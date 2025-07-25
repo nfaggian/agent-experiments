@@ -1,0 +1,25 @@
+
+{
+  "name": "hello_world_eval_set_001",
+  "description": "A sample eval set for the hello world agent.",
+  "samples": [
+    {
+      "sample_id": "sample_001",
+      "inputs": {
+        "prompt": "Hello"
+      },
+      "expected_outputs": {
+        "response": "world"
+      }
+    },
+    {
+      "sample_id": "sample_002",
+      "inputs": {
+        "prompt": "Hi"
+      },
+      "expected_outputs": {
+        "response": "world"
+      }
+    }
+  ]
+}
