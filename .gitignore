@@ -1,1 +1,8 @@
 .env
+poetry.lock
+agent_experiments.egg-info/dependency_links.txt
+agent_experiments.egg-info/PKG-INFO
+agent_experiments.egg-info/requires.txt
+agent_experiments.egg-info/SOURCES.txt
+agent_experiments.egg-info/top_level.txt
+ml_agent/__pycache__/agent.cpython-313.pyc
