@@ -13,7 +13,7 @@ root_agent = Agent(
     model=LiteLlm(model="ollama_chat/gpt-oss:20b"),
     name="local_ollama_agent",
     description="An agent that uses a local Ollama model.",
-    instruction="You are a helpful SOW writinh assistant.",
+    instruction="You are a helpful utilisation review agent",
     tools=[],
 )
  

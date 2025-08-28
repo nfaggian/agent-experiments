@@ -3,9 +3,7 @@ name = "agent-experiments"
 version = "0.0.1"
 description = "An ADK agent for generating nurse shift handover reports."
 authors = [
-    { name = "Gopala Dhar", email = "gopalad@google.com" },
-    { name = "Naveen Poosarla", email = "naveenpoosarla@google.com" },
-    { name = "Pablo Gaeta", email = "pablogaeta@google.com" }
+    { name = "Nathan Faggian", email = "nathan.faggian@gmail.com" },
 ]
 classifiers = [
     "Programming Language :: Python",
