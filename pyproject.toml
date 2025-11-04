@@ -1,7 +1,7 @@
 [project]
 name = "agent-experiments"
 version = "0.0.1"
-description = "An ADK agent for generating nurse shift handover reports."
+description = "Experiments with ADK"
 authors = [
     { name = "Nathan Faggian", email = "nathan.faggian@gmail.com" },
 ]
@@ -14,6 +14,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "google-adk>=1.10.0",
+    "litellm>=1.0.0",
     "pyyaml>=6.0.2",
     "uvicorn==0.34.3",
     "google-auth>=2.23.0",

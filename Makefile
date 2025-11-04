@@ -42,7 +42,7 @@ prefect-server: ## Start Prefect server with promotional content disabled and se
 
 .PHONY: prefect-flows
 prefect-flows: ## Serve Prefect flows from src/workflows (requires server to be running)
-	@PYTHONPATH=$(ROOT_DIR)/src:$$PYTHONPATH uv run prefect flow serve src/workflows/serve.py --host 0.0.0.0
+	@PYTHONPATH=$(ROOT_DIR)/src:$$PYTHONPATH uv run prefect flow serve src/workflows/pipeline.py:agent_workflow --name agent-workflow
 
 .PHONY: help
 help:
