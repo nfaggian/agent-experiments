@@ -40,6 +40,17 @@ api_server: ## Run the ADK FastAPI server
 prefect-server: ## Start Prefect server and serve flows
 	@./scripts/start_prefect.sh
 
+.PHONY: clean
+clean: ## Remove build artifacts, cache files, and test reports
+	@echo "🧹 Cleaning build artifacts and cache files..."
+	@find . -type d -name "__pycache__" -exec rm -r {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@find . -type f -name "*.pyo" -delete 2>/dev/null || true
+	@find . -type d -name "*.egg-info" -exec rm -r {} + 2>/dev/null || true
+	@rm -f coverage.xml junit.xml .coverage 2>/dev/null || true
+	@rm -rf htmlcov .pytest_cache .mypy_cache .ruff_cache 2>/dev/null || true
+	@echo "✅ Clean complete"
+
 .PHONY: help
 help:
 	@uv run python -c "import re; \
