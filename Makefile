@@ -36,6 +36,14 @@ web: ## Run the ADK web demo server
 api_server: ## Run the ADK FastAPI server
 	@uv run adk api_server src/agents/
 
+.PHONY: prefect-server
+prefect-server: ## Start Prefect server with promotional content disabled and serve flows
+	@./scripts/start_prefect.sh
+
+.PHONY: prefect-flows
+prefect-flows: ## Serve Prefect flows from src/workflows (requires server to be running)
+	@PYTHONPATH=$(ROOT_DIR)/src:$$PYTHONPATH uv run prefect flow serve src/workflows/serve.py --host 0.0.0.0
+
 .PHONY: help
 help:
 	@uv run python -c "import re; \

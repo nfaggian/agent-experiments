@@ -16,6 +16,11 @@ dependencies = [
     "google-adk>=1.10.0",
     "pyyaml>=6.0.2",
     "uvicorn==0.34.3",
+    "google-auth>=2.23.0",
+    "google-auth-oauthlib>=1.1.0",
+    "google-api-python-client>=2.100.0",
+    "prefect>=3.0.0",
+    "markdown-it-py>=3.0.0",
 ]
 
 [build-system]
