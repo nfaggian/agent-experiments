@@ -27,6 +27,7 @@ dependencies = [
     "fastapi>=0.139.0",
     "pydantic-settings>=2.14.2",
     "uiprotect>=15.3.0",
+    "httpx>=0.28.1",
 ]
 
 [build-system]
@@ -46,6 +47,7 @@ dev = [
     "deptry>=0.23.0",
     "pytest-cov>=4.0.0",
     "types-pyyaml>=6.0.12.20250809",
+    "playwright>=1.61.0",
 ]
 
 [tool.agent_packs]

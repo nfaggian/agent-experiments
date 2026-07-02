@@ -72,6 +72,20 @@ class CameraStatus(BaseModel):
     selected_camera_id: str | None = None
 
 
+class AmbienceSnapshot(BaseModel):
+    configured: bool
+    time_of_day: str
+    weather: str
+    weather_label: str
+    temperature_c: float | None = None
+    cloud_cover: int | None = None
+    is_day: bool = True
+    timezone: str | None = None
+    location_name: str | None = None
+    local_time: datetime | None = None
+    message: str | None = None
+
+
 class StatusSnapshot(BaseModel):
     authenticated: bool
     auth_state: AuthState

@@ -10,8 +10,19 @@
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <div class="ambient ambient-a"></div>
-  <div class="ambient ambient-b"></div>
+  <div id="sky-background" class="sky-background" data-time="morning" data-weather="clear" aria-hidden="true">
+    <div class="sky-gradient"></div>
+    <div class="sky-stars"></div>
+    <div class="sky-orb"></div>
+    <div class="sky-clouds">
+      <span class="cloud cloud-1"></span>
+      <span class="cloud cloud-2"></span>
+      <span class="cloud cloud-3"></span>
+      <span class="cloud cloud-4"></span>
+    </div>
+    <div class="sky-fog"></div>
+    <div class="sky-precip"></div>
+  </div>
 
   <div class="page">
     <header class="header panel glass">
@@ -29,6 +40,10 @@
         </div>
       </div>
       <div class="header-actions">
+        <span id="weather-chip" class="weather-chip" title="Local weather">
+          <span id="weather-icon" class="weather-icon" aria-hidden="true">☀️</span>
+          <span id="weather-label">Loading weather…</span>
+        </span>
         <span id="connection-pill" class="pill pill-neutral">
           <span class="pill-dot"></span>
           Connecting…
@@ -240,8 +255,10 @@
   <script>
     window.DASHBOARD_CONFIG = {
       snapshotRefreshSeconds: {{ settings.unifi_snapshot_refresh_seconds }},
+      weatherRefreshSeconds: {{ settings.weather_refresh_seconds }},
       yaleConfigured: {{ 'true' if settings.yale_configured else 'false' }},
       unifiConfigured: {{ 'true' if settings.unifi_configured else 'false' }},
+      weatherConfigured: {{ 'true' if settings.weather_configured else 'false' }},
     };
   </script>
   <script src="/static/app.js"></script>

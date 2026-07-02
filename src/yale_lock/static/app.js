@@ -1,8 +1,13 @@
 const config = window.DASHBOARD_CONFIG || {};
 const refreshMs = Math.max(1000, (config.snapshotRefreshSeconds || 2) * 1000);
+const weatherRefreshMs = Math.max(60000, (config.weatherRefreshSeconds || 900) * 1000);
 const THEME_STORAGE_KEY = "home-dashboard-theme";
 
 const els = {
+  skyBackground: document.getElementById("sky-background"),
+  weatherChip: document.getElementById("weather-chip"),
+  weatherIcon: document.getElementById("weather-icon"),
+  weatherLabel: document.getElementById("weather-label"),
   connectionPill: document.getElementById("connection-pill"),
   refreshBtn: document.getElementById("refresh-btn"),
   authPanel: document.getElementById("auth-panel"),
@@ -35,6 +40,98 @@ const els = {
 
 let selectedCameraId = null;
 let snapshotTimer = null;
+let ambienceTimer = null;
+let localTimeTimer = null;
+let ambienceTimezone = null;
+
+const weatherIcons = {
+  clear: "☀️",
+  "partly-cloudy": "⛅",
+  cloudy: "☁️",
+  fog: "🌫️",
+  rain: "🌧️",
+  snow: "❄️",
+  storm: "⛈️",
+};
+
+function localTimeOfDay(date = new Date()) {
+  const hour = date.getHours();
+  if (hour >= 21 || hour < 5) return "night";
+  if (hour < 7) return "dawn";
+  if (hour < 12) return "morning";
+  if (hour < 17) return "afternoon";
+  if (hour < 21) return "evening";
+  return "night";
+}
+
+function formatTemperature(value) {
+  if (value == null || Number.isNaN(value)) return "";
+  return `${Math.round(value)}°`;
+}
+
+function formatAmbienceLabel(ambience) {
+  const temp = formatTemperature(ambience.temperature_c);
+  const timeLabel = titleCase(ambience.time_of_day);
+  if (temp && ambience.weather_label) {
+    return `${temp} · ${ambience.weather_label}`;
+  }
+  if (ambience.weather_label) {
+    return ambience.weather_label;
+  }
+  return timeLabel;
+}
+
+function applyAmbience(ambience) {
+  const time = ambience?.time_of_day || localTimeOfDay();
+  const weather = ambience?.weather || "clear";
+
+  if (els.skyBackground) {
+    els.skyBackground.dataset.time = time;
+    els.skyBackground.dataset.weather = weather;
+  }
+
+  if (els.weatherIcon) {
+    els.weatherIcon.textContent = weatherIcons[weather] || "🌤️";
+  }
+
+  if (els.weatherLabel) {
+    if (ambience?.message && !ambience.configured) {
+      els.weatherLabel.textContent = `${titleCase(time)} · Local time`;
+    } else {
+      els.weatherLabel.textContent = formatAmbienceLabel(ambience || { time_of_day: time, weather_label: titleCase(time) });
+    }
+  }
+
+  if (ambience?.timezone) {
+    ambienceTimezone = ambience.timezone;
+  }
+}
+
+function updateLocalAmbienceTime() {
+  const now = new Date();
+  applyAmbience({
+    time_of_day: localTimeOfDay(now),
+    weather: els.skyBackground?.dataset.weather || "clear",
+    weather_label: els.weatherLabel?.textContent || titleCase(localTimeOfDay(now)),
+    configured: config.weatherConfigured,
+  });
+}
+
+async function refreshAmbience() {
+  const ambience = await api("/api/ambience");
+  applyAmbience(ambience);
+  return ambience;
+}
+
+function startAmbienceLoop() {
+  if (ambienceTimer) clearInterval(ambienceTimer);
+  ambienceTimer = setInterval(() => {
+    refreshAmbience().catch(() => updateLocalAmbienceTime());
+  }, weatherRefreshMs);
+
+  if (localTimeTimer) clearInterval(localTimeTimer);
+  localTimeTimer = setInterval(updateLocalAmbienceTime, 60000);
+}
 
 const activityIcons = {
   lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>`,
@@ -342,6 +439,13 @@ els.cameraSelect.addEventListener("change", async () => {
 
 async function init() {
   initTheme();
+  updateLocalAmbienceTime();
+  try {
+    await refreshAmbience();
+    startAmbienceLoop();
+  } catch {
+    updateLocalAmbienceTime();
+  }
   try {
     const status = await api("/api/status");
     renderStatus(status);

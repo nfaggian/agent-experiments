@@ -16,6 +16,7 @@ from fastapi.templating import Jinja2Templates
 
 from yale_lock.config import Settings
 from yale_lock.models import (
+    AmbienceSnapshot,
     AuthState,
     CredentialsRequest,
     OperationResult,
@@ -23,6 +24,7 @@ from yale_lock.models import (
     VerificationRequest,
 )
 from yale_lock.unifi_client import UniFiCameraClient
+from yale_lock.weather import WeatherService
 from yale_lock.yale_client import YaleLockClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -36,15 +38,36 @@ class DashboardApp:
         self.settings = settings
         self.yale = YaleLockClient(settings)
         self.unifi = UniFiCameraClient(settings)
+        self.weather = WeatherService(settings)
         self._status_subscribers: set[asyncio.Queue[StatusSnapshot]] = set()
+        self._weather_task: asyncio.Task[None] | None = None
 
     async def start(self) -> None:
         await self.yale.start()
         await self.unifi.start()
+        await self.weather.refresh()
+        self._weather_task = asyncio.create_task(self._weather_loop())
 
     async def stop(self) -> None:
+        if self._weather_task:
+            self._weather_task.cancel()
+            try:
+                await self._weather_task
+            except asyncio.CancelledError:
+                pass
+            self._weather_task = None
         await self.yale.stop()
         await self.unifi.stop()
+
+    async def _weather_loop(self) -> None:
+        while True:
+            try:
+                await asyncio.sleep(self.settings.weather_refresh_seconds)
+                await self.weather.refresh()
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                _LOGGER.exception("Weather poll failed")
 
     def build_status(self) -> StatusSnapshot:
         return StatusSnapshot(
@@ -196,6 +219,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if snapshot is None:
             raise HTTPException(status_code=503, detail="Camera snapshot unavailable")
         return Response(content=snapshot, media_type="image/jpeg")
+
+    @app.get("/api/ambience", response_model=AmbienceSnapshot)
+    async def get_ambience() -> AmbienceSnapshot:
+        return dashboard.weather.snapshot
+
+    @app.post("/api/ambience/refresh", response_model=AmbienceSnapshot)
+    async def refresh_ambience() -> AmbienceSnapshot:
+        return await dashboard.weather.refresh()
 
     @app.get("/api/events")
     async def event_stream() -> StreamingResponse:

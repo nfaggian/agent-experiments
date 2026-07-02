@@ -67,7 +67,7 @@ make install
 cp .env.example .env
 ```
 
-Configure `.env` with your Yale and UniFi credentials (see `.env.example` for all options).
+Configure `.env` with your Yale, UniFi, and weather location settings (see `.env.example` for all options). Set `WEATHER_LATITUDE` and `WEATHER_LONGITUDE` to your home coordinates for a weather-aware sky background.
 
 ### Run
 
@@ -82,6 +82,7 @@ Open `http://127.0.0.1:8080` in your browser.
 - **Yale lock**: live lock/door status, recent activity feed, lock/unlock controls
 - **UniFi camera**: camera selector and auto-refreshing snapshot feed
 - **Real-time updates**: Server-Sent Events push status changes to the browser
+- **Dynamic background**: sky gradient reflects time of day and live weather (via Open-Meteo)
 
 ### Requirements
 

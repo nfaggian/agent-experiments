@@ -62,6 +62,13 @@ class Settings(BaseSettings):
     dashboard_host: str = Field(default="127.0.0.1", alias="DASHBOARD_HOST")
     dashboard_port: int = Field(default=8080, alias="DASHBOARD_PORT")
 
+    # Weather / ambience background
+    weather_latitude: float | None = Field(default=None, alias="WEATHER_LATITUDE")
+    weather_longitude: float | None = Field(default=None, alias="WEATHER_LONGITUDE")
+    weather_location_name: str = Field(default="", alias="WEATHER_LOCATION_NAME")
+    weather_timezone: str = Field(default="auto", alias="WEATHER_TIMEZONE")
+    weather_refresh_seconds: float = Field(default=900.0, alias="WEATHER_REFRESH_SECONDS")
+
     @field_validator("yale_brand")
     @classmethod
     def validate_yale_brand(cls, value: str) -> str:
@@ -82,3 +89,7 @@ class Settings(BaseSettings):
     @property
     def unifi_configured(self) -> bool:
         return bool(self.unifi_host and self.unifi_username and self.unifi_password)
+
+    @property
+    def weather_configured(self) -> bool:
+        return self.weather_latitude is not None and self.weather_longitude is not None
