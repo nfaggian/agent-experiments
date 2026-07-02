@@ -28,11 +28,13 @@ if [[ ! -f "$ENV_FILE" ]]; then
     exit 1
 fi
 
-VENV_PYTHON="$PROJECT_ROOT/.venv/bin/python"
-if [[ ! -f "$VENV_PYTHON" ]]; then
-    echo "❌ Virtual environment not found. Please run 'make install' first."
+if ! command -v uv >/dev/null 2>&1; then
+    echo "❌ uv is not installed."
+    echo "   Install: https://docs.astral.sh/uv/getting-started/installation/"
     exit 1
 fi
+
+uv sync --quiet
 
 if [[ -n "${ONEPASSWORD_ENVIRONMENT:-}" ]]; then
     OP_ARGS+=(--environment "$ONEPASSWORD_ENVIRONMENT")

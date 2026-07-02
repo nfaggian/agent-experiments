@@ -3,9 +3,16 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 TESTPATH := $(ROOT_DIR)/tests/
 
 .PHONY: install
-install: ## Install virtual environment with uv
-	@echo "🚀 Creating virtual environment using uv"
+install: ## Create .venv and install dependencies with uv
+	@command -v uv >/dev/null 2>&1 || { \
+		echo "❌ uv is not installed. See https://docs.astral.sh/uv/getting-started/installation/"; \
+		exit 1; \
+	}
+	@echo "🚀 Syncing virtual environment with uv (Python $$(cat .python-version))"
 	@uv sync
+
+.PHONY: sync
+sync: install ## Alias for install (uv sync)
 
 .PHONY: check
 check: ## Check lock file consistency and run static code analysis

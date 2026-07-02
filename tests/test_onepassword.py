@@ -34,6 +34,9 @@ def test_onepassword_example_env_exists() -> None:
 def test_onepassword_run_script_exists() -> None:
     assert RUN_SCRIPT.is_file()
     assert RUN_SCRIPT.stat().st_mode & 0o111, "run-dashboard-1password.sh must be executable"
+    content = RUN_SCRIPT.read_text(encoding="utf-8")
+    assert "uv sync" in content
+    assert "uv run home-dashboard" in content
 
 
 def test_onepassword_example_uses_secret_references_for_credentials() -> None:

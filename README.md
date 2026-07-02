@@ -4,8 +4,13 @@ Experiments with Google Agent Development Kit (ADK) for building AI agents with 
 
 ## Quick Start
 
+This project uses [uv](https://docs.astral.sh/uv/) for Python version management, virtual environments, and dependencies. The lockfile (`uv.lock`) pins exact versions for reproducible installs.
+
 ```bash
-# Install dependencies
+# Install uv (once per machine)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create .venv and install dependencies from uv.lock
 make install
 
 # Configure Ollama (create .env file)
@@ -17,6 +22,8 @@ make web
 # Run Prefect workflows
 make prefect-server
 ```
+
+All commands run through `uv run`, so you do not need to activate the virtual environment manually.
 
 ## Components
 
@@ -37,7 +44,7 @@ make prefect-server
 
 ## Prerequisites
 
-- Python 3.13+
+- [uv](https://docs.astral.sh/uv/) (installs and manages Python 3.13 per `.python-version`)
 - Ollama installed and running
 - Google OAuth credentials (`credentials.json`) for Google Docs API
 
@@ -61,11 +68,19 @@ A web dashboard for monitoring and controlling a Yale smart lock and viewing Uni
 ### Setup
 
 ```bash
-# Install dependencies with uv
+# Sync the uv environment (uses uv.lock + .python-version)
 make install
 
 # Copy and edit environment variables
 cp .env.example .env
+```
+
+To add or upgrade a dependency, use uv and commit the updated lockfile:
+
+```bash
+uv add <package>          # runtime dependency
+uv add --dev <package>    # dev dependency
+uv lock                   # refresh uv.lock after manual pyproject edits
 ```
 
 Configure `.env` with your Yale, UniFi, and weather location settings (see `.env.example` for all options). Set `WEATHER_LATITUDE` and `WEATHER_LONGITUDE` to your home coordinates for a weather-aware sky background.
@@ -121,7 +136,7 @@ ONEPASSWORD_ENVIRONMENT=env_abc123 make dashboard-1password
 
 - Yale lock connected via Yale Access / August app with Wi-Fi bridge
 - UniFi Protect NVR (Cloud Key+, Dream Machine, etc.) on your network
-- Python 3.13+ managed with [uv](https://docs.astral.sh/uv/)
+- [uv](https://docs.astral.sh/uv/) with Python 3.13 (see `.python-version`)
 
 ## Project Structure
 
