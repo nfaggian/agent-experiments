@@ -57,5 +57,5 @@ def test_status_endpoint(test_client: TestClient) -> None:
 def test_index_page(test_client: TestClient) -> None:
     response = test_client.get("/")
     assert response.status_code == 200
-    assert "Home Dashboard" in response.text
+    assert "Home Security" in response.text
     assert "UniFi Camera" in response.text
