@@ -33,6 +33,18 @@ const els = {
   cameraPlaceholder: document.getElementById("camera-placeholder"),
   cameraMessage: document.getElementById("camera-message"),
   cameraStatus: document.getElementById("camera-status"),
+  weatherPanel: document.getElementById("weather-panel"),
+  weatherPanelLocation: document.getElementById("weather-panel-location"),
+  weatherPanelIcon: document.getElementById("weather-panel-icon"),
+  weatherPanelTemp: document.getElementById("weather-panel-temp"),
+  weatherPanelSummary: document.getElementById("weather-panel-summary"),
+  weatherPanelFeels: document.getElementById("weather-panel-feels"),
+  weatherPanelHumidity: document.getElementById("weather-panel-humidity"),
+  weatherPanelWind: document.getElementById("weather-panel-wind"),
+  weatherPanelRain: document.getElementById("weather-panel-rain"),
+  weatherPanelPressure: document.getElementById("weather-panel-pressure"),
+  weatherPanelUpdated: document.getElementById("weather-panel-updated"),
+  weatherPanelSource: document.getElementById("weather-panel-source"),
   activityList: document.getElementById("activity-list"),
   themeLight: document.getElementById("theme-light"),
   themeSystem: document.getElementById("theme-system"),
@@ -98,6 +110,104 @@ function setWeatherIcon(weather) {
   els.weatherIcon.innerHTML = weatherIconSvg[weather] || weatherIconSvg.clear;
 }
 
+function formatStat(value, suffix = "") {
+  if (value == null || value === "" || Number.isNaN(value)) return "—";
+  return `${value}${suffix}`;
+}
+
+function formatWind(direction, speedKmh) {
+  if (speedKmh == null && !direction) return "—";
+  const speed = speedKmh != null ? `${speedKmh} km/h` : "—";
+  if (!direction) return speed;
+  return `${direction} ${speed}`;
+}
+
+function providerLabel(provider) {
+  if (provider === "bom") return "Bureau of Meteorology";
+  if (provider === "open_meteo") return "Open-Meteo";
+  return "Weather service";
+}
+
+function renderWeatherPanel(ambience) {
+  if (!els.weatherPanel) return;
+
+  const configured = ambience?.configured ?? config.weatherConfigured;
+  els.weatherPanel.classList.toggle("is-unconfigured", !configured);
+
+  const weather = ambience?.weather || els.ambient?.dataset.weather || "clear";
+  if (els.weatherPanelIcon) {
+    els.weatherPanelIcon.innerHTML = weatherIconSvg[weather] || weatherIconSvg.clear;
+  }
+
+  if (!configured) {
+    if (els.weatherPanelLocation) els.weatherPanelLocation.textContent = "Weather";
+    if (els.weatherPanelTemp) {
+      els.weatherPanelTemp.textContent = ambience?.message || "Not configured";
+    }
+    if (els.weatherPanelSummary) {
+      els.weatherPanelSummary.textContent = "Set BOM or latitude/longitude in .env";
+    }
+    if (els.weatherPanelFeels) els.weatherPanelFeels.textContent = "—";
+    if (els.weatherPanelHumidity) els.weatherPanelHumidity.textContent = "—";
+    if (els.weatherPanelWind) els.weatherPanelWind.textContent = "—";
+    if (els.weatherPanelRain) els.weatherPanelRain.textContent = "—";
+    if (els.weatherPanelPressure) els.weatherPanelPressure.textContent = "—";
+    if (els.weatherPanelUpdated) els.weatherPanelUpdated.textContent = "—";
+    if (els.weatherPanelSource) els.weatherPanelSource.textContent = "Source —";
+    return;
+  }
+
+  const location = ambience.location_name || ambience.station_name || "Local weather";
+  if (els.weatherPanelLocation) els.weatherPanelLocation.textContent = location;
+  if (els.weatherPanelTemp) {
+    els.weatherPanelTemp.textContent = formatTemperature(ambience.temperature_c) || "—";
+  }
+  if (els.weatherPanelSummary) {
+    const feels = formatTemperature(ambience.apparent_temperature_c);
+    const summary = ambience.weather_label || titleCase(weather);
+    els.weatherPanelSummary.textContent = feels ? `${summary} · Feels ${feels}` : summary;
+  }
+  if (els.weatherPanelFeels) {
+    els.weatherPanelFeels.textContent = formatStat(
+      ambience.apparent_temperature_c != null ? Math.round(ambience.apparent_temperature_c) : null,
+      "°C",
+    );
+  }
+  if (els.weatherPanelHumidity) {
+    els.weatherPanelHumidity.textContent = formatStat(ambience.humidity_percent, "%");
+  }
+  if (els.weatherPanelWind) {
+    els.weatherPanelWind.textContent = formatWind(
+      ambience.wind_direction,
+      ambience.wind_speed_kmh,
+    );
+  }
+  if (els.weatherPanelRain) {
+    const rain = ambience.rain_since_9am_mm;
+    els.weatherPanelRain.textContent =
+      rain == null ? "—" : rain > 0 ? `${rain} mm` : "0 mm";
+  }
+  if (els.weatherPanelPressure) {
+    els.weatherPanelPressure.textContent = formatStat(
+      ambience.pressure_hpa != null ? Math.round(ambience.pressure_hpa) : null,
+      " hPa",
+    );
+  }
+  if (els.weatherPanelUpdated) {
+    els.weatherPanelUpdated.textContent = formatTime(
+      ambience.observation_time || ambience.local_time,
+    );
+  }
+  if (els.weatherPanelSource) {
+    const label = providerLabel(ambience.provider);
+    if (ambience.source_url) {
+      els.weatherPanelSource.innerHTML = `Source: <a href="${ambience.source_url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    } else {
+      els.weatherPanelSource.textContent = `Source: ${label}`;
+    }
+  }
+}
+
 function applyAmbience(ambience) {
   const time = ambience?.time_of_day || localTimeOfDay();
   const weather = ambience?.weather || "clear";
@@ -118,6 +228,8 @@ function applyAmbience(ambience) {
       );
     }
   }
+
+  renderWeatherPanel(ambience);
 }
 
 function updateLocalAmbienceTime() {

@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
 
 import pytest
+from fastapi.testclient import TestClient
 
+from yale_lock.config import Settings
 from yale_lock.weather import (
     TimeOfDay,
     WeatherCondition,
@@ -52,4 +53,25 @@ def test_ambience_endpoint(test_client: TestClient) -> None:
     payload = response.json()
     assert "time_of_day" in payload
     assert "weather" in payload
+    assert "provider" in payload
     assert payload["time_of_day"] in {item.value for item in TimeOfDay}
+
+
+def test_settings_prefers_bom_when_configured() -> None:
+    settings = Settings(
+        WEATHER_PROVIDER="auto",
+        BOM_PRODUCT_ID="IDN60801",
+        BOM_STATION_ID="94768",
+    )
+    assert settings.resolved_weather_provider == "bom"
+    assert settings.weather_configured is True
+
+
+def test_settings_open_meteo_provider() -> None:
+    settings = Settings(
+        WEATHER_PROVIDER="open_meteo",
+        WEATHER_LATITUDE=-33.9,
+        WEATHER_LONGITUDE=151.2,
+    )
+    assert settings.resolved_weather_provider == "open_meteo"
+    assert settings.weather_configured is True

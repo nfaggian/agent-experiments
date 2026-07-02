@@ -63,11 +63,26 @@ class Settings(BaseSettings):
     dashboard_port: int = Field(default=8080, alias="DASHBOARD_PORT")
 
     # Weather / ambience background
+    weather_provider: str = Field(
+        default="auto",
+        alias="WEATHER_PROVIDER",
+        description="Weather source: auto, bom, or open_meteo",
+    )
     weather_latitude: float | None = Field(default=None, alias="WEATHER_LATITUDE")
     weather_longitude: float | None = Field(default=None, alias="WEATHER_LONGITUDE")
     weather_location_name: str = Field(default="", alias="WEATHER_LOCATION_NAME")
     weather_timezone: str = Field(default="auto", alias="WEATHER_TIMEZONE")
     weather_refresh_seconds: float = Field(default=900.0, alias="WEATHER_REFRESH_SECONDS")
+    bom_product_id: str = Field(
+        default="",
+        alias="BOM_PRODUCT_ID",
+        description="BOM observation product ID, e.g. IDN60801 for NSW",
+    )
+    bom_station_id: str = Field(
+        default="",
+        alias="BOM_STATION_ID",
+        description="BOM station WMO ID from the JSON feed URL, e.g. 94768",
+    )
 
     @field_validator("yale_brand")
     @classmethod
@@ -90,6 +105,38 @@ class Settings(BaseSettings):
     def unifi_configured(self) -> bool:
         return bool(self.unifi_host and self.unifi_username and self.unifi_password)
 
+    @field_validator("weather_provider")
+    @classmethod
+    def validate_weather_provider(cls, value: str) -> str:
+        allowed = {"auto", "bom", "open_meteo"}
+        normalized = value.strip().lower()
+        if normalized not in allowed:
+            allowed_list = ", ".join(sorted(allowed))
+            raise ValueError(f"WEATHER_PROVIDER must be one of: {allowed_list}")
+        return normalized
+
+    @property
+    def bom_configured(self) -> bool:
+        return bool(self.bom_product_id and self.bom_station_id)
+
+    @property
+    def open_meteo_configured(self) -> bool:
+        return self.weather_latitude is not None and self.weather_longitude is not None
+
+    @property
+    def resolved_weather_provider(self) -> str:
+        if self.weather_provider == "bom":
+            return "bom"
+        if self.weather_provider == "open_meteo":
+            return "open_meteo"
+        if self.bom_configured:
+            return "bom"
+        return "open_meteo"
+
     @property
     def weather_configured(self) -> bool:
-        return self.weather_latitude is not None and self.weather_longitude is not None
+        if self.weather_provider == "bom":
+            return self.bom_configured
+        if self.weather_provider == "open_meteo":
+            return self.open_meteo_configured
+        return self.bom_configured or self.open_meteo_configured

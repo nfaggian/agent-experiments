@@ -78,10 +78,20 @@ class AmbienceSnapshot(BaseModel):
     weather: str
     weather_label: str
     temperature_c: float | None = None
+    apparent_temperature_c: float | None = None
+    humidity_percent: int | None = None
+    wind_speed_kmh: int | None = None
+    wind_direction: str | None = None
+    rain_since_9am_mm: float | None = None
+    pressure_hpa: float | None = None
     cloud_cover: int | None = None
     is_day: bool = True
     timezone: str | None = None
     location_name: str | None = None
+    station_name: str | None = None
+    observation_time: datetime | None = None
+    provider: str | None = None
+    source_url: str | None = None
     local_time: datetime | None = None
     message: str | None = None
 

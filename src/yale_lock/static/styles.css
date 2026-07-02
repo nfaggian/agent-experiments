@@ -515,6 +515,13 @@ body {
 
 .notice svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--fl-ultra); }
 
+.surveillance {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(220px, 0.9fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
 .camera {
   position: relative;
   aspect-ratio: 16 / 10;
@@ -522,6 +529,121 @@ body {
   overflow: hidden;
   background: #060a12;
   border: 1px solid var(--border);
+  min-height: 220px;
+}
+
+.weather-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  border-radius: var(--fl-radius-sm);
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, rgba(28, 99, 236, 0.08), rgba(112, 0, 255, 0.05));
+}
+
+.weather-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.weather-panel__eyebrow {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.weather-panel__location {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.weather-panel__icon {
+  width: 42px;
+  height: 42px;
+  color: var(--fl-blue);
+  flex-shrink: 0;
+}
+
+.weather-panel__icon svg { width: 100%; height: 100%; }
+
+.weather-panel__hero { margin-top: 4px; }
+
+.weather-panel__temp {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.weather-panel__summary {
+  margin: 8px 0 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.weather-panel__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 14px;
+  margin: 0;
+}
+
+.weather-panel__stat dt {
+  margin: 0 0 2px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.weather-panel__stat dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.weather-panel__foot {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.weather-panel__foot p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.weather-panel__foot a {
+  color: var(--fl-blue);
+  text-decoration: none;
+}
+
+.weather-panel__foot a:hover { text-decoration: underline; }
+
+.weather-panel.is-unconfigured .weather-panel__temp {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .surveillance {
+    grid-template-columns: 1fr;
+  }
+
+  .camera {
+    aspect-ratio: 16 / 9;
+  }
 }
 
 .camera__img {

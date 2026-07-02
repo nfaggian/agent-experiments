@@ -83,7 +83,20 @@ uv add --dev <package>    # dev dependency
 uv lock                   # refresh uv.lock after manual pyproject edits
 ```
 
-Configure `.env` with your Yale, UniFi, and weather location settings (see `.env.example` for all options). Set `WEATHER_LATITUDE` and `WEATHER_LONGITUDE` to your home coordinates for a weather-aware sky background.
+Configure `.env` with your Yale, UniFi, and weather settings (see `.env.example` for all options).
+
+**Weather** appears alongside the UniFi camera feed. For Australian locations, use the [Bureau of Meteorology](https://www.bom.gov.au/) observation JSON feeds (no API key):
+
+```bash
+WEATHER_PROVIDER=bom
+BOM_PRODUCT_ID=IDN60801    # state product ID from the BOM JSON URL
+BOM_STATION_ID=94768       # station WMO ID from the same URL
+WEATHER_LOCATION_NAME=Sydney
+```
+
+Example feed: `https://reg.bom.gov.au/fwo/IDN60801/IDN60801.94768.json`
+
+Alternatively, set `WEATHER_PROVIDER=open_meteo` with `WEATHER_LATITUDE` and `WEATHER_LONGITUDE` for global coverage via Open-Meteo.
 
 ### Run
 
@@ -128,9 +141,9 @@ ONEPASSWORD_ENVIRONMENT=env_abc123 make dashboard-1password
 ### Features
 
 - **Yale lock**: live lock/door status, recent activity feed, lock/unlock controls
-- **UniFi camera**: camera selector and auto-refreshing snapshot feed
+- **UniFi camera**: camera selector, live snapshot feed, and local weather panel (temperature, wind, humidity, rain since 9am)
 - **Real-time updates**: Server-Sent Events push status changes to the browser
-- **Dynamic background**: sky gradient reflects time of day and live weather (via Open-Meteo)
+- **Dynamic background**: sky gradient reflects time of day and live weather (BOM or Open-Meteo)
 
 ### Requirements
 

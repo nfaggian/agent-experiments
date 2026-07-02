@@ -146,15 +146,63 @@
           <span>Camera feed unavailable</span>
         </div>
 
-        <div class="camera">
-          <div class="camera__badge"><span class="live-dot"></span>Live</div>
-          <img id="camera-image" class="camera__img" alt="UniFi camera snapshot" hidden>
-          <div class="camera__placeholder" id="camera-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-              <path d="M4 8.5 7.5 6H16.5L20 8.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
+        <div class="surveillance">
+          <div class="camera">
+            <div class="camera__badge"><span class="live-dot"></span>Live</div>
+            <img id="camera-image" class="camera__img" alt="UniFi camera snapshot" hidden>
+            <div class="camera__placeholder" id="camera-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <path d="M4 8.5 7.5 6H16.5L20 8.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
           </div>
+
+          <aside id="weather-panel" class="weather-panel" aria-label="Local weather">
+            <header class="weather-panel__head">
+              <div>
+                <p class="weather-panel__eyebrow">Local conditions</p>
+                <h3 id="weather-panel-location" class="weather-panel__location">Weather</h3>
+              </div>
+              <div id="weather-panel-icon" class="weather-panel__icon" aria-hidden="true"></div>
+            </header>
+
+            <div class="weather-panel__hero">
+              <p id="weather-panel-temp" class="weather-panel__temp">—</p>
+              <p id="weather-panel-summary" class="weather-panel__summary">Loading…</p>
+            </div>
+
+            <dl class="weather-panel__stats">
+              <div class="weather-panel__stat">
+                <dt>Feels like</dt>
+                <dd id="weather-panel-feels">—</dd>
+              </div>
+              <div class="weather-panel__stat">
+                <dt>Humidity</dt>
+                <dd id="weather-panel-humidity">—</dd>
+              </div>
+              <div class="weather-panel__stat">
+                <dt>Wind</dt>
+                <dd id="weather-panel-wind">—</dd>
+              </div>
+              <div class="weather-panel__stat">
+                <dt>Rain since 9am</dt>
+                <dd id="weather-panel-rain">—</dd>
+              </div>
+              <div class="weather-panel__stat">
+                <dt>Pressure</dt>
+                <dd id="weather-panel-pressure">—</dd>
+              </div>
+              <div class="weather-panel__stat">
+                <dt>Updated</dt>
+                <dd id="weather-panel-updated">—</dd>
+              </div>
+            </dl>
+
+            <footer class="weather-panel__foot">
+              <p id="weather-panel-source">Source —</p>
+            </footer>
+          </aside>
         </div>
 
         <footer class="tile__foot">
