@@ -3,254 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Dashboard</title>
+  <title>Home Security · Dashboard</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <div id="sky-background" class="sky-background" data-time="morning" data-weather="clear" aria-hidden="true">
-    <div class="sky-gradient"></div>
-    <div class="sky-stars"></div>
-    <div class="sky-orb"></div>
-    <div class="sky-clouds">
-      <span class="cloud cloud-1"></span>
-      <span class="cloud cloud-2"></span>
-      <span class="cloud cloud-3"></span>
-      <span class="cloud cloud-4"></span>
-    </div>
-    <div class="sky-fog"></div>
-    <div class="sky-precip"></div>
-    <div class="fuselab-mesh"></div>
-    <div class="fuselab-grid"></div>
+  <div id="ambient" class="ambient" data-time="morning" data-weather="clear" aria-hidden="true">
+    <div class="ambient__base"></div>
+    <div class="ambient__blob ambient__blob--a"></div>
+    <div class="ambient__blob ambient__blob--b"></div>
+    <div class="ambient__blob ambient__blob--c"></div>
+    <div class="ambient__noise"></div>
   </div>
 
-  <div class="page">
-    <header class="header panel glass">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M4 10.5V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8.5"/>
-            <path d="M8 10V7a4 4 0 1 1 8 0v3"/>
-            <circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/>
+  <div class="app">
+    <nav class="nav" aria-label="Dashboard">
+      <div class="nav__brand">
+        <div class="nav__logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="10" fill="url(#logo-grad)"/>
+            <path d="M11 15V11a5 5 0 0 1 10 0v4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+            <rect x="9" y="15" width="14" height="10" rx="3" stroke="#fff" stroke-width="1.8"/>
+            <defs>
+              <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
+                <stop stop-color="#1c63ec"/>
+                <stop offset="1" stop-color="#7000ff"/>
+              </linearGradient>
+            </defs>
           </svg>
         </div>
         <div>
-          <p class="eyebrow">Operations Dashboard</p>
-          <h1>Home Security</h1>
+          <p class="nav__eyebrow">Operations</p>
+          <p class="nav__title">Home Security</p>
         </div>
       </div>
-      <div class="header-actions">
-        <span id="weather-chip" class="weather-chip" title="Local weather">
-          <span id="weather-icon" class="weather-icon" aria-hidden="true">☀️</span>
+
+      <div class="nav__meta">
+        <div id="weather-chip" class="chip chip--weather" title="Local weather">
+          <span id="weather-icon" class="chip__icon" aria-hidden="true"></span>
           <span id="weather-label">Loading weather…</span>
-        </span>
-        <span id="connection-pill" class="pill pill-neutral">
-          <span class="pill-dot"></span>
-          Connecting…
-        </span>
+        </div>
+        <div id="connection-pill" class="chip chip--status">
+          <span class="chip__dot"></span>
+          <span class="chip__text">Connecting…</span>
+        </div>
+      </div>
+
+      <div class="nav__actions">
         <div class="theme-switch" role="group" aria-label="Color theme">
-          <button id="theme-light" class="icon-btn" type="button" title="Light theme" aria-label="Light theme">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <circle cx="12" cy="12" r="4"/>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-            </svg>
+          <button id="theme-light" class="theme-btn" type="button" title="Light" aria-label="Light theme">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="3.5"/><path d="M10 2v2M10 16v2M3.5 3.5l1.4 1.4M15.1 15.1l1.4 1.4M2 10h2M16 10h2M3.5 16.5l1.4-1.4M15.1 4.9l1.4-1.4"/></svg>
           </button>
-          <button id="theme-system" class="icon-btn active" type="button" title="System theme" aria-label="System theme">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <rect x="3" y="4" width="18" height="13" rx="2"/>
-              <path d="M8 20h8"/>
-            </svg>
+          <button id="theme-system" class="theme-btn is-active" type="button" title="System" aria-label="System theme">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="14" height="10" rx="2"/><path d="M7 17h6"/></svg>
           </button>
-          <button id="theme-dark" class="icon-btn" type="button" title="Dark theme" aria-label="Dark theme">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/>
-            </svg>
+          <button id="theme-dark" class="theme-btn" type="button" title="Dark" aria-label="Dark theme">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16.5 11.2A6.5 6.5 0 0 1 8.8 3.5 5.5 5.5 0 1 0 16.5 11.2z"/></svg>
           </button>
         </div>
-        <button id="refresh-btn" class="btn btn-secondary" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-            <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
-            <path d="M21 3v6h-6"/>
-          </svg>
-          Refresh
+        <button id="refresh-btn" class="btn btn--ghost" type="button">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M17 10a7 7 0 1 1-2-5"/><path d="M17 3v4h-4"/></svg>
+          Sync
         </button>
       </div>
-    </header>
+    </nav>
 
-    <section id="auth-panel" class="panel glass auth-panel hidden">
-      <div class="panel-heading">
-        <div class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 11V7a4 4 0 1 1 8 0v4"/>
-            <rect x="4" y="11" width="16" height="10" rx="2"/>
-          </svg>
-        </div>
-        <div>
-          <h2>Yale Sign In</h2>
-          <p id="auth-message" class="muted">Sign in to control your Yale lock.</p>
-        </div>
+    <section id="auth-panel" class="tile tile--auth hidden">
+      <div class="tile__head">
+        <p class="tile__tag">Authentication</p>
+        <h2 class="tile__title">Yale Sign In</h2>
+        <p id="auth-message" class="tile__sub">Sign in to control your Yale lock.</p>
       </div>
-      <form id="login-form" class="stack">
-        <label>
-          <span>Email or phone</span>
-          <input id="login-username" type="text" autocomplete="username" placeholder="you@example.com" required>
-        </label>
-        <label>
-          <span>Password</span>
-          <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" required>
-        </label>
-        <button class="btn btn-primary" type="submit">Sign in</button>
+      <form id="login-form" class="form">
+        <label class="field"><span>Email or phone</span><input id="login-username" type="text" autocomplete="username" placeholder="you@example.com" required></label>
+        <label class="field"><span>Password</span><input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" required></label>
+        <button class="btn btn--accent" type="submit">Sign in</button>
       </form>
-      <form id="verify-form" class="stack hidden">
-        <label>
-          <span>Verification code</span>
-          <input id="verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" required>
-        </label>
-        <button class="btn btn-primary" type="submit">Verify</button>
+      <form id="verify-form" class="form hidden">
+        <label class="field"><span>Verification code</span><input id="verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" required></label>
+        <button class="btn btn--accent" type="submit">Verify</button>
       </form>
     </section>
 
-    <main class="grid">
-      <section class="panel glass panel-accent lock-panel">
-        <div class="panel-header">
-          <div class="panel-heading compact">
-            <div class="panel-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M4 10.5V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8.5"/>
-                <path d="M8 10V7a4 4 0 1 1 8 0v3"/>
-              </svg>
-            </div>
-            <div>
-              <p class="section-tag">Access Control</p>
-              <h2>Yale Lock</h2>
-              <p id="lock-name" class="muted">No lock selected</p>
-            </div>
-          </div>
-        </div>
+    <main class="bento">
+      <article class="tile tile--lock">
+        <header class="tile__head">
+          <p class="tile__tag">01 · Access Control</p>
+          <h2 class="tile__title">Yale Lock</h2>
+          <p id="lock-name" class="tile__sub">No lock selected</p>
+        </header>
 
-        <div class="status-row">
-          <div class="status-card kpi-card" id="lock-status-card">
-            <div class="status-icon lock-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="5" y="11" width="14" height="10" rx="2"/>
-                <path d="M8 11V8a4 4 0 1 1 8 0v3"/>
-              </svg>
-            </div>
-            <div>
-              <p class="label">Lock</p>
-              <p id="lock-status" class="value">Unknown</p>
-            </div>
-          </div>
-          <div class="status-card kpi-card" id="door-status-card">
-            <div class="status-icon door-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/>
-                <path d="M16 19v-6a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v6"/>
-                <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
-              </svg>
-            </div>
-            <div>
-              <p class="label">Door</p>
-              <p id="door-status" class="value">Unknown</p>
-            </div>
-          </div>
-          <div class="status-card kpi-card" id="battery-card">
-            <div class="status-icon battery-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="2" y="7" width="18" height="10" rx="2"/>
-                <path d="M22 11v2"/>
-                <path d="M6 11v2M10 11v2M14 11v2"/>
-              </svg>
-            </div>
-            <div>
-              <p class="label">Battery</p>
-              <p id="battery-level" class="value">—</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="unlock-btn" class="btn btn-primary" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="10" rx="2"/>
-              <path d="M8 11V8a4 4 0 1 1 7.5-2"/>
+        <div class="lock-hero">
+          <div id="lock-ring" class="lock-ring" data-state="unknown">
+            <svg class="lock-ring__svg" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="lock-ring__track" cx="60" cy="60" r="52"/>
+              <circle class="lock-ring__progress" cx="60" cy="60" r="52"/>
             </svg>
-            Unlock
-          </button>
-          <button id="lock-btn" class="btn btn-secondary" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="10" rx="2"/>
-              <path d="M8 11V8a4 4 0 1 1 8 0v3"/>
-            </svg>
-            Lock
-          </button>
-        </div>
-
-        <div class="meta">
-          <p id="bridge-status" class="meta-item muted">
-            <span class="meta-dot" id="bridge-dot"></span>
-            Bridge: —
-          </p>
-          <p id="lock-updated" class="meta-item muted">Updated: —</p>
-        </div>
-      </section>
-
-      <section class="panel glass panel-accent camera-panel">
-        <div class="panel-header">
-          <div class="panel-heading compact">
-            <div class="panel-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M4 8.5 7.5 6H16.5L20 8.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5z"/>
-                <circle cx="12" cy="12" r="3.25"/>
+            <div class="lock-ring__core">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path id="lock-ring-icon" d="M8 11V8a4 4 0 1 1 8 0v3M6 11h12v9H6z"/>
               </svg>
+              <p id="lock-status" class="lock-ring__label">Unknown</p>
             </div>
-            <div>
-              <p class="section-tag">Video Surveillance</p>
-              <h2>UniFi Camera</h2>
-              <p class="muted">Live snapshot feed</p>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric kpi-card" id="door-status-card">
+              <span class="metric__label">Door</span>
+              <span id="door-status" class="metric__value">—</span>
             </div>
+            <div class="metric kpi-card" id="battery-card">
+              <span class="metric__label">Battery</span>
+              <span id="battery-level" class="metric__value">—</span>
+            </div>
+            <div class="metric kpi-card" id="lock-status-card" hidden>
+              <span id="lock-status-hidden" class="metric__value">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile__actions">
+          <button id="unlock-btn" class="btn btn--accent" type="button">Unlock</button>
+          <button id="lock-btn" class="btn btn--outline" type="button">Lock</button>
+        </div>
+
+        <footer class="tile__foot">
+          <p id="bridge-status" class="foot-item"><span class="foot-dot" id="bridge-dot"></span>Bridge —</p>
+          <p id="lock-updated" class="foot-item">Updated —</p>
+        </footer>
+      </article>
+
+      <article class="tile tile--camera">
+        <header class="tile__head tile__head--row">
+          <div>
+            <p class="tile__tag">02 · Surveillance</p>
+            <h2 class="tile__title">UniFi Camera</h2>
           </div>
           <select id="camera-select" class="select" aria-label="Select camera"></select>
-        </div>
+        </header>
 
-        <div id="camera-message" class="camera-message callout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 8v4M12 16h.01"/>
-          </svg>
+        <div id="camera-message" class="notice">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M10 6.5v4M10 14h.01"/></svg>
           <span>Camera feed unavailable</span>
         </div>
-        <div class="camera-frame">
-          <div class="camera-overlay">
-            <span class="live-badge">
-              <span class="live-dot"></span>
-              Live
-            </span>
-          </div>
-          <img id="camera-image" alt="UniFi camera snapshot" hidden>
-        </div>
-        <div class="meta">
-          <p id="camera-status" class="meta-item muted">Status: —</p>
-        </div>
-      </section>
 
-      <section class="panel glass panel-accent activity-panel">
-        <div class="panel-header">
-          <div class="panel-heading compact">
-            <div class="panel-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M12 8v4l3 2"/>
-                <circle cx="12" cy="12" r="9"/>
-              </svg>
-            </div>
-            <div>
-              <p class="section-tag">Event Insights</p>
-              <h2>Recent Activity</h2>
-              <p class="muted">Lock and door events</p>
-            </div>
+        <div class="camera">
+          <div class="camera__badge"><span class="live-dot"></span>Live</div>
+          <img id="camera-image" class="camera__img" alt="UniFi camera snapshot" hidden>
+          <div class="camera__placeholder" id="camera-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+              <path d="M4 8.5 7.5 6H16.5L20 8.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
           </div>
         </div>
-        <ul id="activity-list" class="activity-list"></ul>
-      </section>
+
+        <footer class="tile__foot">
+          <p id="camera-status" class="foot-item">Status —</p>
+        </footer>
+      </article>
+
+      <article class="tile tile--activity">
+        <header class="tile__head">
+          <p class="tile__tag">03 · Event Insights</p>
+          <h2 class="tile__title">Recent Activity</h2>
+        </header>
+        <ul id="activity-list" class="timeline"></ul>
+      </article>
     </main>
   </div>
 

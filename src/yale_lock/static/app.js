@@ -4,7 +4,7 @@ const weatherRefreshMs = Math.max(60000, (config.weatherRefreshSeconds || 900) *
 const THEME_STORAGE_KEY = "home-dashboard-theme";
 
 const els = {
-  skyBackground: document.getElementById("sky-background"),
+  ambient: document.getElementById("ambient"),
   weatherChip: document.getElementById("weather-chip"),
   weatherIcon: document.getElementById("weather-icon"),
   weatherLabel: document.getElementById("weather-label"),
@@ -19,10 +19,10 @@ const els = {
   verifyCode: document.getElementById("verify-code"),
   lockName: document.getElementById("lock-name"),
   lockStatus: document.getElementById("lock-status"),
+  lockRing: document.getElementById("lock-ring"),
   doorStatus: document.getElementById("door-status"),
-  batteryLevel: document.getElementById("battery-level"),
-  lockStatusCard: document.getElementById("lock-status-card"),
   doorStatusCard: document.getElementById("door-status-card"),
+  batteryLevel: document.getElementById("battery-level"),
   bridgeStatus: document.getElementById("bridge-status"),
   bridgeDot: document.getElementById("bridge-dot"),
   lockUpdated: document.getElementById("lock-updated"),
@@ -30,6 +30,7 @@ const els = {
   unlockBtn: document.getElementById("unlock-btn"),
   cameraSelect: document.getElementById("camera-select"),
   cameraImage: document.getElementById("camera-image"),
+  cameraPlaceholder: document.getElementById("camera-placeholder"),
   cameraMessage: document.getElementById("camera-message"),
   cameraStatus: document.getElementById("camera-status"),
   activityList: document.getElementById("activity-list"),
@@ -42,17 +43,33 @@ let selectedCameraId = null;
 let snapshotTimer = null;
 let ambienceTimer = null;
 let localTimeTimer = null;
-let ambienceTimezone = null;
 
-const weatherIcons = {
-  clear: "☀️",
-  "partly-cloudy": "⛅",
-  cloudy: "☁️",
-  fog: "🌫️",
-  rain: "🌧️",
-  snow: "❄️",
-  storm: "⛈️",
+const weatherIconSvg = {
+  clear: `<svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.5v2M10 15.5v2M3.9 3.9l1.4 1.4M14.7 14.7l1.4 1.4M2.5 10h2M15.5 10h2M3.9 16.1l1.4-1.4M14.7 5.3l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "partly-cloudy": `<svg viewBox="0 0 20 20" fill="none"><circle cx="7.5" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 14h9a3 3 0 0 0 .4-6 3.5 3.5 0 0 0-6.8-1.2A2.5 2.5 0 0 0 5 14z" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  cloudy: `<svg viewBox="0 0 20 20" fill="none"><path d="M6 15h8.5a3.5 3.5 0 0 0 .5-7A4 4 0 0 0 5.2 6.5 3 3 0 0 0 6 15z" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  fog: `<svg viewBox="0 0 20 20" fill="none"><path d="M4 9h12M3 12h14M5 15h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  rain: `<svg viewBox="0 0 20 20" fill="none"><path d="M6 14h8.5a3 3 0 0 0 .4-6 3.5 3.5 0 0 0-6.8-1.2A2.5 2.5 0 0 0 6 14z" stroke="currentColor" stroke-width="1.5"/><path d="M8 16.5v2M12 15.5v2M10 17.5v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  snow: `<svg viewBox="0 0 20 20" fill="none"><path d="M6 13h8a3 3 0 0 0 .3-6 3.5 3.5 0 0 0-6.6-1.3A2.5 2.5 0 0 0 6 13z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="16" r=".8" fill="currentColor"/><circle cx="12" cy="17" r=".8" fill="currentColor"/></svg>`,
+  storm: `<svg viewBox="0 0 20 20" fill="none"><path d="M6 12h8a3 3 0 0 0 .4-6 3.5 3.5 0 0 0-6.8-1.2A2.5 2.5 0 0 0 6 12z" stroke="currentColor" stroke-width="1.5"/><path d="M11 13l-2 4h2l-1.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
+
+const activityIcons = {
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>`,
+  unlock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 7.5-2"/></svg>`,
+  dooropen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/><path d="M16 19v-6a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v6"/></svg>`,
+  doorclosed: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/><path d="M10 12h4"/></svg>`,
+  default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg>`,
+};
+
+function titleCase(value) {
+  return String(value || "unknown").replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function formatTime(value) {
+  if (!value) return "—";
+  return new Date(value).toLocaleString();
+}
 
 function localTimeOfDay(date = new Date()) {
   const hour = date.getHours();
@@ -71,48 +88,43 @@ function formatTemperature(value) {
 
 function formatAmbienceLabel(ambience) {
   const temp = formatTemperature(ambience.temperature_c);
-  const timeLabel = titleCase(ambience.time_of_day);
-  if (temp && ambience.weather_label) {
-    return `${temp} · ${ambience.weather_label}`;
-  }
-  if (ambience.weather_label) {
-    return ambience.weather_label;
-  }
-  return timeLabel;
+  if (temp && ambience.weather_label) return `${temp} · ${ambience.weather_label}`;
+  if (ambience.weather_label) return ambience.weather_label;
+  return titleCase(ambience.time_of_day);
+}
+
+function setWeatherIcon(weather) {
+  if (!els.weatherIcon) return;
+  els.weatherIcon.innerHTML = weatherIconSvg[weather] || weatherIconSvg.clear;
 }
 
 function applyAmbience(ambience) {
   const time = ambience?.time_of_day || localTimeOfDay();
   const weather = ambience?.weather || "clear";
 
-  if (els.skyBackground) {
-    els.skyBackground.dataset.time = time;
-    els.skyBackground.dataset.weather = weather;
+  if (els.ambient) {
+    els.ambient.dataset.time = time;
+    els.ambient.dataset.weather = weather;
   }
 
-  if (els.weatherIcon) {
-    els.weatherIcon.textContent = weatherIcons[weather] || "🌤️";
-  }
+  setWeatherIcon(weather);
 
   if (els.weatherLabel) {
     if (ambience?.message && !ambience.configured) {
-      els.weatherLabel.textContent = `${titleCase(time)} · Local time`;
+      els.weatherLabel.textContent = `${titleCase(time)} · Local`;
     } else {
-      els.weatherLabel.textContent = formatAmbienceLabel(ambience || { time_of_day: time, weather_label: titleCase(time) });
+      els.weatherLabel.textContent = formatAmbienceLabel(
+        ambience || { time_of_day: time, weather_label: titleCase(time) },
+      );
     }
-  }
-
-  if (ambience?.timezone) {
-    ambienceTimezone = ambience.timezone;
   }
 }
 
 function updateLocalAmbienceTime() {
-  const now = new Date();
   applyAmbience({
-    time_of_day: localTimeOfDay(now),
-    weather: els.skyBackground?.dataset.weather || "clear",
-    weather_label: els.weatherLabel?.textContent || titleCase(localTimeOfDay(now)),
+    time_of_day: localTimeOfDay(),
+    weather: els.ambient?.dataset.weather || "clear",
+    weather_label: els.weatherLabel?.textContent || titleCase(localTimeOfDay()),
     configured: config.weatherConfigured,
   });
 }
@@ -133,52 +145,44 @@ function startAmbienceLoop() {
   localTimeTimer = setInterval(updateLocalAmbienceTime, 60000);
 }
 
-const activityIcons = {
-  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>`,
-  unlock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 7.5-2"/></svg>`,
-  dooropen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/><path d="M16 19v-6a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v6"/></svg>`,
-  doorclosed: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/><path d="M10 12h4"/></svg>`,
-  default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg>`,
-};
-
-function titleCase(value) {
-  return String(value || "unknown").replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-function formatTime(value) {
-  if (!value) return "—";
-  return new Date(value).toLocaleString();
-}
-
 function activityIconClass(action) {
   if (!action) return "default";
   if (action.includes("lock") && !action.includes("unlock")) return "lock";
   if (action.includes("unlock")) return "unlock";
   if (action.includes("dooropen") || action.includes("door_open")) return "dooropen";
-  if (action.includes("doorclose") || action.includes("door_close") || action.includes("doorclosed")) {
+  if (action.includes("doorclose") || action.includes("door_closed") || action.includes("doorclosed")) {
     return "doorclosed";
   }
   return "default";
 }
 
 function setPill(text, tone = "neutral") {
-  els.connectionPill.innerHTML = `<span class="pill-dot"></span>${text}`;
-  els.connectionPill.className = `pill pill-${tone}`;
+  if (!els.connectionPill) return;
+  const textEl = els.connectionPill.querySelector(".chip__text");
+  if (textEl) textEl.textContent = text;
+  els.connectionPill.className = "chip chip--status";
+  if (tone === "success") els.connectionPill.classList.add("is-success");
+  if (tone === "warning") els.connectionPill.classList.add("is-warning");
+  if (tone === "danger") els.connectionPill.classList.add("is-danger");
 }
 
-function applyStatusCard(card, value) {
-  card.classList.remove("locked", "unlocked", "open", "closed");
-  if (value) card.classList.add(value);
+function applyLockRing(lockStatus, doorStatus) {
+  if (!els.lockRing) return;
+  const state = lockStatus === "unknown" ? doorStatus : lockStatus;
+  els.lockRing.dataset.state = state || "unknown";
+}
+
+function applyDoorMetric(doorStatus) {
+  if (!els.doorStatusCard) return;
+  els.doorStatusCard.classList.remove("open", "closed");
+  if (doorStatus === "open") els.doorStatusCard.classList.add("open");
+  if (doorStatus === "closed") els.doorStatusCard.classList.add("closed");
 }
 
 function setCameraMessage(text) {
-  const messageSpan = els.cameraMessage.querySelector("span");
-  if (messageSpan) {
-    messageSpan.textContent = text;
-  } else {
-    els.cameraMessage.textContent = text;
-  }
-  els.cameraMessage.classList.remove("hidden");
+  const messageSpan = els.cameraMessage?.querySelector("span");
+  if (messageSpan) messageSpan.textContent = text;
+  els.cameraMessage?.classList.remove("hidden");
 }
 
 function applyTheme(mode) {
@@ -186,18 +190,17 @@ function applyTheme(mode) {
   localStorage.setItem(THEME_STORAGE_KEY, mode);
 
   for (const button of [els.themeLight, els.themeSystem, els.themeDark]) {
-    button?.classList.remove("active");
+    button?.classList.remove("is-active");
   }
 
-  if (mode === "light") els.themeLight?.classList.add("active");
-  if (mode === "system") els.themeSystem?.classList.add("active");
-  if (mode === "dark") els.themeDark?.classList.add("active");
+  if (mode === "light") els.themeLight?.classList.add("is-active");
+  if (mode === "system") els.themeSystem?.classList.add("is-active");
+  if (mode === "dark") els.themeDark?.classList.add("is-active");
 }
 
 function initTheme() {
   const saved = localStorage.getItem(THEME_STORAGE_KEY) || "system";
   applyTheme(saved);
-
   els.themeLight?.addEventListener("click", () => applyTheme("light"));
   els.themeSystem?.addEventListener("click", () => applyTheme("system"));
   els.themeDark?.addEventListener("click", () => applyTheme("dark"));
@@ -213,48 +216,42 @@ async function api(path, options = {}) {
     throw new Error(detail || response.statusText);
   }
   const contentType = response.headers.get("content-type") || "";
-  if (contentType.includes("application/json")) {
-    return response.json();
-  }
+  if (contentType.includes("application/json")) return response.json();
   return response;
 }
 
 function renderActivities(activities) {
+  if (!els.activityList) return;
   els.activityList.innerHTML = "";
+
   if (!activities || activities.length === 0) {
-    els.activityList.innerHTML = `
-      <li class="activity-item">
-        <div class="activity-main">
-          <div class="activity-icon default">${activityIcons.default}</div>
-          <div class="activity-copy"><strong>No recent activity</strong><span class="muted">Events will appear here</span></div>
-        </div>
-      </li>`;
+    els.activityList.innerHTML = `<li class="timeline-empty">No events yet — lock and door activity will appear here.</li>`;
     return;
   }
 
-  for (const activity of activities) {
+  activities.forEach((activity, index) => {
     const iconClass = activityIconClass(activity.action);
     const item = document.createElement("li");
-    item.className = "activity-item";
+    item.className = "timeline-item";
+    item.style.animationDelay = `${index * 0.04}s`;
     item.innerHTML = `
-      <div class="activity-main">
-        <div class="activity-icon ${iconClass}">${activityIcons[iconClass] || activityIcons.default}</div>
-        <div class="activity-copy">
-          <strong>${activity.label}</strong>
-          <span class="muted">${activity.operator || activity.device_name || "System"}</span>
-        </div>
+      <div class="timeline-marker ${iconClass}">${activityIcons[iconClass] || activityIcons.default}</div>
+      <div class="timeline-body">
+        <strong>${activity.label}</strong>
+        <span>${activity.operator || activity.device_name || "System"}</span>
       </div>
-      <span class="activity-time">${formatTime(activity.timestamp)}</span>
+      <time class="timeline-time">${formatTime(activity.timestamp)}</time>
     `;
     els.activityList.appendChild(item);
-  }
+  });
 }
 
 function renderCameraOptions(cameras, selectedId) {
+  if (!els.cameraSelect) return;
   els.cameraSelect.innerHTML = "";
   if (!cameras || cameras.length === 0) {
     const option = document.createElement("option");
-    option.textContent = "No cameras found";
+    option.textContent = "No cameras";
     els.cameraSelect.appendChild(option);
     els.cameraSelect.disabled = true;
     return;
@@ -270,16 +267,21 @@ function renderCameraOptions(cameras, selectedId) {
   }
 }
 
+function showCameraFeed(show) {
+  if (els.cameraImage) els.cameraImage.hidden = !show;
+  if (els.cameraPlaceholder) els.cameraPlaceholder.hidden = show;
+}
+
 function updateCameraSnapshot() {
   if (!selectedCameraId) return;
   const url = `/api/camera/snapshot?camera_id=${encodeURIComponent(selectedCameraId)}&t=${Date.now()}`;
   els.cameraImage.onload = () => {
-    els.cameraImage.hidden = false;
-    els.cameraMessage.classList.add("hidden");
+    showCameraFeed(true);
+    els.cameraMessage?.classList.add("hidden");
   };
   els.cameraImage.onerror = () => {
-    els.cameraImage.hidden = true;
-    setCameraMessage("Unable to load camera snapshot");
+    showCameraFeed(false);
+    setCameraMessage("Unable to load snapshot");
   };
   els.cameraImage.src = url;
 }
@@ -296,68 +298,71 @@ function renderStatus(status) {
   const needsAuth = authState !== "authenticated" && config.yaleConfigured;
 
   if (needsAuth || authState === "requires_validation") {
-    els.authPanel.classList.remove("hidden");
-    els.authMessage.textContent = status.auth_message || "Sign in to control your Yale lock.";
-    els.verifyForm.classList.toggle("hidden", authState !== "requires_validation");
-    els.loginForm.classList.toggle("hidden", authState === "requires_validation");
+    els.authPanel?.classList.remove("hidden");
+    if (els.authMessage) els.authMessage.textContent = status.auth_message || "Sign in to control your Yale lock.";
+    els.verifyForm?.classList.toggle("hidden", authState !== "requires_validation");
+    els.loginForm?.classList.toggle("hidden", authState === "requires_validation");
   } else {
-    els.authPanel.classList.add("hidden");
+    els.authPanel?.classList.add("hidden");
   }
 
-  if (status.authenticated) {
-    setPill("Yale connected", "success");
-  } else if (config.yaleConfigured) {
-    setPill("Yale auth required", "warning");
-  } else {
-    setPill("Yale not configured", "neutral");
-  }
+  if (status.authenticated) setPill("Yale connected", "success");
+  else if (config.yaleConfigured) setPill("Sign in required", "warning");
+  else setPill("Not configured", "neutral");
 
   const lock = status.lock;
-  els.lockName.textContent = lock ? lock.name : "No lock selected";
-  els.lockStatus.textContent = titleCase(status.lock_status);
-  els.doorStatus.textContent = titleCase(status.door_status);
-  els.batteryLevel.textContent = lock && lock.battery_level != null ? `${lock.battery_level}%` : "—";
+  if (els.lockName) els.lockName.textContent = lock ? lock.name : "No lock selected";
 
-  if (lock) {
-    const bridgeOnline = lock.bridge_online;
-    els.bridgeStatus.innerHTML = `<span class="meta-dot ${bridgeOnline ? "online" : "offline"}"></span>Bridge: ${bridgeOnline ? "Online" : "Offline"}`;
-  } else {
-    els.bridgeStatus.innerHTML = `<span class="meta-dot"></span>Bridge: —`;
+  const lockLabel = titleCase(status.lock_status);
+  if (els.lockStatus) els.lockStatus.textContent = lockLabel;
+  if (els.doorStatus) els.doorStatus.textContent = titleCase(status.door_status);
+  if (els.batteryLevel) {
+    els.batteryLevel.textContent = lock && lock.battery_level != null ? `${lock.battery_level}%` : "—";
   }
 
-  els.lockUpdated.textContent = `Updated: ${formatTime(status.lock_status_updated_at || status.updated_at)}`;
+  applyLockRing(status.lock_status, status.door_status);
+  applyDoorMetric(status.door_status);
 
-  applyStatusCard(els.lockStatusCard, status.lock_status);
-  applyStatusCard(els.doorStatusCard, status.door_status);
+  if (lock && els.bridgeStatus) {
+    const online = lock.bridge_online;
+    els.bridgeStatus.innerHTML = `<span class="foot-dot ${online ? "is-online" : "is-offline"}"></span>Bridge ${online ? "online" : "offline"}`;
+  } else if (els.bridgeStatus) {
+    els.bridgeStatus.innerHTML = `<span class="foot-dot"></span>Bridge —`;
+  }
+
+  if (els.lockUpdated) {
+    els.lockUpdated.textContent = `Updated ${formatTime(status.lock_status_updated_at || status.updated_at)}`;
+  }
 
   const controlsEnabled = status.authenticated && !!lock;
-  els.lockBtn.disabled = !controlsEnabled;
-  els.unlockBtn.disabled = !controlsEnabled;
+  if (els.lockBtn) els.lockBtn.disabled = !controlsEnabled;
+  if (els.unlockBtn) els.unlockBtn.disabled = !controlsEnabled;
 
   renderActivities(status.activities);
 
   const camera = status.camera || {};
   if (!config.unifiConfigured) {
     setCameraMessage("Set UNIFI_HOST, UNIFI_USERNAME, and UNIFI_PASSWORD in .env");
-    els.cameraImage.hidden = true;
+    showCameraFeed(false);
     return;
   }
 
   if (!camera.connected) {
     setCameraMessage(camera.message || "UniFi Protect unavailable");
-    els.cameraImage.hidden = true;
+    showCameraFeed(false);
   }
 
   renderCameraOptions(camera.cameras || [], camera.selected_camera_id);
   selectedCameraId = camera.selected_camera_id || selectedCameraId;
   const active = (camera.cameras || []).find((item) => item.camera_id === selectedCameraId);
-  els.cameraStatus.textContent = active
-    ? `Status: ${active.is_connected ? "Connected" : "Offline"}${active.is_motion_detected ? " · Motion" : ""}`
-    : "Status: —";
 
-  if (camera.connected && selectedCameraId) {
-    startSnapshotLoop();
+  if (els.cameraStatus) {
+    els.cameraStatus.textContent = active
+      ? `${active.is_connected ? "Connected" : "Offline"}${active.is_motion_detected ? " · Motion" : ""}`
+      : "—";
   }
+
+  if (camera.connected && selectedCameraId) startSnapshotLoop();
 }
 
 async function refreshStatus() {
@@ -367,19 +372,15 @@ async function refreshStatus() {
 
 function connectEvents() {
   const source = new EventSource("/api/events");
-  source.onmessage = (event) => {
-    renderStatus(JSON.parse(event.data));
-  };
-  source.onerror = () => {
-    setPill("Live updates paused", "warning");
-  };
+  source.onmessage = (event) => renderStatus(JSON.parse(event.data));
+  source.onerror = () => setPill("Updates paused", "warning");
 }
 
-els.refreshBtn.addEventListener("click", () => {
+els.refreshBtn?.addEventListener("click", () => {
   refreshStatus().catch((error) => setPill(error.message, "danger"));
 });
 
-els.lockBtn.addEventListener("click", async () => {
+els.lockBtn?.addEventListener("click", async () => {
   try {
     const result = await api("/api/lock", { method: "POST" });
     if (result.status) renderStatus(result.status);
@@ -388,7 +389,7 @@ els.lockBtn.addEventListener("click", async () => {
   }
 });
 
-els.unlockBtn.addEventListener("click", async () => {
+els.unlockBtn?.addEventListener("click", async () => {
   try {
     const result = await api("/api/unlock", { method: "POST" });
     if (result.status) renderStatus(result.status);
@@ -397,7 +398,7 @@ els.unlockBtn.addEventListener("click", async () => {
   }
 });
 
-els.loginForm.addEventListener("submit", async (event) => {
+els.loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
     const status = await api("/api/auth/login", {
@@ -410,11 +411,11 @@ els.loginForm.addEventListener("submit", async (event) => {
     });
     renderStatus(status);
   } catch (error) {
-    els.authMessage.textContent = error.message;
+    if (els.authMessage) els.authMessage.textContent = error.message;
   }
 });
 
-els.verifyForm.addEventListener("submit", async (event) => {
+els.verifyForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
     const status = await api("/api/auth/verify", {
@@ -423,11 +424,11 @@ els.verifyForm.addEventListener("submit", async (event) => {
     });
     renderStatus(status);
   } catch (error) {
-    els.authMessage.textContent = error.message;
+    if (els.authMessage) els.authMessage.textContent = error.message;
   }
 });
 
-els.cameraSelect.addEventListener("change", async () => {
+els.cameraSelect?.addEventListener("change", async () => {
   selectedCameraId = els.cameraSelect.value;
   try {
     await api(`/api/cameras/${encodeURIComponent(selectedCameraId)}/select`, { method: "POST" });
