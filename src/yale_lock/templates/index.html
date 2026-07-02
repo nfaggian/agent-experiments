@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Home Dashboard</p>
+        <h1>Yale Lock & UniFi Camera</h1>
+      </div>
+      <div class="header-actions">
+        <span id="connection-pill" class="pill pill-neutral">Connecting…</span>
+        <button id="refresh-btn" class="btn btn-secondary" type="button">Refresh</button>
+      </div>
+    </header>
+
+    <section id="auth-panel" class="panel auth-panel hidden">
+      <h2>Yale Sign In</h2>
+      <p id="auth-message" class="muted"></p>
+      <form id="login-form" class="stack">
+        <label>
+          Email or phone
+          <input id="login-username" type="text" autocomplete="username" required>
+        </label>
+        <label>
+          Password
+          <input id="login-password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+      </form>
+      <form id="verify-form" class="stack hidden">
+        <label>
+          Verification code
+          <input id="verify-code" type="text" inputmode="numeric" autocomplete="one-time-code" required>
+        </label>
+        <button class="btn btn-primary" type="submit">Verify</button>
+      </form>
+    </section>
+
+    <main class="grid">
+      <section class="panel lock-panel">
+        <div class="panel-header">
+          <h2>Yale Lock</h2>
+          <span id="lock-name" class="muted">—</span>
+        </div>
+
+        <div class="status-row">
+          <div class="status-card" id="lock-status-card">
+            <p class="label">Lock</p>
+            <p id="lock-status" class="value">Unknown</p>
+          </div>
+          <div class="status-card" id="door-status-card">
+            <p class="label">Door</p>
+            <p id="door-status" class="value">Unknown</p>
+          </div>
+          <div class="status-card">
+            <p class="label">Battery</p>
+            <p id="battery-level" class="value">—</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="unlock-btn" class="btn btn-primary" type="button">Unlock</button>
+          <button id="lock-btn" class="btn btn-secondary" type="button">Lock</button>
+        </div>
+
+        <div class="meta">
+          <p id="bridge-status" class="muted">Bridge: —</p>
+          <p id="lock-updated" class="muted">Updated: —</p>
+        </div>
+      </section>
+
+      <section class="panel camera-panel">
+        <div class="panel-header">
+          <h2>UniFi Camera</h2>
+          <select id="camera-select" class="select"></select>
+        </div>
+
+        <div id="camera-message" class="camera-message muted">Camera feed unavailable</div>
+        <div class="camera-frame">
+          <img id="camera-image" alt="UniFi camera snapshot" hidden>
+        </div>
+        <div class="meta">
+          <p id="camera-status" class="muted">Status: —</p>
+        </div>
+      </section>
+
+      <section class="panel activity-panel">
+        <div class="panel-header">
+          <h2>Recent Activity</h2>
+        </div>
+        <ul id="activity-list" class="activity-list"></ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.DASHBOARD_CONFIG = {
+      snapshotRefreshSeconds: {{ settings.unifi_snapshot_refresh_seconds }},
+      yaleConfigured: {{ 'true' if settings.yale_configured else 'false' }},
+      unifiConfigured: {{ 'true' if settings.unifi_configured else 'false' }},
+    };
+  </script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -50,7 +50,44 @@ make prefect-server   # Start Prefect server and serve flows
 make prefect-flows    # Serve flows (server must be running)
 make test             # Run tests
 make check            # Lint and type check
+make dashboard        # Run Yale lock + UniFi camera dashboard
 ```
+
+## Home Dashboard (Yale Lock + UniFi Camera)
+
+A web dashboard for monitoring and controlling a Yale smart lock and viewing UniFi Protect camera snapshots.
+
+### Setup
+
+```bash
+# Install dependencies with uv
+make install
+
+# Copy and edit environment variables
+cp .env.example .env
+```
+
+Configure `.env` with your Yale and UniFi credentials (see `.env.example` for all options).
+
+### Run
+
+```bash
+make dashboard
+```
+
+Open `http://127.0.0.1:8080` in your browser.
+
+### Features
+
+- **Yale lock**: live lock/door status, recent activity feed, lock/unlock controls
+- **UniFi camera**: camera selector and auto-refreshing snapshot feed
+- **Real-time updates**: Server-Sent Events push status changes to the browser
+
+### Requirements
+
+- Yale lock connected via Yale Access / August app with Wi-Fi bridge
+- UniFi Protect NVR (Cloud Key+, Dream Machine, etc.) on your network
+- Python 3.13+ managed with [uv](https://docs.astral.sh/uv/)
 
 ## Project Structure
 
@@ -61,6 +98,12 @@ src/
 │       ├── agent.py         # Agent definition
 │       └── tools/
 │           └── google_docs_tool.py  # Google Docs integration
+├── yale_lock/               # Yale lock + UniFi camera dashboard
+│   ├── server.py            # FastAPI application
+│   ├── yale_client.py       # Yale lock integration
+│   ├── unifi_client.py      # UniFi Protect camera integration
+│   ├── static/              # Web UI assets
+│   └── templates/           # HTML templates
 └── workflows/
     ├── pipeline.py          # Main Prefect workflow
     ├── serve.py             # Flow serving entry point

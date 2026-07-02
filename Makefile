@@ -28,6 +28,10 @@ test: ## Run all tests
 		--cov-report=term-missing \
 		--junitxml=junit.xml
 
+.PHONY: dashboard
+dashboard: ## Run Yale lock + UniFi camera web dashboard
+	@uv run home-dashboard
+
 .PHONY: web
 web: ## Run the ADK web demo server
 	@uv run adk web --reload src/agents/

@@ -22,6 +22,11 @@ dependencies = [
     "google-api-python-client>=2.100.0",
     "prefect>=3.0.0",
     "markdown-it-py>=3.0.0",
+    "yalexs>=9.2.10",
+    "aiofiles>=25.1.0",
+    "fastapi>=0.139.0",
+    "pydantic-settings>=2.14.2",
+    "uiprotect>=15.3.0",
 ]
 
 [build-system]
@@ -57,6 +62,10 @@ warn_unused_ignores = true
 show_error_codes = true
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "yale_lock.*"
+disable_error_code = ["no-any-unimported"]
+
 [tool.basedpyright]
 reportAny = false
 reportExplicitAny = false
@@ -80,3 +89,9 @@ omit = ["server.py"]
 
 [tool.deptry.per_rule_ignores]
 DEP002 = ["uvicorn"]
+
+[project.scripts]
+home-dashboard = "yale_lock.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

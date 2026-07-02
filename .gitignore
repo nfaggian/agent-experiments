@@ -67,3 +67,4 @@ ml_agent/__pycache__/__init__.cpython-313.pyc
 uv.lock
 ml_agent/__pycache__/__init__.cpython-313.pyc
 ml_agent/tools/__pycache__/google_docs_tool.cpython-313.pyc
+.yale_auth_cache
