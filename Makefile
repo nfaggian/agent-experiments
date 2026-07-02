@@ -32,6 +32,10 @@ test: ## Run all tests
 dashboard: ## Run Yale lock + UniFi camera web dashboard
 	@uv run home-dashboard
 
+.PHONY: dashboard-1password
+dashboard-1password: ## Run dashboard with secrets from 1Password
+	@./scripts/run-dashboard-1password.sh
+
 .PHONY: web
 web: ## Run the ADK web demo server
 	@uv run adk web --reload src/agents/

@@ -51,6 +51,7 @@ make prefect-flows    # Serve flows (server must be running)
 make test             # Run tests
 make check            # Lint and type check
 make dashboard        # Run Yale lock + UniFi camera dashboard
+make dashboard-1password  # Run dashboard with 1Password secrets
 ```
 
 ## Home Dashboard (Yale Lock + UniFi Camera)
@@ -76,6 +77,38 @@ make dashboard
 ```
 
 Open `http://127.0.0.1:8080` in your browser.
+
+### Run with 1Password
+
+Store Yale and UniFi credentials in 1Password, then inject them at runtime with the [1Password CLI](https://developer.1password.com/docs/cli/) (`op`). Non-secret settings (hostnames, ports, weather coordinates) stay as plaintext in your env file; only passwords and usernames use `op://` secret references.
+
+```bash
+# Install the 1Password CLI and sign in
+op signin
+
+# Create your local env file from the example
+cp .env.1password.example .env.1password
+
+# Edit .env.1password — replace vault/item/field names with your references.
+# List field references for an item:
+op item get "Yale Access" --format json | jq '.fields[] | {label, reference}'
+
+# Start the dashboard (secrets are resolved by op run, never written to disk)
+make dashboard-1password
+```
+
+Optional environment variables:
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `ONEPASSWORD_ENV_FILE` | `.env.1password` | Path to the env file with `op://` references |
+| `ONEPASSWORD_ENVIRONMENT` | _(unset)_ | 1Password Environment ID (`op run --environment`) |
+
+Example with a 1Password Environment plus a local override file:
+
+```bash
+ONEPASSWORD_ENVIRONMENT=env_abc123 make dashboard-1password
+```
 
 ### Features
 
