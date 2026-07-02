@@ -1,5 +1,6 @@
 const config = window.DASHBOARD_CONFIG || {};
 const refreshMs = Math.max(1000, (config.snapshotRefreshSeconds || 2) * 1000);
+const THEME_STORAGE_KEY = "home-dashboard-theme";
 
 const els = {
   connectionPill: document.getElementById("connection-pill"),
@@ -18,6 +19,7 @@ const els = {
   lockStatusCard: document.getElementById("lock-status-card"),
   doorStatusCard: document.getElementById("door-status-card"),
   bridgeStatus: document.getElementById("bridge-status"),
+  bridgeDot: document.getElementById("bridge-dot"),
   lockUpdated: document.getElementById("lock-updated"),
   lockBtn: document.getElementById("lock-btn"),
   unlockBtn: document.getElementById("unlock-btn"),
@@ -26,10 +28,21 @@ const els = {
   cameraMessage: document.getElementById("camera-message"),
   cameraStatus: document.getElementById("camera-status"),
   activityList: document.getElementById("activity-list"),
+  themeLight: document.getElementById("theme-light"),
+  themeSystem: document.getElementById("theme-system"),
+  themeDark: document.getElementById("theme-dark"),
 };
 
 let selectedCameraId = null;
 let snapshotTimer = null;
+
+const activityIcons = {
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>`,
+  unlock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 7.5-2"/></svg>`,
+  dooropen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/><path d="M16 19v-6a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v6"/></svg>`,
+  doorclosed: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14"/><path d="M10 12h4"/></svg>`,
+  default: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg>`,
+};
 
 function titleCase(value) {
   return String(value || "unknown").replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -40,14 +53,57 @@ function formatTime(value) {
   return new Date(value).toLocaleString();
 }
 
+function activityIconClass(action) {
+  if (!action) return "default";
+  if (action.includes("lock") && !action.includes("unlock")) return "lock";
+  if (action.includes("unlock")) return "unlock";
+  if (action.includes("dooropen") || action.includes("door_open")) return "dooropen";
+  if (action.includes("doorclose") || action.includes("door_close") || action.includes("doorclosed")) {
+    return "doorclosed";
+  }
+  return "default";
+}
+
 function setPill(text, tone = "neutral") {
-  els.connectionPill.textContent = text;
+  els.connectionPill.innerHTML = `<span class="pill-dot"></span>${text}`;
   els.connectionPill.className = `pill pill-${tone}`;
 }
 
 function applyStatusCard(card, value) {
   card.classList.remove("locked", "unlocked", "open", "closed");
   if (value) card.classList.add(value);
+}
+
+function setCameraMessage(text) {
+  const messageSpan = els.cameraMessage.querySelector("span");
+  if (messageSpan) {
+    messageSpan.textContent = text;
+  } else {
+    els.cameraMessage.textContent = text;
+  }
+  els.cameraMessage.classList.remove("hidden");
+}
+
+function applyTheme(mode) {
+  document.documentElement.dataset.theme = mode;
+  localStorage.setItem(THEME_STORAGE_KEY, mode);
+
+  for (const button of [els.themeLight, els.themeSystem, els.themeDark]) {
+    button?.classList.remove("active");
+  }
+
+  if (mode === "light") els.themeLight?.classList.add("active");
+  if (mode === "system") els.themeSystem?.classList.add("active");
+  if (mode === "dark") els.themeDark?.classList.add("active");
+}
+
+function initTheme() {
+  const saved = localStorage.getItem(THEME_STORAGE_KEY) || "system";
+  applyTheme(saved);
+
+  els.themeLight?.addEventListener("click", () => applyTheme("light"));
+  els.themeSystem?.addEventListener("click", () => applyTheme("system"));
+  els.themeDark?.addEventListener("click", () => applyTheme("dark"));
 }
 
 async function api(path, options = {}) {
@@ -69,19 +125,29 @@ async function api(path, options = {}) {
 function renderActivities(activities) {
   els.activityList.innerHTML = "";
   if (!activities || activities.length === 0) {
-    els.activityList.innerHTML = '<li class="activity-item"><span class="muted">No recent activity</span></li>';
+    els.activityList.innerHTML = `
+      <li class="activity-item">
+        <div class="activity-main">
+          <div class="activity-icon default">${activityIcons.default}</div>
+          <div class="activity-copy"><strong>No recent activity</strong><span class="muted">Events will appear here</span></div>
+        </div>
+      </li>`;
     return;
   }
 
   for (const activity of activities) {
+    const iconClass = activityIconClass(activity.action);
     const item = document.createElement("li");
     item.className = "activity-item";
     item.innerHTML = `
-      <div>
-        <strong>${activity.label}</strong>
-        <span class="muted">${activity.operator || activity.device_name || "System"}</span>
+      <div class="activity-main">
+        <div class="activity-icon ${iconClass}">${activityIcons[iconClass] || activityIcons.default}</div>
+        <div class="activity-copy">
+          <strong>${activity.label}</strong>
+          <span class="muted">${activity.operator || activity.device_name || "System"}</span>
+        </div>
       </div>
-      <span class="muted">${formatTime(activity.timestamp)}</span>
+      <span class="activity-time">${formatTime(activity.timestamp)}</span>
     `;
     els.activityList.appendChild(item);
   }
@@ -116,8 +182,7 @@ function updateCameraSnapshot() {
   };
   els.cameraImage.onerror = () => {
     els.cameraImage.hidden = true;
-    els.cameraMessage.textContent = "Unable to load camera snapshot";
-    els.cameraMessage.classList.remove("hidden");
+    setCameraMessage("Unable to load camera snapshot");
   };
   els.cameraImage.src = url;
 }
@@ -155,7 +220,14 @@ function renderStatus(status) {
   els.lockStatus.textContent = titleCase(status.lock_status);
   els.doorStatus.textContent = titleCase(status.door_status);
   els.batteryLevel.textContent = lock && lock.battery_level != null ? `${lock.battery_level}%` : "—";
-  els.bridgeStatus.textContent = lock ? `Bridge: ${lock.bridge_online ? "Online" : "Offline"}` : "Bridge: —";
+
+  if (lock) {
+    const bridgeOnline = lock.bridge_online;
+    els.bridgeStatus.innerHTML = `<span class="meta-dot ${bridgeOnline ? "online" : "offline"}"></span>Bridge: ${bridgeOnline ? "Online" : "Offline"}`;
+  } else {
+    els.bridgeStatus.innerHTML = `<span class="meta-dot"></span>Bridge: —`;
+  }
+
   els.lockUpdated.textContent = `Updated: ${formatTime(status.lock_status_updated_at || status.updated_at)}`;
 
   applyStatusCard(els.lockStatusCard, status.lock_status);
@@ -169,15 +241,13 @@ function renderStatus(status) {
 
   const camera = status.camera || {};
   if (!config.unifiConfigured) {
-    els.cameraMessage.textContent = "Set UNIFI_HOST, UNIFI_USERNAME, and UNIFI_PASSWORD in .env";
-    els.cameraMessage.classList.remove("hidden");
+    setCameraMessage("Set UNIFI_HOST, UNIFI_USERNAME, and UNIFI_PASSWORD in .env");
     els.cameraImage.hidden = true;
     return;
   }
 
   if (!camera.connected) {
-    els.cameraMessage.textContent = camera.message || "UniFi Protect unavailable";
-    els.cameraMessage.classList.remove("hidden");
+    setCameraMessage(camera.message || "UniFi Protect unavailable");
     els.cameraImage.hidden = true;
   }
 
@@ -266,12 +336,12 @@ els.cameraSelect.addEventListener("change", async () => {
     await api(`/api/cameras/${encodeURIComponent(selectedCameraId)}/select`, { method: "POST" });
     startSnapshotLoop();
   } catch (error) {
-    els.cameraMessage.textContent = error.message;
-    els.cameraMessage.classList.remove("hidden");
+    setCameraMessage(error.message);
   }
 });
 
 async function init() {
+  initTheme();
   try {
     const status = await api("/api/status");
     renderStatus(status);
