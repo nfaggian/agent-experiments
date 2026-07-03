@@ -36,6 +36,15 @@ web: ## Run the ADK web demo server
 api_server: ## Run the ADK FastAPI server
 	@uv run adk api_server src/agents/
 
+.PHONY: mobile-api
+mobile-api: ## Run the Home Security Mobile API server
+	@echo "🚀 Starting Home Security Mobile API server..."
+	@PYTHONPATH=$(ROOT_DIR) uv run uvicorn src.mobile_api.app:app --host 0.0.0.0 --port 8000 --reload
+
+.PHONY: home-security-web
+home-security-web: ## Run the Home Security Agent via ADK web interface
+	@uv run adk web --reload src/agents/home_security_agent/
+
 .PHONY: prefect-server
 prefect-server: ## Start Prefect server and serve flows
 	@./scripts/start_prefect.sh
