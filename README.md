@@ -26,7 +26,7 @@ make prefect-server
 ### Agents
 
 #### Home Security Agent (NEW)
-An AI-powered home security monitoring agent that manages smart locks, cameras, and sensors.
+An AI-powered home security monitoring agent that manages smart locks, cameras, and sensors. Uses **Gemma 2 9B** by default via local Ollama.
 
 **Features:**
 - **Smart Lock Management**: View status, lock/unlock doors remotely
@@ -185,9 +185,28 @@ struct HomeSecurityAPI {
 ## Configuration
 
 - **Ollama**: Set `OLLAMA_API_BASE` in `.env` or environment
+- **Home Security Model**: Set `HOME_SECURITY_MODEL` to override the default Gemma model
+  - Default: `ollama_chat/gemma2:9b` (local Ollama)
+  - Options: `ollama_chat/gemma2:27b`, `ollama_chat/gemma:7b`, `gemini/gemma-2-9b-it`
 - **Google Docs**: Place `credentials.json` in project root (token.json auto-generated)
 - **Prefect UI**: Available at `http://127.0.0.1:4200` (or port specified by `PREFECT_PORT`)
 - **Mobile API**: Default port 8000, configurable via uvicorn options
+
+### Setting up Gemma with Ollama
+
+```bash
+# Install Ollama (if not already installed)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull Gemma 2 9B model
+ollama pull gemma2:9b
+
+# Or for the larger 27B model (requires more RAM)
+ollama pull gemma2:27b
+
+# Start Ollama server
+ollama serve
+```
 
 ## Security Notes
 

@@ -1,5 +1,7 @@
 """Home Security Monitoring Agent - AI-powered smart home security assistant."""
 
+import os
+
 from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm
 
@@ -19,6 +21,13 @@ from .tools import (
     get_recent_activity,
     get_home_summary,
 )
+
+# Model configuration - supports both local Ollama and cloud providers
+# For local Ollama with Gemma: ollama_chat/gemma2:9b or ollama_chat/gemma2:27b
+# For Google AI Studio: gemini/gemma-2-9b-it or gemini/gemma-2-27b-it
+# Set MODEL_NAME environment variable to override default
+DEFAULT_MODEL = "ollama_chat/gemma2:9b"
+MODEL_NAME = os.getenv("HOME_SECURITY_MODEL", DEFAULT_MODEL)
 
 
 AGENT_INSTRUCTION = """You are a helpful and vigilant home security AI assistant. Your role is to help 
@@ -57,7 +66,14 @@ overview of the home security status including any issues or alerts.
 """
 
 root_agent = Agent(
-    model=LiteLlm(model="ollama_chat/gpt-oss:20b"),
+    # Uses Gemma 2 9B by default via local Ollama
+    # Override with HOME_SECURITY_MODEL environment variable
+    # Examples:
+    #   - ollama_chat/gemma2:9b (default, local)
+    #   - ollama_chat/gemma2:27b (larger local model)
+    #   - ollama_chat/gemma:7b (original Gemma)
+    #   - gemini/gemma-2-9b-it (Google AI Studio)
+    model=LiteLlm(model=MODEL_NAME),
     name="home_security_agent",
     description="An AI assistant that monitors home security including locks, cameras, and sensors.",
     instruction=AGENT_INSTRUCTION,
