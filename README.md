@@ -145,42 +145,34 @@ tests/
 └── test_mobile_api.py          # API endpoint tests
 ```
 
-## iOS App Integration
+## iOS App
 
-The Mobile API is designed for easy iOS app integration:
+A complete SwiftUI iOS app is included in the `ios/` directory.
 
-1. **SwiftUI/UIKit**: Use URLSession or Alamofire to call REST endpoints
-2. **Widgets**: Use quick action endpoints for iOS widgets
-3. **Siri Shortcuts**: Integrate quick actions with iOS Shortcuts app
-4. **Push Notifications**: Register device tokens via `/api/notifications/register`
+### Features
+- **Dashboard**: Security score gauge, quick actions, status overview
+- **Locks**: View/control all smart locks with battery indicators
+- **Cameras**: Camera grid with motion detection events
+- **AI Chat**: Natural language assistant for security queries
+- **Settings**: Server config, arm/disarm, notifications, activity log
 
-**Example Swift code:**
-```swift
-struct HomeSecurityAPI {
-    let baseURL = "http://your-server:8000"
-    
-    func getSummary() async throws -> HomeSummary {
-        let url = URL(string: "\(baseURL)/api/summary")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        return try JSONDecoder().decode(HomeSummary.self, from: data)
-    }
-    
-    func lockAllDoors() async throws {
-        var request = URLRequest(url: URL(string: "\(baseURL)/api/locks/lock-all")!)
-        request.httpMethod = "POST"
-        let (_, _) = try await URLSession.shared.data(for: request)
-    }
-    
-    func chat(message: String) async throws -> ChatResponse {
-        var request = URLRequest(url: URL(string: "\(baseURL)/api/chat")!)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(["message": message])
-        let (data, _) = try await URLSession.shared.data(for: request)
-        return try JSONDecoder().decode(ChatResponse.self, from: data)
-    }
-}
+### Quick Start
+
+```bash
+# 1. Start the backend
+make mobile-api
+
+# 2. Open in Xcode
+open ios/HomeSecurityApp/HomeSecurityApp.xcodeproj
+
+# 3. Build and run (⌘R)
 ```
+
+### Requirements
+- iOS 17.0+
+- Xcode 15.0+
+
+See [ios/README.md](ios/README.md) for detailed setup instructions.
 
 ## Configuration
 
