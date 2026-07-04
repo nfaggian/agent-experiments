@@ -3,12 +3,7 @@
 import { useCallback, useState } from "react";
 import type { UtilizationTimeline } from "@/core/types";
 import { updateTimelineCell } from "@/core/api";
-import {
-  cn,
-  getUtilizationCellStyle,
-  getUtilizationColor,
-  getUtilizationTextColor,
-} from "@/core/utils";
+import { cn, utilizationVariant } from "@/core/utils";
 import { CalendarRange, Pencil, Check, X } from "lucide-react";
 
 interface UtilizationTimelineProps {
@@ -196,7 +191,7 @@ export function UtilizationTimelineView({
                           }
                           className={cn(
                             "util-cell group relative",
-                            getUtilizationCellStyle(cell.utilization)
+                            utilizationVariant(cell.utilization).cell
                           )}
                           title={
                             cell.note
@@ -213,10 +208,7 @@ export function UtilizationTimelineView({
                 })}
                 <td className="px-3 py-2 text-center">
                   <span
-                    className={cn(
-                      "title-sm",
-                      getUtilizationTextColor(rowAverage(row.cells))
-                    )}
+                    className={cn("title-sm", utilizationVariant(rowAverage(row.cells)).text)}
                   >
                     {rowAverage(row.cells)}%
                   </span>
@@ -244,7 +236,7 @@ export function UtilizationTimelineView({
                   >
                     <div className="mx-auto flex h-2 max-w-[72px] overflow-hidden rounded-full bg-surface-container-highest">
                       <div
-                        className={cn("h-full rounded-full", getUtilizationColor(avg))}
+                        className={cn("h-full rounded-full", utilizationVariant(avg).bar)}
                         style={{ width: `${Math.min(avg, 100)}%` }}
                       />
                     </div>

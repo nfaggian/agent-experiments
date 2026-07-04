@@ -4,10 +4,11 @@ from datetime import datetime, timezone
 
 from pydantic import TypeAdapter
 
-from delta_command.json_db import database_path, load_json, migrate_legacy_runtime, save_json
+from delta_command.json_db import database_path, load_json, save_json
 from delta_command.models import (
     Database,
     Engineer,
+    EngineerStatus,
     Opportunity,
     OpportunityStage,
     Project,
@@ -27,15 +28,8 @@ from delta_command.utilization_timeline import (
 DatabaseAdapter = TypeAdapter(Database)
 
 
-def _data_path():
-    path = database_path()
-    migrate_legacy_runtime(path)
-    return path
-
-
 def load_database() -> Database:
-    raw = load_json(_data_path())
-    return DatabaseAdapter.validate_python(raw)
+    return DatabaseAdapter.validate_python(load_json(database_path()))
 
 
 def list_engineers(
@@ -59,8 +53,7 @@ def list_engineers(
 
 def save_database(db: Database) -> None:
     db.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    payload = db.model_dump(by_alias=True, mode="json")
-    save_json(_data_path(), payload)
+    save_json(database_path(), db.model_dump(by_alias=True, mode="json"))
 
 
 def update_opportunity_stage(opportunity_id: str, stage: OpportunityStage) -> Opportunity | None:

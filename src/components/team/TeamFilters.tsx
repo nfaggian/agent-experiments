@@ -55,14 +55,12 @@ export function TeamFilters({ filters, onChange, resultCount, totalCount }: Team
   );
 }
 
-export function filterEngineers<T extends { name: string; role: string; email: string; status: string }>(
-  engineers: T[],
-  filters: TeamFilterState
-): T[] {
+export function filterEngineers<
+  T extends { name: string; role: string; email: string; status: string }
+>(engineers: T[], filters: TeamFilterState): T[] {
   const query = filters.search.trim().toLowerCase();
   return engineers.filter((engineer) => {
-    const matchesStatus = filters.status === "all" || engineer.status === filters.status;
-    if (!matchesStatus) return false;
+    if (filters.status !== "all" && engineer.status !== filters.status) return false;
     if (!query) return true;
     return (
       engineer.name.toLowerCase().includes(query) ||
@@ -70,11 +68,4 @@ export function filterEngineers<T extends { name: string; role: string; email: s
       engineer.email.toLowerCase().includes(query)
     );
   });
-}
-
-export function filterTimelineRows<T extends { engineerId: string }>(
-  rows: T[],
-  engineerIds: Set<string>
-): T[] {
-  return rows.filter((row) => engineerIds.has(row.engineerId));
 }

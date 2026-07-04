@@ -27,9 +27,6 @@ const STAGE_COLORS: Record<string, string> = {
   lost: "#EF4444",
 };
 
-const CHART_GRID_COLOR = CHART_GRID;
-const CHART_TICK_COLOR = CHART_TICK;
-
 export function PipelineChart({ opportunities }: PipelineChartProps) {
   const data = OPPORTUNITY_STAGES.filter((s) => !["lost"].includes(s.id)).map(
     (stage) => {
@@ -52,15 +49,15 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} barSize={40}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
             <XAxis
               dataKey="stage"
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
             />

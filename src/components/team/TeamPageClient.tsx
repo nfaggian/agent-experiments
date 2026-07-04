@@ -7,8 +7,7 @@ import { TeamFilters, filterEngineers } from "@/components/team/TeamFilters";
 import type { TeamFilterState } from "@/components/team/TeamFilters";
 import { UtilizationTimelineView } from "@/components/team/UtilizationTimeline";
 import type { Engineer, Project, UtilizationTimeline } from "@/core/types";
-import { formatNameList } from "@/core/team-utils";
-import { cn, getUtilizationColor } from "@/core/utils";
+import { cn, formatNameList, utilizationVariant } from "@/core/utils";
 import { Users, AlertTriangle, CheckCircle, Clock, CalendarRange, LayoutGrid } from "lucide-react";
 
 type TeamView = "timeline" | "overview";
@@ -172,7 +171,7 @@ export function TeamPageClient({
                         <div
                           className={cn(
                             "flex h-full items-center justify-end rounded-full pr-2 text-[10px] font-medium text-white transition-all",
-                            getUtilizationColor(engineer.utilization)
+                            utilizationVariant(engineer.utilization).bar
                           )}
                           style={{
                             width: `${Math.min(engineer.utilization, 100)}%`,

@@ -1,8 +1,13 @@
-/** API client for Delta Command Python backend. */
+/**
+ * API client for the Delta Command Python backend.
+ *
+ * On the server (Node.js runtime) we hit the backend directly at DELTA_API_URL.
+ * In the browser we go through the Next.js rewrite at "/api/*" so requests
+ * stay same-origin (see `next.config.ts`).
+ */
 
 import type {
   DashboardMetrics,
-  Database,
   Engineer,
   Opportunity,
   OpportunityStage,
@@ -11,22 +16,21 @@ import type {
   UtilizationTimeline,
 } from "./types";
 
-const API_BASE = process.env.DELTA_API_URL ?? "http://127.0.0.1:8000";
+const SERVER_API_BASE = process.env.DELTA_API_URL ?? "http://127.0.0.1:8000";
+
+function apiUrl(path: string): string {
+  return typeof window === "undefined" ? `${SERVER_API_BASE}${path}` : path;
+}
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(apiUrl(path), {
     ...init,
     cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
+    headers: { "Content-Type": "application/json", ...init?.headers },
   });
-
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    throw new Error(`API ${path} failed: ${response.status} ${response.statusText}`);
   }
-
   return response.json() as Promise<T>;
 }
 
@@ -60,22 +64,6 @@ export async function updateTimelineCell(
     method: "PATCH",
     body: JSON.stringify({ engineerId, weekStart, utilization, note }),
   });
-}
-
-export async function getDatabase(): Promise<Database> {
-  const [engineers, opportunities, projects, dashboard] = await Promise.all([
-    getEngineers(),
-    getOpportunities(),
-    getProjects(),
-    getDashboardMetrics(),
-  ]);
-
-  return {
-    engineers,
-    opportunities,
-    projects,
-    lastUpdated: dashboard.lastUpdated,
-  };
 }
 
 export async function updateOpportunityStage(
