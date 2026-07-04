@@ -1,23 +1,25 @@
 import { Header } from "@/components/layout/Header";
 import { EngineerCard } from "@/components/team/EngineerCard";
-import { getDatabase } from "@/core/store";
+import { getEngineers, getProjects } from "@/core/api";
 import { cn, getUtilizationColor } from "@/core/utils";
 import { Users, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 
-export default function TeamPage() {
-  const db = getDatabase();
+export const dynamic = "force-dynamic";
+
+export default async function TeamPage() {
+  const [engineers, projects] = await Promise.all([getEngineers(), getProjects()]);
 
   const projectNames = Object.fromEntries(
-    db.projects.map((p) => [p.id, p.name])
+    projects.map((p) => [p.id, p.name])
   );
 
-  const overallocated = db.engineers.filter((e) => e.status === "overallocated");
-  const available = db.engineers.filter((e) => e.status === "available");
+  const overallocated = engineers.filter((e) => e.status === "overallocated");
+  const available = engineers.filter((e) => e.status === "available");
   const avgUtil = Math.round(
-    db.engineers.reduce((sum, e) => sum + e.utilization, 0) / db.engineers.length
+    engineers.reduce((sum, e) => sum + e.utilization, 0) / engineers.length
   );
 
-  const sortedEngineers = [...db.engineers].sort(
+  const sortedEngineers = [...engineers].sort(
     (a, b) => b.utilization - a.utilization
   );
 
@@ -37,7 +39,7 @@ export default function TeamPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-slate-900">
-                  {db.engineers.length}
+                  {engineers.length}
                 </p>
                 <p className="text-sm text-slate-500">Team Members</p>
               </div>

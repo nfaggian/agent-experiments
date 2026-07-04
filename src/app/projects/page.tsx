@@ -1,22 +1,24 @@
 import { Header } from "@/components/layout/Header";
 import { ProjectCard } from "@/components/projects/ProjectCard";
-import { getDatabase } from "@/core/store";
+import { getEngineers, getProjects } from "@/core/api";
 import { PROJECT_STATUSES } from "@/core/types";
 import { formatCurrency, cn } from "@/core/utils";
 import { FolderKanban, AlertTriangle, CheckCircle2, PauseCircle } from "lucide-react";
 
-export default function ProjectsPage() {
-  const db = getDatabase();
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
+  const [projects, engineers] = await Promise.all([getProjects(), getEngineers()]);
 
   const engineerNames = Object.fromEntries(
-    db.engineers.map((e) => [e.id, e.name])
+    engineers.map((e) => [e.id, e.name])
   );
 
-  const activeProjects = db.projects.filter((p) => p.status === "active");
-  const atRiskProjects = db.projects.filter((p) => p.status === "at_risk");
-  const planningProjects = db.projects.filter((p) => p.status === "planning");
-  const totalBudget = db.projects.reduce((sum, p) => sum + p.budget, 0);
-  const totalSpent = db.projects.reduce((sum, p) => sum + p.spent, 0);
+  const activeProjects = projects.filter((p) => p.status === "active");
+  const atRiskProjects = projects.filter((p) => p.status === "at_risk");
+  const planningProjects = projects.filter((p) => p.status === "planning");
+  const totalBudget = projects.reduce((sum, p) => sum + p.budget, 0);
+  const totalSpent = projects.reduce((sum, p) => sum + p.spent, 0);
 
   const statusIcons: Record<string, typeof FolderKanban> = {
     active: FolderKanban,
@@ -37,7 +39,7 @@ export default function ProjectsPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card p-4">
             <p className="text-xs font-medium text-slate-500">Total Projects</p>
-            <p className="text-2xl font-bold text-slate-900">{db.projects.length}</p>
+            <p className="text-2xl font-bold text-slate-900">{projects.length}</p>
           </div>
           <div className="card p-4">
             <p className="text-xs font-medium text-slate-500">In Delivery</p>
@@ -64,7 +66,7 @@ export default function ProjectsPage() {
 
         <div className="flex flex-wrap gap-3">
           {PROJECT_STATUSES.map((status) => {
-            const count = db.projects.filter((p) => p.status === status.id).length;
+            const count = projects.filter((p) => p.status === status.id).length;
             const Icon = statusIcons[status.id] ?? FolderKanban;
             return (
               <div
