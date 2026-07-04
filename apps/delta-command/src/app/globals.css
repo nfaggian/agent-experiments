@@ -4,23 +4,16 @@
 
 @layer base {
   :root {
-    --sidebar-width: 16rem;
-    --md-sys-color-primary: #005fb0;
-    --md-sys-color-on-primary: #ffffff;
-    --md-sys-color-primary-container: #d3e4ff;
-    --md-sys-color-on-primary-container: #001d36;
-    --md-sys-color-surface: #f8f9ff;
-    --md-sys-color-surface-container: #eceef4;
-    --md-sys-color-outline-variant: #c4c6d0;
+    --sidebar-width: 15rem;
   }
 
   * {
-    @apply border-outline-variant/60;
+    @apply border-outline-variant/50;
   }
 
   body {
     @apply bg-surface text-surface-on antialiased;
-    font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1, "liga" 1;
   }
 
   h1, h2, h3, h4 {
@@ -30,61 +23,62 @@
 
 @layer components {
   .card {
-    @apply rounded-lg border border-outline-variant/40 bg-surface-bright shadow-elevation-1
-      transition-shadow duration-200 ease-standard hover:shadow-elevation-2;
+    @apply rounded-xl border border-outline-variant/60 bg-surface-bright shadow-card
+      transition-all duration-300 ease-emphasized
+      hover:border-outline-variant hover:shadow-elevated;
   }
 
-  .card-filled {
-    @apply rounded-lg bg-surface-container shadow-elevation-0;
+  .card-flat {
+    @apply rounded-xl border border-outline-variant/60 bg-surface-bright;
   }
 
   .badge {
-    @apply inline-flex items-center rounded-sm px-2 py-0.5 text-[11px] font-medium leading-4;
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium leading-4;
   }
 
   .chip {
-    @apply inline-flex items-center rounded-sm bg-secondary-container px-2 py-1
-      text-[11px] font-medium leading-4 text-secondary-on-container;
+    @apply inline-flex items-center rounded-md bg-surface-container px-2 py-0.5
+      text-[11px] font-medium leading-4 text-surface-on-variant ring-1 ring-inset ring-outline-variant/60;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5
-      text-sm font-medium leading-5 text-primary-on shadow-elevation-1
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-surface-on px-5 py-2
+      text-sm font-medium text-surface-bright shadow-sm
       transition-all duration-200 ease-standard
-      hover:shadow-elevation-2 active:shadow-elevation-1
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
+      hover:bg-zinc-800 active:scale-[0.98]
+      focus-visible:outline-none focus-visible:shadow-glow;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-outline
-      bg-surface-bright px-6 py-2.5 text-sm font-medium leading-5 text-primary
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant
+      bg-surface-bright px-5 py-2 text-sm font-medium text-surface-on
       transition-all duration-200 ease-standard
-      hover:bg-primary-container/30
-      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
+      hover:bg-surface-container-low
+      focus-visible:outline-none focus-visible:shadow-glow;
   }
 
   .btn-tonal {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-secondary-container
-      px-6 py-2.5 text-sm font-medium leading-5 text-secondary-on-container
-      transition-all duration-200 ease-standard hover:shadow-elevation-1;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent-muted px-5 py-2
+      text-sm font-medium text-accent-foreground
+      transition-all duration-200 ease-standard hover:bg-blue-100;
   }
 
   .icon-btn {
-    @apply relative flex h-10 w-10 items-center justify-center rounded-full
-      text-surface-on-variant transition-colors duration-200 ease-standard
-      hover:bg-surface-on/[0.08] active:bg-surface-on/[0.12];
+    @apply relative flex h-9 w-9 items-center justify-center rounded-lg
+      text-surface-on-variant transition-all duration-200 ease-standard
+      hover:bg-surface-container hover:text-surface-on;
   }
 
   .headline-md {
-    @apply text-[1.75rem] font-normal leading-9 tracking-tight;
+    @apply text-2xl font-semibold leading-8 tracking-tight;
   }
 
   .title-lg {
-    @apply text-[1.375rem] font-normal leading-7;
+    @apply text-lg font-semibold leading-7 tracking-tight;
   }
 
   .title-md {
-    @apply text-base font-medium leading-6 tracking-wide;
+    @apply text-sm font-semibold leading-5;
   }
 
   .title-sm {
@@ -92,74 +86,117 @@
   }
 
   .body-md {
-    @apply text-sm font-normal leading-5;
+    @apply text-sm font-normal leading-5 text-surface-on-variant;
   }
 
   .label-md {
-    @apply text-xs font-medium leading-4 tracking-wide;
+    @apply text-xs font-medium uppercase tracking-wider text-surface-on-variant/70;
   }
 
   .section-title {
-    @apply text-[1.375rem] font-normal leading-7 text-surface-on;
+    @apply text-base font-semibold tracking-tight text-surface-on;
   }
 
   .metric-value {
-    @apply text-[2rem] font-normal leading-10 tracking-tight text-surface-on;
+    @apply text-3xl font-semibold leading-none tracking-tight text-surface-on;
   }
 
   .metric-label {
-    @apply text-xs font-medium leading-4 tracking-wide text-surface-on-variant;
+    @apply text-xs font-medium uppercase tracking-wider text-surface-on-variant/80;
   }
 
   .nav-item {
-    @apply relative flex items-center gap-3 rounded-full px-4 py-3 text-sm font-medium leading-5
-      text-surface-on-variant transition-all duration-200 ease-standard
-      hover:bg-surface-on/[0.08];
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium
+      text-sidebar-muted transition-all duration-200 ease-standard
+      hover:bg-zinc-800/60 hover:text-sidebar-foreground;
   }
 
   .nav-item-active {
-    @apply bg-secondary-container text-secondary-on-container;
+    @apply bg-zinc-800/80 text-sidebar-foreground before:absolute before:left-0 before:top-1/2
+      before:h-5 before:w-0.5 before:-translate-y-1/2 before:rounded-full before:bg-accent
+      before:content-[''];
   }
 
   .text-field-outlined {
-    @apply rounded-xs border border-outline bg-transparent text-sm leading-5 text-surface-on
-      outline-none transition-colors duration-200
-      placeholder:text-surface-on-variant/70
-      focus:border-primary focus:ring-2 focus:ring-primary/20;
+    @apply rounded-lg border border-outline-variant/80 bg-surface-bright text-sm text-surface-on
+      outline-none transition-all duration-200
+      placeholder:text-surface-on-variant/50
+      focus:border-accent focus:shadow-glow;
   }
 
   .banner-error {
-    @apply flex items-center gap-3 rounded-lg border border-error/20 bg-error-container px-5 py-4
-      text-error-on-container;
+    @apply flex items-center gap-3 rounded-xl border border-red-200/80 bg-red-50/80 px-5 py-3.5
+      text-red-900 backdrop-blur-sm;
   }
 
   .banner-warning {
-    @apply flex items-center gap-3 rounded-lg border border-tertiary/20 bg-tertiary-container
-      px-5 py-4 text-tertiary-on-container;
+    @apply flex items-center gap-3 rounded-xl border border-amber-200/80 bg-amber-50/80 px-5 py-3.5
+      text-amber-950 backdrop-blur-sm;
   }
 
   .progress-track {
-    @apply h-1 overflow-hidden rounded-full bg-surface-container-highest;
+    @apply h-1.5 overflow-hidden rounded-full bg-surface-container-high;
   }
 
   .progress-indicator {
-    @apply h-full rounded-full bg-primary transition-all duration-300 ease-standard;
+    @apply h-full rounded-full bg-accent transition-all duration-500 ease-emphasized;
   }
 
   .top-app-bar {
-    @apply sticky top-0 z-20 flex h-16 items-center justify-between
-      border-b border-outline-variant/50 bg-surface/95 px-6 backdrop-blur-md md:px-8;
+    @apply sticky top-0 z-20 flex h-[4.25rem] items-center justify-between
+      border-b border-outline-variant/50 bg-surface-bright/80 px-6 backdrop-blur-xl md:px-8;
   }
 
   .nav-drawer {
-    @apply fixed inset-y-0 left-0 z-30 flex w-64 flex-col
-      border-r border-outline-variant/50 bg-surface-container-low;
+    @apply fixed inset-y-0 left-0 z-30 flex w-60 flex-col
+      border-r border-sidebar-border bg-sidebar text-sidebar-foreground;
+  }
+
+  .segmented-control {
+    @apply inline-flex rounded-lg bg-surface-container p-1 ring-1 ring-inset ring-outline-variant/60;
+  }
+
+  .segmented-item {
+    @apply flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium
+      text-surface-on-variant transition-all duration-200 ease-standard
+      hover:text-surface-on;
+  }
+
+  .segmented-item-active {
+    @apply bg-surface-bright text-surface-on shadow-sm ring-1 ring-outline-variant/60;
+  }
+
+  .link-subtle {
+    @apply text-xs font-medium text-accent-foreground transition-colors hover:text-accent;
+  }
+
+  .stat-inline {
+    @apply flex items-center gap-3;
+  }
+
+  .stat-icon {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg;
+  }
+
+  .kanban-column {
+    @apply flex w-72 shrink-0 flex-col rounded-xl border border-outline-variant/60
+      bg-surface-container-low/80 p-3 backdrop-blur-sm;
+  }
+
+  .page-shell {
+    @apply bg-grid-pattern bg-grid bg-surface;
+  }
+
+  .util-cell {
+    @apply mx-auto flex h-10 w-[68px] flex-col items-center justify-center rounded-lg
+      text-sm font-semibold ring-1 ring-inset transition-all duration-200
+      hover:scale-[1.02] hover:shadow-sm active:scale-[0.98];
   }
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -167,10 +204,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--md-sys-color-outline-variant);
-  border-radius: 4px;
+  @apply rounded-full bg-zinc-300;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #74777f;
+  @apply bg-zinc-400;
 }

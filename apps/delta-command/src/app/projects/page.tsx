@@ -43,7 +43,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="card p-4">
             <p className="metric-label">In Delivery</p>
-            <p className="metric-value text-[1.75rem] text-primary">
+            <p className="metric-value text-[1.75rem] text-accent-foreground">
               {activeProjects.length + atRiskProjects.length}
             </p>
           </div>
@@ -55,7 +55,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="card p-4">
             <p className="metric-label">Spent to Date</p>
-            <p className="metric-value text-[1.75rem] text-primary">
+            <p className="metric-value text-[1.75rem] text-accent-foreground">
               {formatCurrency(totalSpent)}
             </p>
             <p className="label-md text-surface-on-variant/70">
@@ -71,14 +71,14 @@ export default async function ProjectsPage() {
             return (
               <div
                 key={status.id}
-                className="flex items-center gap-2 rounded-full border border-outline-variant/50 bg-surface-bright px-4 py-2 shadow-elevation-1"
+                className="flex items-center gap-2 rounded-xl border border-outline-variant/60 bg-surface-bright px-4 py-2 shadow-card"
               >
                 <span className={cn("h-2.5 w-2.5 rounded-full", status.color)} />
                 <Icon className="h-4 w-4 text-surface-on-variant" />
                 <span className="title-sm text-surface-on">
                   {status.label}
                 </span>
-                <span className="rounded-full bg-secondary-container px-2 py-0.5 label-md text-secondary-on-container">
+                <span className="rounded-md bg-surface-container px-2 py-0.5 label-md text-surface-on-variant ring-1 ring-inset ring-outline-variant/60">
                   {count}
                 </span>
               </div>

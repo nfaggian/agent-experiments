@@ -6,7 +6,7 @@ import { PipelineBoard } from "@/components/opportunities/PipelineBoard";
 import { OpportunityCard } from "@/components/opportunities/PipelineBoard";
 import type { Opportunity, OpportunityStage } from "@/core/types";
 import { OPPORTUNITY_STAGES } from "@/core/types";
-import { formatCurrency } from "@/core/utils";
+import { formatCurrency, cn } from "@/core/utils";
 import { LayoutGrid, List, Trophy, XCircle } from "lucide-react";
 
 export default function OpportunitiesPage() {
@@ -50,7 +50,7 @@ export default function OpportunitiesPage() {
       <div>
         <Header title="Opportunity Pipeline" subtitle="Loading..." />
         <div className="flex h-64 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-container border-t-primary" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-outline-variant border-t-accent" />
         </div>
       </div>
     );
@@ -73,16 +73,16 @@ export default function OpportunitiesPage() {
           </div>
           <div className="card p-4">
             <p className="metric-label">Weighted Value</p>
-            <p className="metric-value text-[1.75rem] text-primary">
+            <p className="metric-value text-[1.75rem] text-accent-foreground">
               {formatCurrency(weightedValue)}
             </p>
           </div>
           <div className="card p-4">
             <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-primary" />
+              <Trophy className="h-4 w-4 text-emerald-600" />
               <p className="metric-label">Won</p>
             </div>
-            <p className="metric-value text-[1.75rem] text-primary">
+            <p className="metric-value text-[1.75rem] text-emerald-600">
               {wonOpps.length} · {formatCurrency(wonOpps.reduce((s, o) => s + o.value, 0))}
             </p>
           </div>
@@ -98,15 +98,14 @@ export default function OpportunitiesPage() {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex gap-1 rounded-full bg-surface-container p-1">
+          <div className="segmented-control">
             <button
               type="button"
               onClick={() => setView("board")}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                view === "board"
-                  ? "bg-secondary-container text-secondary-on-container shadow-elevation-1"
-                  : "text-surface-on-variant hover:bg-surface-on/[0.08]"
-              }`}
+              className={cn(
+                "segmented-item",
+                view === "board" && "segmented-item-active"
+              )}
             >
               <LayoutGrid className="h-4 w-4" />
               Board
@@ -114,11 +113,10 @@ export default function OpportunitiesPage() {
             <button
               type="button"
               onClick={() => setView("list")}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                view === "list"
-                  ? "bg-secondary-container text-secondary-on-container shadow-elevation-1"
-                  : "text-surface-on-variant hover:bg-surface-on/[0.08]"
-              }`}
+              className={cn(
+                "segmented-item",
+                view === "list" && "segmented-item-active"
+              )}
             >
               <List className="h-4 w-4" />
               List

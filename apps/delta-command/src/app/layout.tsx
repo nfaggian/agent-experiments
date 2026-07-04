@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Sidebar } from "@/components/layout/Sidebar";
 import "./globals.css";
 
-const roboto = Roboto({
-  variable: "--font-roboto",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
   display: "swap",
 });
 
@@ -23,10 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} font-sans`}>
-        <div className="flex min-h-screen bg-surface">
+      <body className={`${inter.variable} font-sans`}>
+        <div className="flex min-h-screen">
           <Sidebar />
-          <main className="ml-64 min-h-screen flex-1 bg-surface">{children}</main>
+          <main className="ml-60 min-h-screen flex-1 page-shell">{children}</main>
         </div>
       </body>
     </html>

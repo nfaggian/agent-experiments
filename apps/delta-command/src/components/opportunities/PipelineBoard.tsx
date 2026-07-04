@@ -19,12 +19,12 @@ export function OpportunityCard({
   const weightedValue = opportunity.value * (opportunity.probability / 100);
 
   return (
-    <div className="card group p-4 transition-shadow hover:shadow-elevation-3">
+    <div className="card group p-4 transition-all duration-200 hover:shadow-elevated">
       <div className="mb-3 flex items-start justify-between gap-2">
         <h4 className="title-sm leading-snug text-surface-on">
           {opportunity.title}
         </h4>
-        <span className="shrink-0 title-sm text-primary">
+        <span className="shrink-0 title-sm text-accent-foreground">
           {formatCurrency(opportunity.value)}
         </span>
       </div>
@@ -117,7 +117,7 @@ export function PipelineBoard({ opportunities, onStageChange }: PipelineBoardPro
         return (
           <div
             key={stage.id}
-            className="flex w-72 shrink-0 flex-col rounded-lg bg-surface-container p-3"
+            className="kanban-column"
           >
             <div className="mb-3 flex items-center justify-between px-1">
               <div className="flex items-center gap-2">
@@ -125,7 +125,7 @@ export function PipelineBoard({ opportunities, onStageChange }: PipelineBoardPro
                 <h3 className="title-sm text-surface-on">
                   {stage.label}
                 </h3>
-                <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-surface-bright px-1.5 label-md text-surface-on-variant shadow-elevation-1">
+                <span className="flex h-6 min-w-6 items-center justify-center rounded-md bg-surface-bright px-1.5 label-md text-surface-on-variant ring-1 ring-inset ring-outline-variant/60">
                   {stageOpps.length}
                 </span>
               </div>
@@ -144,7 +144,7 @@ export function PipelineBoard({ opportunities, onStageChange }: PipelineBoardPro
                 />
               ))}
               {stageOpps.length === 0 && (
-                <div className="flex flex-1 items-center justify-center rounded-lg border-2 border-dashed border-outline-variant p-6">
+                <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-outline-variant/80 p-6">
                   <p className="label-md text-surface-on-variant/60">No opportunities</p>
                 </div>
               )}

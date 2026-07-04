@@ -7,7 +7,7 @@ import {
   Target,
   Users,
   FolderKanban,
-  Bolt,
+  Zap,
 } from "lucide-react";
 import { cn } from "@/core/utils";
 
@@ -23,20 +23,17 @@ export function Sidebar() {
 
   return (
     <aside className="nav-drawer">
-      <div className="flex h-16 items-center gap-3 px-5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container">
-          <Bolt className="h-5 w-5 text-primary-on-container" />
+      <div className="flex h-[4.25rem] items-center gap-3 border-b border-sidebar-border px-5">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent shadow-glow">
+          <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
         </div>
         <div>
-          <h1 className="title-md text-surface-on">Delta Command</h1>
-          <p className="label-md text-surface-on-variant">Engineering Hub</p>
+          <h1 className="text-sm font-semibold tracking-tight text-white">Delta Command</h1>
+          <p className="text-[11px] text-sidebar-muted">Engineering Hub</p>
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-2">
-        <p className="mb-2 px-4 label-md uppercase tracking-wider text-surface-on-variant/70">
-          Navigation
-        </p>
+      <nav className="flex-1 space-y-0.5 px-3 py-4">
         {navigation.map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (
@@ -47,9 +44,10 @@ export function Sidebar() {
             >
               <item.icon
                 className={cn(
-                  "h-6 w-6 shrink-0",
-                  isActive ? "text-secondary-on-container" : "text-surface-on-variant"
+                  "h-4 w-4 shrink-0",
+                  isActive ? "text-white" : "text-sidebar-muted"
                 )}
+                strokeWidth={isActive ? 2.25 : 2}
               />
               {item.name}
             </Link>
@@ -57,14 +55,14 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-outline-variant/50 p-4">
-        <div className="rounded-lg bg-primary-container p-4 shadow-elevation-1">
-          <p className="label-md uppercase tracking-wider text-primary-on-container/70">
-            Delta Engineering
+      <div className="border-t border-sidebar-border p-4">
+        <div className="rounded-xl border border-sidebar-border bg-zinc-900/50 p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-sidebar-muted">
+            Q3 Review
           </p>
-          <p className="mt-1 title-sm text-primary-on-container">Q3 2026 Review</p>
-          <p className="mt-2 body-md text-primary-on-container/80">
-            Leadership dashboard ready for weekly sync
+          <p className="mt-1.5 text-sm font-medium text-white">Leadership sync</p>
+          <p className="mt-1 text-xs leading-relaxed text-sidebar-muted">
+            Pipeline, delivery & capacity
           </p>
         </div>
       </div>

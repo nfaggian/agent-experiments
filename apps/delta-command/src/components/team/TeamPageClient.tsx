@@ -40,15 +40,13 @@ export function TeamPageClient({
 
       <div className="space-y-8 p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex gap-1 rounded-full bg-surface-container p-1">
+          <div className="segmented-control">
             <button
               type="button"
               onClick={() => setView("timeline")}
               className={cn(
-                "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
-                view === "timeline"
-                  ? "bg-secondary-container text-secondary-on-container shadow-elevation-1"
-                  : "text-surface-on-variant hover:bg-surface-on/[0.08]"
+                "segmented-item",
+                view === "timeline" && "segmented-item-active"
               )}
             >
               <CalendarRange className="h-4 w-4" />
@@ -58,10 +56,8 @@ export function TeamPageClient({
               type="button"
               onClick={() => setView("overview")}
               className={cn(
-                "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
-                view === "overview"
-                  ? "bg-secondary-container text-secondary-on-container shadow-elevation-1"
-                  : "text-surface-on-variant hover:bg-surface-on/[0.08]"
+                "segmented-item",
+                view === "overview" && "segmented-item-active"
               )}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -75,11 +71,11 @@ export function TeamPageClient({
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container">
-                <Users className="h-5 w-5 text-primary-on-container" />
+            <div className="stat-inline">
+              <div className="stat-icon bg-accent-muted text-accent-foreground">
+                <Users className="h-4 w-4" />
               </div>
               <div>
                 <p className="metric-value text-[1.75rem]">{engineers.length}</p>
@@ -88,9 +84,9 @@ export function TeamPageClient({
             </div>
           </div>
           <div className="card p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-tertiary-container">
-                <Clock className="h-5 w-5 text-tertiary-on-container" />
+            <div className="stat-inline">
+              <div className="stat-icon bg-blue-50 text-blue-700">
+                <Clock className="h-4 w-4" />
               </div>
               <div>
                 <p className="metric-value text-[1.75rem]">{avgUtil}%</p>
@@ -99,9 +95,9 @@ export function TeamPageClient({
             </div>
           </div>
           <div className="card p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-container">
-                <CheckCircle className="h-5 w-5 text-secondary-on-container" />
+            <div className="stat-inline">
+              <div className="stat-icon bg-emerald-50 text-emerald-700">
+                <CheckCircle className="h-4 w-4" />
               </div>
               <div>
                 <p className="metric-value text-[1.75rem]">{available.length}</p>
@@ -110,9 +106,9 @@ export function TeamPageClient({
             </div>
           </div>
           <div className="card p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-error-container">
-                <AlertTriangle className="h-5 w-5 text-error-on-container" />
+            <div className="stat-inline">
+              <div className="stat-icon bg-red-50 text-red-700">
+                <AlertTriangle className="h-4 w-4" />
               </div>
               <div>
                 <p className="metric-value text-[1.75rem]">{overallocated.length}</p>

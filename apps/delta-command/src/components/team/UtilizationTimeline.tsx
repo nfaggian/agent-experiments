@@ -5,6 +5,7 @@ import type { UtilizationTimeline } from "@/core/types";
 import { updateTimelineCell } from "@/core/api";
 import {
   cn,
+  getUtilizationCellStyle,
   getUtilizationColor,
   getUtilizationTextColor,
 } from "@/core/utils";
@@ -12,13 +13,6 @@ import { CalendarRange, Pencil, Check, X } from "lucide-react";
 
 interface UtilizationTimelineProps {
   initialData: UtilizationTimeline;
-}
-
-function cellBackground(utilization: number): string {
-  if (utilization >= 100) return "bg-error-container text-error-on-container";
-  if (utilization >= 85) return "bg-tertiary-container text-tertiary-on-container";
-  if (utilization >= 60) return "bg-primary-container text-primary-on-container";
-  return "bg-secondary-container text-secondary-on-container";
 }
 
 export function UtilizationTimelineView({ initialData }: UtilizationTimelineProps) {
@@ -66,7 +60,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/50 px-6 py-4">
         <div>
           <h3 className="section-title flex items-center gap-2">
-            <CalendarRange className="h-5 w-5 text-primary" />
+            <CalendarRange className="h-5 w-5 text-accent" />
             Utilization Timeline
           </h3>
           <p className="body-md text-surface-on-variant">
@@ -75,16 +69,16 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
         </div>
         <div className="flex flex-wrap items-center gap-3 label-md text-surface-on-variant">
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-sm bg-secondary-container" /> &lt;60%
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> &lt;60%
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-sm bg-primary-container" /> 60–84%
+            <span className="h-2.5 w-2.5 rounded-full bg-accent" /> 60–84%
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-sm bg-tertiary-container" /> 85–99%
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-500" /> 85–99%
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-sm bg-error-container" /> 100%+
+            <span className="h-2.5 w-2.5 rounded-full bg-red-500" /> 100%+
           </span>
         </div>
       </div>
@@ -102,7 +96,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                   className={cn(
                     "min-w-[88px] px-2 py-3 text-center label-md",
                     week.isCurrent
-                      ? "bg-primary-container/50 text-primary-on-container"
+                      ? "bg-accent-muted text-accent-foreground"
                       : "text-surface-on-variant"
                   )}
                 >
@@ -142,7 +136,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                       key={cell.weekStart}
                       className={cn(
                         "px-1 py-2 text-center",
-                        weekMeta?.isCurrent && "bg-primary-container/10"
+                        weekMeta?.isCurrent && "bg-accent-muted/30"
                       )}
                     >
                       {isEditing ? (
@@ -164,7 +158,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                           <button
                             type="button"
                             onClick={() => void saveEdit()}
-                            className="icon-btn h-8 w-8 text-primary"
+                            className="icon-btn h-8 w-8 text-accent-foreground"
                             aria-label="Save"
                             disabled={saving}
                           >
@@ -186,8 +180,8 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                             startEdit(row.engineerId, cell.weekStart, cell.utilization)
                           }
                           className={cn(
-                            "group relative mx-auto flex h-12 w-[72px] flex-col items-center justify-center rounded-lg transition-all hover:shadow-elevation-1",
-                            cellBackground(cell.utilization)
+                            "util-cell group relative",
+                            getUtilizationCellStyle(cell.utilization)
                           )}
                           title={
                             cell.note
@@ -230,7 +224,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                     key={week.weekStart}
                     className={cn(
                       "px-2 py-3 text-center",
-                      week.isCurrent && "bg-primary-container/20"
+                      week.isCurrent && "bg-accent-muted/40"
                     )}
                   >
                     <div className="mx-auto flex h-2 max-w-[72px] overflow-hidden rounded-full bg-surface-container-highest">

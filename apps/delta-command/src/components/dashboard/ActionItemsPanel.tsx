@@ -13,15 +13,15 @@ const severityStyles: Record<
   { container: string; icon: typeof AlertCircle }
 > = {
   critical: {
-    container: "border-error/30 bg-error-container/40",
+    container: "border-red-200/80 bg-red-50/60",
     icon: AlertCircle,
   },
   warning: {
-    container: "border-tertiary/30 bg-tertiary-container/40",
+    container: "border-amber-200/80 bg-amber-50/60",
     icon: AlertTriangle,
   },
   info: {
-    container: "border-primary/20 bg-primary-container/30",
+    container: "border-blue-200/80 bg-blue-50/60",
     icon: Info,
   },
 };
@@ -58,7 +58,7 @@ export function ActionItemsPanel({ items }: ActionItemsPanelProps) {
               <Link
                 href={item.href}
                 className={cn(
-                  "group flex items-start gap-3 rounded-lg border p-3 transition-shadow hover:shadow-elevation-1",
+                  "group flex items-start gap-3 rounded-xl border p-3.5 transition-all duration-200 hover:shadow-card",
                   style.container
                 )}
               >

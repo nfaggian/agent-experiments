@@ -40,7 +40,7 @@ export function PipelineHealthPanel({ pipeline }: PipelineHealthPanelProps) {
     <div className="card p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="section-title">Pipeline Health</h3>
-        <Link href="/opportunities" className="label-md text-primary hover:underline">
+        <Link href="/opportunities" className="link-subtle">
           View pipeline
         </Link>
       </div>
@@ -48,10 +48,10 @@ export function PipelineHealthPanel({ pipeline }: PipelineHealthPanelProps) {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-lg bg-surface-container-low p-4"
+            className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-4"
           >
             <div className="mb-2 flex items-center gap-2">
-              <stat.icon className="h-4 w-4 text-primary" />
+              <stat.icon className="h-4 w-4 text-accent" />
               <span className="label-md text-surface-on-variant">{stat.label}</span>
             </div>
             <p className="title-lg text-surface-on">{stat.value}</p>
@@ -72,7 +72,7 @@ export function MilestonesPanel({ milestones }: MilestonesPanelProps) {
     <div className="card p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="section-title">Upcoming Milestones</h3>
-        <Link href="/projects" className="label-md text-primary hover:underline">
+        <Link href="/projects" className="link-subtle">
           All projects
         </Link>
       </div>
@@ -96,10 +96,10 @@ export function MilestonesPanel({ milestones }: MilestonesPanelProps) {
                   className={cn(
                     "badge",
                     m.overdue
-                      ? "bg-error-container text-error-on-container"
+                      ? "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200/80"
                       : m.daysUntil <= 7
-                        ? "bg-tertiary-container text-tertiary-on-container"
-                        : "bg-secondary-container text-secondary-on-container"
+                        ? "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200/80"
+                        : "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200/80"
                   )}
                 >
                   {m.overdue

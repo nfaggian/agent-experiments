@@ -47,7 +47,7 @@ export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
             <div
               className={cn(
                 "h-full rounded-full transition-all",
-                project.status === "at_risk" ? "bg-error" : "bg-primary"
+                project.status === "at_risk" ? "bg-red-500" : "bg-accent"
               )}
               style={{ width: `${project.progress}%` }}
             />
@@ -108,7 +108,7 @@ export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
             {project.milestones.map((milestone) => (
               <li key={milestone.id} className="flex items-center gap-2 label-md">
                 {milestone.completed ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" />
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
                 ) : (
                   <Circle className="h-3.5 w-3.5 shrink-0 text-outline-variant" />
                 )}
