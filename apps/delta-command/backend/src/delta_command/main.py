@@ -17,13 +17,17 @@ from delta_command.models import (
     Project,
     ProjectStatusUpdate,
     ResetResponse,
+    UtilizationTimelineResponse,
+    UtilizationTimelineUpdate,
 )
 from delta_command.store import (
     load_database,
     reset_database,
+    get_utilization_timeline,
     update_engineer_utilization,
     update_opportunity_stage,
     update_project_status,
+    update_timeline_cell,
 )
 
 app = FastAPI(
@@ -89,6 +93,24 @@ def patch_engineer(body: EngineerUtilizationUpdate) -> Engineer:
     if updated is None:
         raise HTTPException(status_code=404, detail="Engineer not found")
     return updated
+
+
+@app.get("/api/utilization/timeline")
+def get_timeline() -> UtilizationTimelineResponse:
+    return get_utilization_timeline()
+
+
+@app.patch("/api/utilization/timeline")
+def patch_timeline(body: UtilizationTimelineUpdate) -> UtilizationTimelineResponse:
+    try:
+        return update_timeline_cell(
+            body.engineer_id,
+            body.week_start,
+            body.utilization,
+            body.note,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @app.post("/api/reset")

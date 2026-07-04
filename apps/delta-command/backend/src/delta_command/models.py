@@ -38,6 +38,14 @@ class Milestone(BaseModel):
     completed: bool
 
 
+class UtilizationWeek(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    week_start: str = Field(alias="weekStart")
+    utilization: int
+    note: str | None = None
+
+
 class Engineer(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
@@ -50,6 +58,9 @@ class Engineer(BaseModel):
     status: EngineerStatus
     skills: list[str] = Field(default_factory=list)
     current_projects: list[str] = Field(default_factory=list, alias="currentProjects")
+    utilization_timeline: list[UtilizationWeek] = Field(
+        default_factory=list, alias="utilizationTimeline"
+    )
     avatar: str | None = None
 
 
@@ -129,6 +140,45 @@ class ProjectStatusUpdate(BaseModel):
 class EngineerUtilizationUpdate(BaseModel):
     id: str
     utilization: int
+
+
+class UtilizationTimelineWeek(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    week_start: str = Field(alias="weekStart")
+    label: str
+    is_current: bool = Field(alias="isCurrent")
+
+
+class UtilizationTimelineCell(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    week_start: str = Field(alias="weekStart")
+    utilization: int
+    note: str | None = None
+
+
+class UtilizationTimelineRow(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    engineer_id: str = Field(alias="engineerId")
+    name: str
+    role: str
+    cells: list[UtilizationTimelineCell]
+
+
+class UtilizationTimelineResponse(BaseModel):
+    weeks: list[UtilizationTimelineWeek]
+    rows: list[UtilizationTimelineRow]
+
+
+class UtilizationTimelineUpdate(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    engineer_id: str = Field(alias="engineerId")
+    week_start: str = Field(alias="weekStart")
+    utilization: int
+    note: str | None = None
 
 
 class ResetResponse(BaseModel):

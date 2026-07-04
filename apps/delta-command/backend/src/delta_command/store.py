@@ -11,11 +11,20 @@ from pydantic import TypeAdapter
 from delta_command.models import (
     Database,
     Engineer,
-    EngineerStatus,
     Opportunity,
     OpportunityStage,
     Project,
     ProjectStatus,
+    UtilizationTimelineResponse,
+    UtilizationTimelineRow,
+    UtilizationTimelineCell,
+    UtilizationTimelineWeek,
+)
+from delta_command.utilization_timeline import (
+    build_week_columns,
+    current_week_utilization,
+    ensure_engineer_timeline,
+    status_for_utilization,
 )
 
 DatabaseAdapter = TypeAdapter(Database)
@@ -111,20 +120,108 @@ def update_project_status(project_id: str, status: ProjectStatus) -> Project | N
 
 def update_engineer_utilization(engineer_id: str, utilization: int) -> Engineer | None:
     db = load_database()
+    week_columns = build_week_columns()
     for index, engineer in enumerate(db.engineers):
         if engineer.id != engineer_id:
             continue
-        if utilization >= 100:
-            status = EngineerStatus.OVERALLOCATED
-        elif utilization >= 50:
-            status = EngineerStatus.ALLOCATED
-        else:
-            status = EngineerStatus.AVAILABLE
-        updated = engineer.model_copy(update={"utilization": utilization, "status": status})
+        engineer = ensure_engineer_timeline(engineer, week_columns)
+        status = status_for_utilization(utilization)
+        timeline = list(engineer.utilization_timeline)
+        current = next((w for w in week_columns if w["isCurrent"]), week_columns[-1])
+        for cell_index, cell in enumerate(timeline):
+            if cell.week_start == current["weekStart"]:
+                timeline[cell_index] = cell.model_copy(update={"utilization": utilization})
+                break
+        updated = engineer.model_copy(
+            update={"utilization": utilization, "status": status, "utilization_timeline": timeline}
+        )
         db.engineers[index] = updated
         save_database(db)
         return updated
     return None
+
+
+def get_utilization_timeline() -> UtilizationTimelineResponse:
+    db = load_database()
+    week_columns = build_week_columns()
+    engineers = [ensure_engineer_timeline(e, week_columns) for e in db.engineers]
+    if any(
+        e.utilization_timeline != db.engineers[i].utilization_timeline
+        for i, e in enumerate(engineers)
+    ):
+        db.engineers = engineers
+        save_database(db)
+
+    weeks = [
+        UtilizationTimelineWeek(
+            weekStart=column["weekStart"],
+            label=column["label"],
+            isCurrent=column["isCurrent"],
+        )
+        for column in week_columns
+    ]
+    rows: list[UtilizationTimelineRow] = []
+    for engineer in engineers:
+        rows.append(
+            UtilizationTimelineRow(
+                engineerId=engineer.id,
+                name=engineer.name,
+                role=engineer.role,
+                cells=[
+                    UtilizationTimelineCell(
+                        weekStart=cell.week_start,
+                        utilization=cell.utilization,
+                        note=cell.note,
+                    )
+                    for cell in engineer.utilization_timeline
+                ],
+            )
+        )
+    return UtilizationTimelineResponse(weeks=weeks, rows=rows)
+
+
+def update_timeline_cell(
+    engineer_id: str,
+    week_start: str,
+    utilization: int,
+    note: str | None = None,
+) -> UtilizationTimelineResponse:
+    db = load_database()
+    week_columns = build_week_columns()
+    utilization = max(0, min(150, utilization))
+    found = False
+
+    for index, engineer in enumerate(db.engineers):
+        if engineer.id != engineer_id:
+            continue
+        engineer = ensure_engineer_timeline(engineer, week_columns)
+        timeline = list(engineer.utilization_timeline)
+        for cell_index, cell in enumerate(timeline):
+            if cell.week_start != week_start:
+                continue
+            timeline[cell_index] = cell.model_copy(
+                update={"utilization": utilization, "note": note}
+            )
+            found = True
+            break
+        current_util = current_week_utilization(
+            engineer.model_copy(update={"utilization_timeline": timeline}),
+            week_columns,
+        )
+        db.engineers[index] = engineer.model_copy(
+            update={
+                "utilization_timeline": timeline,
+                "utilization": current_util,
+                "status": status_for_utilization(current_util),
+            }
+        )
+        break
+
+    if not found:
+        raise ValueError("Engineer or week not found")
+
+    save_database(db)
+    return get_utilization_timeline()
 
 
 def reset_database() -> Database:
