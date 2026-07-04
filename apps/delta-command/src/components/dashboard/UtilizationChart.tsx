@@ -12,7 +12,12 @@ import {
   Cell,
 } from "recharts";
 import type { Engineer } from "@/core/types";
-import { CHART_GRID, CHART_TICK, CHART_TOOLTIP_STYLE } from "@/core/utils";
+import {
+  CHART_GRID,
+  CHART_TICK,
+  CHART_TOOLTIP_STYLE,
+  GOOGLE_COLORS,
+} from "@/core/utils";
 
 interface UtilizationChartProps {
   engineers: Engineer[];
@@ -20,14 +25,11 @@ interface UtilizationChartProps {
 }
 
 function getBarColor(utilization: number): string {
-  if (utilization >= 100) return "#EF4444";
-  if (utilization >= 85) return "#F59E0B";
-  if (utilization >= 60) return "#3B82F6";
-  return "#10B981";
+  if (utilization >= 100) return GOOGLE_COLORS.red;
+  if (utilization >= 85) return GOOGLE_COLORS.yellow;
+  if (utilization >= 60) return GOOGLE_COLORS.blue;
+  return GOOGLE_COLORS.green;
 }
-
-const CHART_GRID_COLOR = CHART_GRID;
-const CHART_TICK_COLOR = CHART_TICK;
 
 export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChartProps) {
   const data = [...engineers]
@@ -54,11 +56,11 @@ export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChar
         <div style={{ height: chartHeight }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" barSize={16}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} horizontal={false} />
             <XAxis
               type="number"
               domain={[0, 120]}
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${v}%`}
@@ -66,7 +68,7 @@ export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChar
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
               width={60}
@@ -75,8 +77,13 @@ export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChar
               contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(value: number) => [`${value}%`, "Utilization"]}
             />
-            <ReferenceLine x={100} stroke="#EF4444" strokeDasharray="4 4" label={{ value: "100%", position: "top", fill: "#EF4444", fontSize: 11 }} />
-            <Bar dataKey="utilization" radius={[0, 6, 6, 0]}>
+            <ReferenceLine
+              x={100}
+              stroke={GOOGLE_COLORS.red}
+              strokeDasharray="4 4"
+              label={{ value: "100%", position: "top", fill: GOOGLE_COLORS.red, fontSize: 11 }}
+            />
+            <Bar dataKey="utilization" radius={[0, 4, 4, 0]}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}

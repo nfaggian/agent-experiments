@@ -84,16 +84,16 @@ export function UtilizationTimelineView({
         </div>
         <div className="flex flex-wrap items-center gap-3 label-md text-surface-on-variant">
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> &lt;60%
+            <span className="h-2.5 w-2.5 rounded-full bg-google-green" /> &lt;60%
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-accent" /> 60–84%
+            <span className="h-2.5 w-2.5 rounded-full bg-google-blue" /> 60–84%
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-500" /> 85–99%
+            <span className="h-2.5 w-2.5 rounded-full bg-google-yellow" /> 85–99%
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-red-500" /> 100%+
+            <span className="h-2.5 w-2.5 rounded-full bg-google-red" /> 100%+
           </span>
         </div>
       </div>
@@ -132,7 +132,7 @@ export function UtilizationTimelineView({
             {visibleRows.map((row) => (
               <tr
                 key={row.engineerId}
-                className="border-b border-outline-variant/30 hover:bg-surface-on/[0.02]"
+                className="border-b border-outline-variant/30 hover:bg-surface-container/50"
               >
                 <td className="sticky left-0 z-10 bg-surface-bright/95 px-4 py-3 backdrop-blur-sm">
                   <p className="title-sm text-surface-on">{row.name}</p>

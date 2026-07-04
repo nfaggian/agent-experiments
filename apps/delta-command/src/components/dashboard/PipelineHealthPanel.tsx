@@ -48,7 +48,7 @@ export function PipelineHealthPanel({ pipeline }: PipelineHealthPanelProps) {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-white/[0.06] bg-surface-container-low/60 p-4"
+            className="rounded-lg border border-outline bg-surface-container-low p-4"
           >
             <div className="mb-2 flex items-center gap-2">
               <stat.icon className="h-4 w-4 text-accent" />
@@ -96,10 +96,10 @@ export function MilestonesPanel({ milestones }: MilestonesPanelProps) {
                   className={cn(
                     "badge",
                     m.overdue
-                      ? "bg-red-500/15 text-red-300 ring-1 ring-inset ring-red-500/30"
+                      ? "bg-red-50 text-google-red ring-1 ring-inset ring-google-red/30"
                       : m.daysUntil <= 7
-                        ? "bg-amber-500/15 text-amber-300 ring-1 ring-inset ring-amber-500/30"
-                        : "bg-emerald-500/15 text-emerald-300 ring-1 ring-inset ring-emerald-500/30"
+                        ? "bg-yellow-50 text-[#B06000] ring-1 ring-inset ring-google-yellow/40"
+                        : "bg-green-50 text-google-green ring-1 ring-inset ring-google-green/30"
                   )}
                 >
                   {m.overdue

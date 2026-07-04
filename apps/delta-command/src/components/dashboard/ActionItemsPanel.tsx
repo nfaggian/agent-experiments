@@ -13,15 +13,15 @@ const severityStyles: Record<
   { container: string; icon: typeof AlertCircle }
 > = {
   critical: {
-    container: "border-red-500/30 bg-red-500/10",
+    container: "border-google-red/30 bg-red-50",
     icon: AlertCircle,
   },
   warning: {
-    container: "border-amber-500/30 bg-amber-500/10",
+    container: "border-google-yellow/40 bg-yellow-50",
     icon: AlertTriangle,
   },
   info: {
-    container: "border-blue-500/30 bg-blue-500/10",
+    container: "border-google-blue/30 bg-blue-50",
     icon: Info,
   },
 };
@@ -58,16 +58,16 @@ export function ActionItemsPanel({ items }: ActionItemsPanelProps) {
               <Link
                 href={item.href}
                 className={cn(
-                  "group flex items-start gap-3 rounded-xl border p-3.5 transition-all duration-200 hover:shadow-card",
+                  "group flex items-start gap-3 rounded-lg border p-3.5 transition-all duration-200 hover:shadow-card",
                   style.container
                 )}
               >
-                <Icon className="mt-0.5 h-4 w-4 shrink-0" />
+                <Icon className="mt-0.5 h-4 w-4 shrink-0 text-surface-on" />
                 <div className="min-w-0 flex-1">
-                  <p className="title-sm">{item.title}</p>
-                  <p className="body-md opacity-80">{item.detail}</p>
+                  <p className="title-sm text-surface-on">{item.title}</p>
+                  <p className="body-md">{item.detail}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-surface-on-variant opacity-0 transition-opacity group-hover:opacity-60" />
               </Link>
             </li>
           );
