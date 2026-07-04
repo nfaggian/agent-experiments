@@ -1,9 +1,9 @@
 import { ProjectsPageClient } from "@/components/projects/ProjectsPageClient";
-import { getEngineers, getProjects } from "@/core/api";
+import { getState } from "@/core/api";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const [projects, engineers] = await Promise.all([getProjects(), getEngineers()]);
+  const { projects, engineers } = await getState();
   return <ProjectsPageClient initialProjects={projects} engineers={engineers} />;
 }

@@ -1,28 +1,44 @@
 # Delta Command Backend
 
-Python API for Delta Command, backed by a single JSON file database.
+A thin FastAPI CRUD layer over a single JSON file. Four endpoints total.
 
 ## Setup
 
 ```bash
 cd apps/delta-command/backend
 uv sync
+uv run delta-command    # → http://127.0.0.1:8000
 ```
 
-## Run
+## API
 
-```bash
-uv run delta-command
-```
-
-API available at http://127.0.0.1:8000
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/api/state` | Return the entire database (`engineers`, `opportunities`, `projects`, `lastUpdated`). The frontend derives every metric from this. |
+| PATCH | `/api/opportunities` | Update stage (probability auto-set to 100/0 for won/lost). |
+| PATCH | `/api/projects` | Update status. |
+| PATCH | `/api/timeline` | Update one weekly utilization cell for one engineer; recomputes engineer.utilization and status. |
 
 ## Database
 
-All data is stored in **`config/data.json`** — one file for reads and writes.
+All data lives in **`config/data.json`**. Set `DELTA_DATA_PATH` to override the path.
 
-UI changes (opportunity stages, project status, utilization timeline) persist directly to this file.
+Writes are atomic (`delta_command/json_db.py`).
 
-Override the path with `DELTA_DATA_PATH`.
+Regenerate the 30-engineer seed dataset:
 
-Persistence uses atomic JSON writes via `delta_command/json_db.py`.
+```bash
+uv run python scripts/seed_team.py
+```
+
+`scripts/seed_team.py` is the single source of truth for timeline shape — the API only ever updates existing cells, it never adds new weeks.
+
+## Layout
+
+```
+delta_command/
+├── json_db.py   # atomic file I/O
+├── models.py    # Pydantic models (snake_case in Python, camelCase in JSON)
+├── store.py     # domain operations (load/save/update)
+└── main.py      # FastAPI routes
+```

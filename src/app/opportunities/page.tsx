@@ -1,9 +1,9 @@
 import { OpportunitiesPageClient } from "@/components/opportunities/OpportunitiesPageClient";
-import { getOpportunities } from "@/core/api";
+import { getState } from "@/core/api";
 
 export const dynamic = "force-dynamic";
 
 export default async function OpportunitiesPage() {
-  const opportunities = await getOpportunities();
+  const { opportunities } = await getState();
   return <OpportunitiesPageClient initialOpportunities={opportunities} />;
 }

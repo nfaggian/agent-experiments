@@ -1,9 +1,19 @@
-from __future__ import annotations
+"""Pydantic models for the Delta Command database.
 
-from datetime import datetime
+Python fields are snake_case; JSON is camelCase (via a shared alias generator).
+"""
+
+from datetime import datetime, timezone
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic.alias_generators import to_camel
+
+_CAMEL = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+
+def _now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 class OpportunityStage(StrEnum):
@@ -30,25 +40,22 @@ class EngineerStatus(StrEnum):
 
 
 class Milestone(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
+    model_config = _CAMEL
     id: str
     title: str
-    due_date: str = Field(alias="dueDate")
+    due_date: str
     completed: bool
 
 
 class UtilizationWeek(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    week_start: str = Field(alias="weekStart")
+    model_config = _CAMEL
+    week_start: str
     utilization: int
     note: str | None = None
 
 
 class Engineer(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
+    model_config = _CAMEL
     id: str
     name: str
     role: str
@@ -57,16 +64,13 @@ class Engineer(BaseModel):
     utilization: int
     status: EngineerStatus
     skills: list[str] = Field(default_factory=list)
-    current_projects: list[str] = Field(default_factory=list, alias="currentProjects")
-    utilization_timeline: list[UtilizationWeek] = Field(
-        default_factory=list, alias="utilizationTimeline"
-    )
+    current_projects: list[str] = Field(default_factory=list)
+    utilization_timeline: list[UtilizationWeek] = Field(default_factory=list)
     avatar: str | None = None
 
 
 class Opportunity(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
+    model_config = _CAMEL
     id: str
     title: str
     client: str
@@ -74,57 +78,37 @@ class Opportunity(BaseModel):
     value: int
     probability: int
     owner: str
-    expected_close: str = Field(alias="expectedClose")
+    expected_close: str
     description: str
     tags: list[str] = Field(default_factory=list)
-    created_at: str = Field(alias="createdAt")
-    updated_at: str = Field(alias="updatedAt")
+    created_at: str
+    updated_at: str
 
 
 class Project(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
+    model_config = _CAMEL
     id: str
     name: str
     client: str
     status: ProjectStatus
     progress: int
-    start_date: str = Field(alias="startDate")
-    end_date: str = Field(alias="endDate")
+    start_date: str
+    end_date: str
     budget: int
     spent: int
-    lead_engineer: str = Field(alias="leadEngineer")
+    lead_engineer: str
     team: list[str] = Field(default_factory=list)
     description: str
     milestones: list[Milestone] = Field(default_factory=list)
-    opportunity_id: str | None = Field(default=None, alias="opportunityId")
+    opportunity_id: str | None = None
 
 
 class Database(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
+    model_config = _CAMEL
     engineers: list[Engineer] = Field(default_factory=list)
     opportunities: list[Opportunity] = Field(default_factory=list)
     projects: list[Project] = Field(default_factory=list)
-    last_updated: str = Field(
-        default_factory=lambda: datetime.utcnow().isoformat() + "Z",
-        alias="lastUpdated",
-    )
-
-
-class DashboardMetrics(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    pipeline_value: float = Field(alias="pipelineValue")
-    total_pipeline: float = Field(alias="totalPipeline")
-    active_opportunities: int = Field(alias="activeOpportunities")
-    active_projects: int = Field(alias="activeProjects")
-    at_risk_projects: int = Field(alias="atRiskProjects")
-    avg_utilization: int = Field(alias="avgUtilization")
-    available_capacity: int = Field(alias="availableCapacity")
-    won_this_quarter: int = Field(alias="wonThisQuarter")
-    team_size: int = Field(alias="teamSize")
-    last_updated: str = Field(alias="lastUpdated")
+    last_updated: str = Field(default_factory=_now_iso)
 
 
 class OpportunityStageUpdate(BaseModel):
@@ -137,45 +121,9 @@ class ProjectStatusUpdate(BaseModel):
     status: ProjectStatus
 
 
-class EngineerUtilizationUpdate(BaseModel):
-    id: str
-    utilization: int
-
-
-class UtilizationTimelineWeek(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    week_start: str = Field(alias="weekStart")
-    label: str
-    is_current: bool = Field(alias="isCurrent")
-
-
-class UtilizationTimelineCell(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    week_start: str = Field(alias="weekStart")
-    utilization: int
-    note: str | None = None
-
-
-class UtilizationTimelineRow(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    engineer_id: str = Field(alias="engineerId")
-    name: str
-    role: str
-    cells: list[UtilizationTimelineCell]
-
-
-class UtilizationTimelineResponse(BaseModel):
-    weeks: list[UtilizationTimelineWeek]
-    rows: list[UtilizationTimelineRow]
-
-
-class UtilizationTimelineUpdate(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    engineer_id: str = Field(alias="engineerId")
-    week_start: str = Field(alias="weekStart")
+class TimelineCellUpdate(BaseModel):
+    model_config = _CAMEL
+    engineer_id: str
+    week_start: str
     utilization: int
     note: str | None = None

@@ -1,6 +1,9 @@
-"""Generate a 30-engineer seed dataset for config/data.json."""
+"""Regenerate config/data.json with a fresh 30-engineer roster.
 
-from __future__ import annotations
+This is the single source of truth for timeline shape: every engineer gets an
+8-week utilization timeline seeded here, and the API only ever mutates cells
+that already exist.
+"""
 
 import json
 import random
@@ -17,11 +20,11 @@ LAST = [
     "Nguyen", "Cooper", "Tanaka", "Silva", "Martin", "Rivera", "Brooks", "Clark", "Williams", "Carter",
     "Davis", "Evans", "Ali", "Murphy", "Lee", "Petrov", "Santos", "Wright", "Zhang", "Adams",
 ]
-ROLES = [
+ROLE_WEIGHTS = [
     ("Engineer", 0.35),
     ("Senior Engineer", 0.35),
     ("Staff Engineer", 0.15),
-    ("Principal Engineer", 0.1),
+    ("Principal Engineer", 0.10),
     ("Engineering Manager", 0.05),
 ]
 SKILLS = [
@@ -30,36 +33,20 @@ SKILLS = [
     "Frontend", "CI/CD", "PostgreSQL",
 ]
 PROJECT_IDS = [f"proj-{i}" for i in range(1, 11)]
+TIMELINE_WEEKS = 8
 
 
-def pick_role(rng: random.Random) -> str:
+def _pick_role(rng: random.Random) -> str:
     roll = rng.random()
     cumulative = 0.0
-    for role, weight in ROLES:
+    for role, weight in ROLE_WEIGHTS:
         cumulative += weight
         if roll <= cumulative:
             return role
     return "Engineer"
 
 
-def week_start(value: date) -> date:
-    return value - timedelta(days=value.weekday())
-
-
-def build_timeline(base: int, rng: random.Random) -> list[dict]:
-    today = date.today()
-    current = week_start(today)
-    start = current - timedelta(weeks=2)
-    timeline: list[dict] = []
-    for index in range(8):
-        week = start + timedelta(weeks=index)
-        drift = (index - 2) * 3
-        value = max(0, min(150, base + drift - (index % 3) * 5 + rng.randint(-2, 2)))
-        timeline.append({"weekStart": week.isoformat(), "utilization": value, "note": None})
-    return timeline
-
-
-def status_for(utilization: int) -> str:
+def _status_for(utilization: int) -> str:
     if utilization >= 100:
         return "overallocated"
     if utilization >= 50:
@@ -67,26 +54,37 @@ def status_for(utilization: int) -> str:
     return "available"
 
 
+def _timeline(base: int, rng: random.Random) -> list[dict]:
+    monday = date.today() - timedelta(days=date.today().weekday())
+    start = monday - timedelta(weeks=2)
+    cells = []
+    for i in range(TIMELINE_WEEKS):
+        drift = (i - 2) * 3 - (i % 3) * 5 + rng.randint(-2, 2)
+        value = max(0, min(150, base + drift))
+        cells.append({"weekStart": (start + timedelta(weeks=i)).isoformat(), "utilization": value, "note": None})
+    return cells
+
+
 def build_engineers(count: int = 30, seed: int = 42) -> list[dict]:
     rng = random.Random(seed)
-    engineers: list[dict] = []
-    for index in range(count):
-        first, last = FIRST[index], LAST[index]
+    engineers = []
+    for i in range(count):
+        first, last = FIRST[i], LAST[i]
         utilization = rng.randint(35, 115)
-        project_count = 0 if utilization < 55 else rng.randint(1, 3)
-        projects = rng.sample(PROJECT_IDS, k=min(project_count, len(PROJECT_IDS))) if project_count else []
+        assigned = 0 if utilization < 55 else rng.randint(1, 3)
+        projects = rng.sample(PROJECT_IDS, k=min(assigned, len(PROJECT_IDS))) if assigned else []
         engineers.append(
             {
-                "id": f"eng-{index + 1}",
+                "id": f"eng-{i + 1}",
                 "name": f"{first} {last}",
-                "role": pick_role(rng),
+                "role": _pick_role(rng),
                 "email": f"{first.lower()}.{last.lower()}@company.com",
                 "capacity": 100,
                 "utilization": utilization,
-                "status": status_for(utilization),
+                "status": _status_for(utilization),
                 "skills": rng.sample(SKILLS, k=rng.randint(2, 5)),
                 "currentProjects": projects,
-                "utilizationTimeline": build_timeline(utilization, rng),
+                "utilizationTimeline": _timeline(utilization, rng),
                 "avatar": None,
             }
         )

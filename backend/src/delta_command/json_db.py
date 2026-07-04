@@ -1,7 +1,5 @@
 """Atomic JSON file store for the Delta Command database."""
 
-from __future__ import annotations
-
 import json
 import os
 import tempfile
@@ -11,8 +9,7 @@ DEFAULT_DATA_PATH = Path(__file__).resolve().parents[2] / "config" / "data.json"
 
 
 def database_path() -> Path:
-    override = os.environ.get("DELTA_DATA_PATH") or os.environ.get("DELTA_CONFIG_PATH")
-    return Path(override) if override else DEFAULT_DATA_PATH
+    return Path(os.environ.get("DELTA_DATA_PATH") or DEFAULT_DATA_PATH)
 
 
 def load_json(path: Path) -> dict:
@@ -26,9 +23,7 @@ def save_json(path: Path, data: dict) -> None:
     """Write JSON atomically via a temp file in the same directory."""
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
-    fd, temp_name = tempfile.mkstemp(
-        dir=path.parent, prefix=f".{path.stem}-", suffix=".tmp"
-    )
+    fd, temp_name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.stem}-", suffix=".tmp")
     temp_path = Path(temp_name)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
