@@ -21,7 +21,7 @@ export function EngineerCard({ engineer, projectNames = {} }: EngineerCardProps)
   return (
     <div className="card p-5">
       <div className="mb-4 flex items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container title-sm text-primary-on-container">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-muted text-sm font-semibold text-accent-foreground">
           {getInitials(engineer.name)}
         </div>
         <div className="min-w-0 flex-1">

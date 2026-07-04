@@ -19,7 +19,7 @@ export function KPICard({
   change,
   changeLabel,
   icon: Icon,
-  iconColor = "bg-primary-container text-primary-on-container",
+  iconColor = "text-accent bg-accent-muted",
 }: KPICardProps) {
   const trendIcon =
     change === undefined ? null : change > 0 ? TrendingUp : change < 0 ? TrendingDown : Minus;
@@ -28,42 +28,40 @@ export function KPICard({
     change === undefined
       ? ""
       : change > 0
-        ? "text-primary"
+        ? "text-emerald-600"
         : change < 0
-          ? "text-error"
+          ? "text-red-600"
           : "text-surface-on-variant";
 
   return (
-    <div className="card p-6">
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <p className="metric-label">{label}</p>
-          <p className="metric-value">{value}</p>
-          {context && (
-            <p className="label-md text-surface-on-variant/80">{context}</p>
-          )}
-          {change !== undefined && TrendIcon && (
-            <div className={cn("flex items-center gap-1 label-md", trendColor)}>
-              <TrendIcon className="h-4 w-4" />
-              <span>
-                {change > 0 ? "+" : ""}
-                {change}%
-              </span>
-              {changeLabel && (
-                <span className="text-surface-on-variant/70">{changeLabel}</span>
-              )}
-            </div>
-          )}
-        </div>
+    <div className="card group p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <p className="metric-label">{label}</p>
         <div
           className={cn(
-            "flex h-12 w-12 items-center justify-center rounded-full",
+            "flex h-8 w-8 items-center justify-center rounded-lg transition-transform duration-300 group-hover:scale-105",
             iconColor
           )}
         >
-          <Icon className="h-6 w-6" />
+          <Icon className="h-4 w-4" strokeWidth={2} />
         </div>
       </div>
+      <p className="metric-value">{value}</p>
+      {context && (
+        <p className="mt-2 text-xs leading-relaxed text-surface-on-variant">{context}</p>
+      )}
+      {change !== undefined && TrendIcon && (
+        <div className={cn("mt-2 flex items-center gap-1 text-xs font-medium", trendColor)}>
+          <TrendIcon className="h-3.5 w-3.5" />
+          <span>
+            {change > 0 ? "+" : ""}
+            {change}%
+          </span>
+          {changeLabel && (
+            <span className="font-normal text-surface-on-variant/70">{changeLabel}</span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

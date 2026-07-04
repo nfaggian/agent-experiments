@@ -9,9 +9,9 @@ interface DeliveryOverviewPanelProps {
 
 export function DeliveryOverviewPanel({ delivery }: DeliveryOverviewPanelProps) {
   const statusRows = [
-    { label: "Active", count: delivery.activeCount, color: "bg-primary" },
-    { label: "Planning", count: delivery.planningCount, color: "bg-outline" },
-    { label: "At risk", count: delivery.atRiskCount, color: "bg-error" },
+    { label: "Active", count: delivery.activeCount, color: "bg-accent" },
+    { label: "Planning", count: delivery.planningCount, color: "bg-zinc-300" },
+    { label: "At risk", count: delivery.atRiskCount, color: "bg-red-500" },
   ];
   const total = statusRows.reduce((s, r) => s + r.count, 0) || 1;
 
@@ -19,7 +19,7 @@ export function DeliveryOverviewPanel({ delivery }: DeliveryOverviewPanelProps) 
     <div className="card p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="section-title">Delivery Overview</h3>
-        <Link href="/projects" className="label-md text-primary hover:underline">
+        <Link href="/projects" className="link-subtle">
           View projects
         </Link>
       </div>
@@ -27,7 +27,7 @@ export function DeliveryOverviewPanel({ delivery }: DeliveryOverviewPanelProps) 
       <div className="mb-4 grid grid-cols-2 gap-4">
         <div>
           <div className="mb-1 flex items-center gap-2">
-            <Wallet className="h-4 w-4 text-primary" />
+            <Wallet className="h-4 w-4 text-accent" />
             <span className="label-md text-surface-on-variant">Budget burn</span>
           </div>
           <p className="title-lg text-surface-on">{delivery.burnPercent}%</p>
@@ -37,7 +37,7 @@ export function DeliveryOverviewPanel({ delivery }: DeliveryOverviewPanelProps) 
         </div>
         <div>
           <div className="mb-1 flex items-center gap-2">
-            <Clock className="h-4 w-4 text-primary" />
+            <Clock className="h-4 w-4 text-accent" />
             <span className="label-md text-surface-on-variant">Due soon</span>
           </div>
           <p className="title-lg text-surface-on">{delivery.milestonesDue14Days}</p>
@@ -69,7 +69,7 @@ export function DeliveryOverviewPanel({ delivery }: DeliveryOverviewPanelProps) 
           </span>
         ))}
         {delivery.projectsEnding30Days > 0 && (
-          <span className="text-tertiary">
+          <span className="text-amber-600">
             · {delivery.projectsEnding30Days} ending in 30d
           </span>
         )}
@@ -93,23 +93,23 @@ export function TeamSnapshotPanel({
     <div className="card p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="section-title">Team Capacity</h3>
-        <Link href="/team" className="label-md text-primary hover:underline">
+        <Link href="/team" className="link-subtle">
           View team
         </Link>
       </div>
 
       <div className="mb-4 grid grid-cols-3 gap-3 text-center">
-        <div className="rounded-lg bg-surface-container-low p-3">
+        <div className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-3">
           <p className={cn("title-lg", getUtilizationTextColor(avgUtilization))}>
             {avgUtilization}%
           </p>
           <p className="label-md text-surface-on-variant">Avg util</p>
         </div>
-        <div className="rounded-lg bg-surface-container-low p-3">
-          <p className="title-lg text-primary">{team.benchCapacityPercent}%</p>
+        <div className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-3">
+          <p className="title-lg text-emerald-600">{team.benchCapacityPercent}%</p>
           <p className="label-md text-surface-on-variant">Bench</p>
         </div>
-        <div className="rounded-lg bg-surface-container-low p-3">
+        <div className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-3">
           <p className="title-lg text-surface-on">{team.available.length}</p>
           <p className="label-md text-surface-on-variant">Available</p>
         </div>
@@ -134,12 +134,12 @@ export function TeamSnapshotPanel({
 
       {team.unassigned.length > 0 && (
         <div>
-          <p className="mb-2 label-md text-primary">Ready for assignment</p>
+          <p className="mb-2 label-md text-accent-foreground">Ready for assignment</p>
           <ul className="flex flex-wrap gap-2">
             {team.unassigned.map((e) => (
               <li
                 key={e.id}
-                className="flex items-center gap-1.5 rounded-full bg-primary-container px-3 py-1 label-md text-primary-on-container"
+                className="flex items-center gap-1.5 rounded-lg bg-accent-muted px-3 py-1 label-md text-accent-foreground ring-1 ring-inset ring-blue-200/60"
               >
                 <UserCheck className="h-3.5 w-3.5" />
                 {e.name.split(" ")[0]}

@@ -19,13 +19,16 @@ interface PipelineChartProps {
 }
 
 const STAGE_COLORS: Record<string, string> = {
-  prospect: "#74777F",
-  qualified: "#005FB0",
-  proposal: "#6B5778",
-  negotiation: "#535F70",
-  won: "#005FB0",
-  lost: "#BA1A1A",
+  prospect: "#A1A1AA",
+  qualified: "#3B82F6",
+  proposal: "#8B5CF6",
+  negotiation: "#6366F1",
+  won: "#10B981",
+  lost: "#EF4444",
 };
+
+const CHART_GRID = "#E4E4E7";
+const CHART_TICK = "#71717A";
 
 export function PipelineChart({ opportunities }: PipelineChartProps) {
   const data = OPPORTUNITY_STAGES.filter((s) => !["lost"].includes(s.id)).map(
@@ -49,23 +52,24 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} barSize={40}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
             <XAxis
               dataKey="stage"
-              tick={{ fontSize: 12, fill: "#64748b" }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: "#64748b" }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
             />
             <Tooltip
               contentStyle={{
-                borderRadius: "8px",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                borderRadius: "12px",
+                border: "1px solid #E4E4E7",
+                boxShadow: "0 8px 24px -4px rgb(0 0 0 / 0.08)",
+                fontSize: "13px",
               }}
               formatter={(value: number, name: string) => {
                 if (name === "value") return [formatCurrency(value), "Total Value"];

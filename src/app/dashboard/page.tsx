@@ -67,42 +67,42 @@ export default async function DashboardPage() {
             value={formatCurrency(metrics.pipelineValue)}
             context={`${formatCurrency(metrics.totalPipeline)} unweighted · ${pipeline.closingWithin30Days} closing in 30d`}
             icon={DollarSign}
-            iconColor="bg-primary-container text-primary-on-container"
+            iconColor="bg-accent-muted text-accent-foreground"
           />
           <KPICard
             label="Late-Stage Pipeline"
             value={String(pipeline.lateStage)}
             context={`${formatCurrency(pipeline.lateStageValue)} in proposal & negotiation`}
             icon={Layers}
-            iconColor="bg-secondary-container text-secondary-on-container"
+            iconColor="bg-violet-50 text-violet-700"
           />
           <KPICard
             label="In Negotiation"
             value={String(pipeline.inNegotiation)}
             context={`${formatCurrency(pipeline.negotiationValue)} · ${pipeline.avgProbability}% avg probability`}
             icon={Target}
-            iconColor="bg-tertiary-container text-tertiary-on-container"
+            iconColor="bg-indigo-50 text-indigo-700"
           />
           <KPICard
             label="Active Delivery"
             value={String(metrics.activeProjects)}
             context={`${delivery.planningCount} in planning · ${delivery.atRiskCount} at risk`}
             icon={FolderKanban}
-            iconColor="bg-secondary-container text-secondary-on-container"
+            iconColor="bg-emerald-50 text-emerald-700"
           />
           <KPICard
             label="Budget Burn"
             value={`${delivery.burnPercent}%`}
             context={`${formatCurrency(delivery.totalSpent)} of ${formatCurrency(delivery.totalBudget)} active budget`}
             icon={Flame}
-            iconColor="bg-tertiary-container text-tertiary-on-container"
+            iconColor="bg-amber-50 text-amber-700"
           />
           <KPICard
             label="Team Utilization"
             value={`${metrics.avgUtilization}%`}
             context={`${team.overallocated.length} overallocated · ${team.benchCapacityPercent}% bench capacity`}
             icon={Users}
-            iconColor="bg-primary-container text-primary-on-container"
+            iconColor="bg-blue-50 text-blue-700"
           />
         </div>
 
@@ -138,10 +138,7 @@ export default async function DashboardPage() {
                   {formatCurrency(pipeline.closingValue30Days)} in next 30 days
                 </p>
               </div>
-              <Link
-                href="/opportunities"
-                className="label-md text-primary hover:underline"
-              >
+              <Link href="/opportunities" className="link-subtle">
                 View all
               </Link>
             </div>
@@ -171,7 +168,7 @@ export default async function DashboardPage() {
                       <CalendarClock className="h-3 w-3" />
                       {formatDate(opp.expectedClose)}
                     </p>
-                    <p className="label-md text-primary">
+                    <p className="label-md text-accent-foreground">
                       Wtd {formatCurrency(opp.value * (opp.probability / 100))}
                     </p>
                   </div>
@@ -190,10 +187,7 @@ export default async function DashboardPage() {
                     : "Active delivery status"}
                 </p>
               </div>
-              <Link
-                href="/projects"
-                className="label-md text-primary hover:underline"
-              >
+              <Link href="/projects" className="link-subtle">
                 View all projects
               </Link>
             </div>

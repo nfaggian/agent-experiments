@@ -18,11 +18,14 @@ interface UtilizationChartProps {
 }
 
 function getBarColor(utilization: number): string {
-  if (utilization >= 100) return "#BA1A1A";
-  if (utilization >= 85) return "#6B5778";
-  if (utilization >= 60) return "#005FB0";
-  return "#535F70";
+  if (utilization >= 100) return "#EF4444";
+  if (utilization >= 85) return "#F59E0B";
+  if (utilization >= 60) return "#3B82F6";
+  return "#10B981";
 }
+
+const CHART_GRID = "#E4E4E7";
+const CHART_TICK = "#71717A";
 
 export function UtilizationChart({ engineers }: UtilizationChartProps) {
   const data = [...engineers]
@@ -36,17 +39,17 @@ export function UtilizationChart({ engineers }: UtilizationChartProps) {
   return (
     <div className="card p-6">
       <h3 className="section-title mb-1">Team Utilization</h3>
-      <p className="mb-6 text-sm text-slate-500">
+      <p className="mb-6 body-md text-surface-on-variant">
         Current allocation across the delta engineering team
       </p>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" barSize={20}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
+          <BarChart data={data} layout="vertical" barSize={18}>
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} horizontal={false} />
             <XAxis
               type="number"
               domain={[0, 120]}
-              tick={{ fontSize: 12, fill: "#64748b" }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${v}%`}
@@ -54,21 +57,22 @@ export function UtilizationChart({ engineers }: UtilizationChartProps) {
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fontSize: 12, fill: "#64748b" }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
               width={60}
             />
             <Tooltip
               contentStyle={{
-                borderRadius: "8px",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                borderRadius: "12px",
+                border: "1px solid #E4E4E7",
+                boxShadow: "0 8px 24px -4px rgb(0 0 0 / 0.08)",
+                fontSize: "13px",
               }}
               formatter={(value: number) => [`${value}%`, "Utilization"]}
             />
-            <ReferenceLine x={100} stroke="#ef4444" strokeDasharray="4 4" label={{ value: "100%", position: "top", fill: "#ef4444", fontSize: 11 }} />
-            <Bar dataKey="utilization" radius={[0, 4, 4, 0]}>
+            <ReferenceLine x={100} stroke="#EF4444" strokeDasharray="4 4" label={{ value: "100%", position: "top", fill: "#EF4444", fontSize: 11 }} />
+            <Bar dataKey="utilization" radius={[0, 6, 6, 0]}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
