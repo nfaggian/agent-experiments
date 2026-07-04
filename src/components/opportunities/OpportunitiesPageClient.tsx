@@ -2,13 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { LayoutGrid, List, Trophy, XCircle } from "lucide-react";
+
 import { Header } from "@/components/layout/Header";
 import { PipelineBoard, OpportunityCard } from "@/components/opportunities/PipelineBoard";
 import type { Opportunity, OpportunityStage } from "@/core/types";
-import { OPPORTUNITY_STAGES } from "@/core/types";
 import { updateOpportunityStage } from "@/core/api";
 import { cn, formatCurrency } from "@/core/utils";
-import { LayoutGrid, List, Trophy, XCircle } from "lucide-react";
 
 interface OpportunitiesPageClientProps {
   initialOpportunities: Opportunity[];
@@ -30,22 +30,23 @@ export function OpportunitiesPageClient({
 
   const activeOpps = opportunities.filter((o) => !["won", "lost"].includes(o.stage));
   const wonOpps = opportunities.filter((o) => o.stage === "won");
-  const lostOpps = opportunities.filter((o) => o.stage === "lost");
+  const lostCount = opportunities.filter((o) => o.stage === "lost").length;
   const totalValue = activeOpps.reduce((sum, o) => sum + o.value, 0);
   const weightedValue = activeOpps.reduce(
     (sum, o) => sum + o.value * (o.probability / 100),
     0
   );
+  const wonValue = wonOpps.reduce((s, o) => s + o.value, 0);
 
   return (
     <div>
       <Header
         title="Opportunity Pipeline"
-        subtitle="Track and manage the sales funnel from prospect to close"
+        meta={`${activeOpps.length} active · ${wonOpps.length} won · ${lostCount} lost`}
       />
 
       <div className="space-y-6 p-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-3">
           <div className="card p-4">
             <p className="metric-label">Active Pipeline</p>
             <p className="metric-value text-[1.75rem]">{formatCurrency(totalValue)}</p>
@@ -59,57 +60,37 @@ export function OpportunitiesPageClient({
           <div className="card p-4">
             <div className="flex items-center gap-2">
               <Trophy className="h-4 w-4 text-emerald-400" />
-              <p className="metric-label">Won</p>
+              <p className="metric-label">Won this cycle</p>
+              {lostCount > 0 && (
+                <span className="ml-auto flex items-center gap-1 label-md text-surface-on-variant/70">
+                  <XCircle className="h-3.5 w-3.5" />
+                  {lostCount} lost
+                </span>
+              )}
             </div>
             <p className="metric-value text-[1.75rem] text-emerald-400">
-              {wonOpps.length} · {formatCurrency(wonOpps.reduce((s, o) => s + o.value, 0))}
-            </p>
-          </div>
-          <div className="card p-4">
-            <div className="flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-error" />
-              <p className="metric-label">Lost</p>
-            </div>
-            <p className="metric-value text-[1.75rem] text-surface-on-variant">
-              {lostOpps.length}
+              {wonOpps.length} · {formatCurrency(wonValue)}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="segmented-control">
-            <button
-              type="button"
-              onClick={() => setView("board")}
-              className={cn("segmented-item", view === "board" && "segmented-item-active")}
-            >
-              <LayoutGrid className="h-4 w-4" />
-              Board
-            </button>
-            <button
-              type="button"
-              onClick={() => setView("list")}
-              className={cn("segmented-item", view === "list" && "segmented-item-active")}
-            >
-              <List className="h-4 w-4" />
-              List
-            </button>
-          </div>
-
-          <div className="flex gap-3">
-            {OPPORTUNITY_STAGES.filter((s) => ["won", "lost"].includes(s.id)).map((stage) => {
-              const count = opportunities.filter((o) => o.stage === stage.id).length;
-              return (
-                <span
-                  key={stage.id}
-                  className="flex items-center gap-1.5 label-md text-surface-on-variant"
-                >
-                  <span className={`h-2 w-2 rounded-full ${stage.color}`} />
-                  {stage.label}: {count}
-                </span>
-              );
-            })}
-          </div>
+        <div className="segmented-control w-fit">
+          <button
+            type="button"
+            onClick={() => setView("board")}
+            className={cn("segmented-item", view === "board" && "segmented-item-active")}
+          >
+            <LayoutGrid className="h-4 w-4" />
+            Board
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("list")}
+            className={cn("segmented-item", view === "list" && "segmented-item-active")}
+          >
+            <List className="h-4 w-4" />
+            List
+          </button>
         </div>
 
         {view === "board" ? (
