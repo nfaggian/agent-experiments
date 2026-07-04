@@ -6,29 +6,27 @@ import pytest
 from fastapi.testclient import TestClient
 
 from delta_command.json_db import load_json
-
 from delta_command.main import app
 from delta_command.metrics import compute_dashboard_metrics
 from delta_command.models import Database
-from delta_command.store import load_database, reset_database
 
 
 @pytest.fixture
 def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
-    config = tmp_path / "data.json"
-    runtime = tmp_path / "runtime.json"
+    data_file = tmp_path / "data.json"
     source = Path(__file__).resolve().parents[1] / "config" / "data.json"
-    config.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
-    monkeypatch.setenv("DELTA_CONFIG_PATH", str(config))
-    monkeypatch.setenv("DELTA_RUNTIME_PATH", str(runtime))
-    reset_database()
+    data_file.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    monkeypatch.setenv("DELTA_DATA_PATH", str(data_file))
     return TestClient(app)
 
 
 def test_health(client: TestClient) -> None:
     response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json()["status"] == "ok"
+    payload = response.json()
+    assert payload["status"] == "ok"
+    assert payload["datastore"] == "json"
+    assert payload["path"].endswith("data.json")
 
 
 def test_dashboard_metrics(client: TestClient) -> None:
@@ -45,12 +43,21 @@ def test_opportunity_stage_update(client: TestClient) -> None:
     assert response.json()["stage"] == "qualified"
 
 
-def test_reset_restores_json_seed(client: TestClient) -> None:
+def test_opportunity_stage_update_persists_to_disk(client: TestClient) -> None:
+    path = Path(client.get("/api/health").json()["path"])
     client.patch("/api/opportunities", json={"id": "opp-4", "stage": "won"})
-    client.post("/api/reset")
-    response = client.get("/api/opportunities")
-    opp = next(item for item in response.json() if item["id"] == "opp-4")
-    assert opp["stage"] == "prospect"
+    on_disk = load_json(path)
+    opp = next(item for item in on_disk["opportunities"] if item["id"] == "opp-4")
+    assert opp["stage"] == "won"
+
+
+def test_project_status_update_persists_to_disk(client: TestClient) -> None:
+    path = Path(client.get("/api/health").json()["path"])
+    response = client.patch("/api/projects", json={"id": "proj-1", "status": "at_risk"})
+    assert response.status_code == 200
+    on_disk = load_json(path)
+    project = next(item for item in on_disk["projects"] if item["id"] == "proj-1")
+    assert project["status"] == "at_risk"
 
 
 def test_compute_dashboard_metrics_from_json() -> None:
@@ -86,3 +93,21 @@ def test_utilization_timeline_update(client: TestClient) -> None:
     updated_row = response.json()["rows"][0]
     assert updated_row["cells"][0]["utilization"] == 72
 
+
+def test_utilization_timeline_update_persists_to_disk(client: TestClient) -> None:
+    path = Path(client.get("/api/health").json()["path"])
+    timeline = client.get("/api/utilization/timeline").json()
+    row = timeline["rows"][0]
+    week = timeline["weeks"][0]["weekStart"]
+    client.patch(
+        "/api/utilization/timeline",
+        json={
+            "engineerId": row["engineerId"],
+            "weekStart": week,
+            "utilization": 81,
+        },
+    )
+    on_disk = load_json(path)
+    engineer = next(item for item in on_disk["engineers"] if item["id"] == row["engineerId"])
+    cell = next(item for item in engineer["utilizationTimeline"] if item["weekStart"] == week)
+    assert cell["utilization"] == 81
