@@ -118,8 +118,8 @@ export function TeamSnapshotPanel({
       {team.overallocated.length > 0 && (
         <div className="mb-3">
           <p className="mb-2 label-md text-error">Overallocated</p>
-          <ul className="space-y-1">
-            {team.overallocated.map((e) => (
+          <ul className="max-h-32 space-y-1 overflow-y-auto">
+            {team.overallocated.slice(0, 8).map((e) => (
               <li key={e.id} className="flex items-center justify-between body-md">
                 <span className="flex items-center gap-2">
                   <Users className="h-3.5 w-3.5 text-error" />
@@ -129,6 +129,11 @@ export function TeamSnapshotPanel({
               </li>
             ))}
           </ul>
+          {team.overallocated.length > 8 && (
+            <p className="mt-2 label-md text-surface-on-variant">
+              + {team.overallocated.length - 8} more overallocated
+            </p>
+          )}
         </div>
       )}
 

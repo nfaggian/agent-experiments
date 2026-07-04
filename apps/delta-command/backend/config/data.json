@@ -3,59 +3,57 @@
     {
       "id": "eng-1",
       "name": "Sarah Chen",
-      "role": "Principal Engineer",
+      "role": "Senior Engineer",
       "email": "sarah.chen@company.com",
       "capacity": 100,
-      "utilization": 95,
-      "status": "allocated",
+      "utilization": 38,
+      "status": "available",
       "skills": [
-        "Architecture",
-        "Cloud",
-        "Leadership"
+        "Data Pipelines",
+        "PostgreSQL",
+        "Kubernetes",
+        "Go"
       ],
-      "currentProjects": [
-        "proj-1",
-        "proj-3"
-      ],
+      "currentProjects": [],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 89,
+          "utilization": 32,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 87,
+          "utilization": 30,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 85,
+          "utilization": 28,
           "note": null
         },
         {
           "weekStart": "2026-07-06",
-          "utilization": 98,
+          "utilization": 41,
           "note": null
         },
         {
           "weekStart": "2026-07-13",
-          "utilization": 96,
+          "utilization": 39,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 94,
+          "utilization": 37,
           "note": null
         },
         {
           "weekStart": "2026-07-27",
-          "utilization": 107,
+          "utilization": 50,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 105,
+          "utilization": 48,
           "note": null
         }
       ],
@@ -67,57 +65,57 @@
       "role": "Senior Engineer",
       "email": "marcus.webb@company.com",
       "capacity": 100,
-      "utilization": 110,
+      "utilization": 104,
       "status": "overallocated",
       "skills": [
-        "Backend",
+        "TypeScript",
         "Python",
+        "React",
+        "GCP",
         "Data Pipelines"
       ],
       "currentProjects": [
-        "proj-1",
-        "proj-2",
-        "proj-4"
+        "proj-10"
       ],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 104,
+          "utilization": 98,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 102,
+          "utilization": 96,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 100,
+          "utilization": 94,
           "note": null
         },
         {
           "weekStart": "2026-07-06",
-          "utilization": 113,
+          "utilization": 107,
           "note": null
         },
         {
           "weekStart": "2026-07-13",
-          "utilization": 111,
+          "utilization": 105,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 109,
+          "utilization": 103,
           "note": null
         },
         {
           "weekStart": "2026-07-27",
-          "utilization": 122,
+          "utilization": 116,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 120,
+          "utilization": 114,
           "note": null
         }
       ],
@@ -129,55 +127,53 @@
       "role": "Senior Engineer",
       "email": "priya.sharma@company.com",
       "capacity": 100,
-      "utilization": 80,
-      "status": "allocated",
+      "utilization": 38,
+      "status": "available",
       "skills": [
         "Frontend",
-        "React",
-        "UX"
+        "FinTech",
+        "Data Pipelines"
       ],
-      "currentProjects": [
-        "proj-2"
-      ],
+      "currentProjects": [],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 74,
+          "utilization": 32,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 72,
+          "utilization": 30,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 70,
+          "utilization": 28,
           "note": null
         },
         {
           "weekStart": "2026-07-06",
-          "utilization": 83,
+          "utilization": 41,
           "note": null
         },
         {
           "weekStart": "2026-07-13",
-          "utilization": 81,
+          "utilization": 39,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 79,
+          "utilization": 37,
           "note": null
         },
         {
           "weekStart": "2026-07-27",
-          "utilization": 92,
+          "utilization": 50,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 90,
+          "utilization": 48,
           "note": null
         }
       ],
@@ -185,16 +181,18 @@
     },
     {
       "id": "eng-4",
-      "name": "James O'Brien",
-      "role": "Engineer",
+      "name": "James OBrien",
+      "role": "Senior Engineer",
       "email": "james.obrien@company.com",
       "capacity": 100,
-      "utilization": 65,
+      "utilization": 70,
       "status": "allocated",
       "skills": [
         "DevOps",
+        "ML",
         "Kubernetes",
-        "CI/CD"
+        "GCP",
+        "PostgreSQL"
       ],
       "currentProjects": [
         "proj-3"
@@ -202,42 +200,42 @@
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 59,
-          "note": null
-        },
-        {
-          "weekStart": "2026-06-22",
-          "utilization": 57,
-          "note": null
-        },
-        {
-          "weekStart": "2026-06-29",
-          "utilization": 55,
-          "note": null
-        },
-        {
-          "weekStart": "2026-07-06",
-          "utilization": 68,
-          "note": null
-        },
-        {
-          "weekStart": "2026-07-13",
-          "utilization": 66,
-          "note": null
-        },
-        {
-          "weekStart": "2026-07-20",
           "utilization": 64,
           "note": null
         },
         {
+          "weekStart": "2026-06-22",
+          "utilization": 62,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 60,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 73,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 71,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 69,
+          "note": null
+        },
+        {
           "weekStart": "2026-07-27",
-          "utilization": 77,
+          "utilization": 82,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 75,
+          "utilization": 80,
           "note": null
         }
       ],
@@ -249,55 +247,56 @@
       "role": "Engineer",
       "email": "elena.rodriguez@company.com",
       "capacity": 100,
-      "utilization": 45,
-      "status": "available",
+      "utilization": 83,
+      "status": "allocated",
       "skills": [
+        "PostgreSQL",
         "ML",
-        "Python",
+        "TypeScript",
         "Analytics"
       ],
       "currentProjects": [
-        "proj-4"
+        "proj-6"
       ],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 39,
+          "utilization": 77,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 37,
+          "utilization": 75,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 35,
+          "utilization": 73,
           "note": null
         },
         {
           "weekStart": "2026-07-06",
-          "utilization": 48,
+          "utilization": 86,
           "note": null
         },
         {
           "weekStart": "2026-07-13",
-          "utilization": 46,
+          "utilization": 84,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 44,
+          "utilization": 82,
           "note": null
         },
         {
           "weekStart": "2026-07-27",
-          "utilization": 57,
+          "utilization": 95,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 55,
+          "utilization": 93,
           "note": null
         }
       ],
@@ -306,58 +305,59 @@
     {
       "id": "eng-6",
       "name": "David Kim",
-      "role": "Staff Engineer",
+      "role": "Senior Engineer",
       "email": "david.kim@company.com",
       "capacity": 100,
-      "utilization": 75,
+      "utilization": 83,
       "status": "allocated",
       "skills": [
-        "Security",
-        "Infrastructure",
-        "Compliance"
+        "PostgreSQL",
+        "Architecture",
+        "GCP",
+        "React"
       ],
       "currentProjects": [
-        "proj-5"
+        "proj-9"
       ],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 69,
+          "utilization": 77,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 67,
+          "utilization": 75,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 65,
+          "utilization": 73,
           "note": null
         },
         {
           "weekStart": "2026-07-06",
-          "utilization": 78,
+          "utilization": 86,
           "note": null
         },
         {
           "weekStart": "2026-07-13",
-          "utilization": 76,
+          "utilization": 84,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 74,
+          "utilization": 82,
           "note": null
         },
         {
           "weekStart": "2026-07-27",
-          "utilization": 87,
+          "utilization": 95,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 85,
+          "utilization": 93,
           "note": null
         }
       ],
@@ -369,53 +369,55 @@
       "role": "Engineer",
       "email": "amara.okonkwo@company.com",
       "capacity": 100,
-      "utilization": 30,
-      "status": "available",
+      "utilization": 64,
+      "status": "allocated",
       "skills": [
         "Mobile",
-        "React Native",
-        "API Design"
+        "ML"
       ],
-      "currentProjects": [],
+      "currentProjects": [
+        "proj-2",
+        "proj-4"
+      ],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 24,
+          "utilization": 58,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 22,
+          "utilization": 56,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 20,
+          "utilization": 54,
           "note": null
         },
         {
           "weekStart": "2026-07-06",
-          "utilization": 33,
+          "utilization": 67,
           "note": null
         },
         {
           "weekStart": "2026-07-13",
-          "utilization": 31,
+          "utilization": 65,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 29,
+          "utilization": 63,
           "note": null
         },
         {
           "weekStart": "2026-07-27",
-          "utilization": 42,
+          "utilization": 76,
           "note": null
         },
         {
           "weekStart": "2026-08-03",
-          "utilization": 40,
+          "utilization": 74,
           "note": null
         }
       ],
@@ -423,60 +425,1402 @@
     },
     {
       "id": "eng-8",
-      "name": "Thomas Berg",
+      "name": "Tyler Foster",
       "role": "Senior Engineer",
-      "email": "thomas.berg@company.com",
+      "email": "tyler.foster@company.com",
       "capacity": 100,
-      "utilization": 90,
+      "utilization": 81,
       "status": "allocated",
       "skills": [
-        "Integration",
-        "APIs",
-        "Legacy Systems"
+        "GCP",
+        "ML",
+        "React",
+        "AWS"
       ],
       "currentProjects": [
-        "proj-5",
+        "proj-6"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 75,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 73,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 71,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 84,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 82,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 80,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 93,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 91,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-9",
+      "name": "Nina Patel",
+      "role": "Senior Engineer",
+      "email": "nina.patel@company.com",
+      "capacity": 100,
+      "utilization": 66,
+      "status": "allocated",
+      "skills": [
+        "ML",
+        "Frontend",
+        "Data Pipelines",
+        "DevOps",
+        "TypeScript"
+      ],
+      "currentProjects": [
+        "proj-8"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 60,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 58,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 56,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 69,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 67,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 65,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 78,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 76,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-10",
+      "name": "Omar Hassan",
+      "role": "Engineer",
+      "email": "omar.hassan@company.com",
+      "capacity": 100,
+      "utilization": 39,
+      "status": "available",
+      "skills": [
+        "Mobile",
+        "ML",
+        "React",
+        "GCP"
+      ],
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 33,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 31,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 29,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 42,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 40,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 38,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 51,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 49,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-11",
+      "name": "Lisa Nguyen",
+      "role": "Principal Engineer",
+      "email": "lisa.nguyen@company.com",
+      "capacity": 100,
+      "utilization": 107,
+      "status": "overallocated",
+      "skills": [
+        "Analytics",
+        "Kubernetes",
+        "ML",
+        "CI/CD",
+        "Data Pipelines"
+      ],
+      "currentProjects": [
+        "proj-6",
+        "proj-4",
+        "proj-8"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 101,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 99,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 97,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 110,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 108,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 106,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 119,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 117,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-12",
+      "name": "Ryan Cooper",
+      "role": "Staff Engineer",
+      "email": "ryan.cooper@company.com",
+      "capacity": 100,
+      "utilization": 103,
+      "status": "overallocated",
+      "skills": [
+        "Architecture",
+        "Data Pipelines",
+        "Kubernetes",
+        "Backend",
+        "Cloud"
+      ],
+      "currentProjects": [
+        "proj-10",
+        "proj-7"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 97,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 95,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 93,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 106,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 104,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 102,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 115,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 113,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-13",
+      "name": "Keiko Tanaka",
+      "role": "Engineer",
+      "email": "keiko.tanaka@company.com",
+      "capacity": 100,
+      "utilization": 41,
+      "status": "available",
+      "skills": [
+        "Kubernetes",
+        "AWS"
+      ],
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 35,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 33,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 31,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 44,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 42,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 40,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 53,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 51,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-14",
+      "name": "Andre Silva",
+      "role": "Staff Engineer",
+      "email": "andre.silva@company.com",
+      "capacity": 100,
+      "utilization": 89,
+      "status": "allocated",
+      "skills": [
+        "Backend",
+        "ML",
+        "Frontend",
+        "Python",
+        "Go"
+      ],
+      "currentProjects": [
+        "proj-2",
+        "proj-7",
+        "proj-9"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 83,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 81,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 79,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 92,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 90,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 88,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 101,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 99,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-15",
+      "name": "Sophie Martin",
+      "role": "Senior Engineer",
+      "email": "sophie.martin@company.com",
+      "capacity": 100,
+      "utilization": 103,
+      "status": "overallocated",
+      "skills": [
+        "FinTech",
+        "AWS",
+        "Analytics",
+        "Python"
+      ],
+      "currentProjects": [
+        "proj-6",
         "proj-2"
       ],
       "utilizationTimeline": [
         {
           "weekStart": "2026-06-15",
-          "utilization": 84,
+          "utilization": 97,
           "note": null
         },
         {
           "weekStart": "2026-06-22",
-          "utilization": 82,
+          "utilization": 95,
           "note": null
         },
         {
           "weekStart": "2026-06-29",
-          "utilization": 80,
-          "note": null
-        },
-        {
-          "weekStart": "2026-07-06",
           "utilization": 93,
           "note": null
         },
         {
+          "weekStart": "2026-07-06",
+          "utilization": 106,
+          "note": null
+        },
+        {
           "weekStart": "2026-07-13",
-          "utilization": 91,
+          "utilization": 104,
           "note": null
         },
         {
           "weekStart": "2026-07-20",
-          "utilization": 89,
-          "note": null
-        },
-        {
-          "weekStart": "2026-07-27",
           "utilization": 102,
           "note": null
         },
         {
+          "weekStart": "2026-07-27",
+          "utilization": 115,
+          "note": null
+        },
+        {
           "weekStart": "2026-08-03",
+          "utilization": 113,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-16",
+      "name": "Carlos Rivera",
+      "role": "Engineering Manager",
+      "email": "carlos.rivera@company.com",
+      "capacity": 100,
+      "utilization": 68,
+      "status": "allocated",
+      "skills": [
+        "Backend",
+        "GCP",
+        "Kubernetes",
+        "Architecture"
+      ],
+      "currentProjects": [
+        "proj-3",
+        "proj-9",
+        "proj-2"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 62,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 60,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 58,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 71,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 69,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 67,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 80,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 78,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-17",
+      "name": "Maya Brooks",
+      "role": "Staff Engineer",
+      "email": "maya.brooks@company.com",
+      "capacity": 100,
+      "utilization": 104,
+      "status": "overallocated",
+      "skills": [
+        "Go",
+        "Architecture"
+      ],
+      "currentProjects": [
+        "proj-1",
+        "proj-6",
+        "proj-8"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 98,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 96,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 94,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 107,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 105,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 103,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 116,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 114,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-18",
+      "name": "Ethan Clark",
+      "role": "Principal Engineer",
+      "email": "ethan.clark@company.com",
+      "capacity": 100,
+      "utilization": 74,
+      "status": "allocated",
+      "skills": [
+        "CI/CD",
+        "React",
+        "PostgreSQL"
+      ],
+      "currentProjects": [
+        "proj-1"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 68,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 66,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 64,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 77,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 75,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 73,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 86,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 84,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-19",
+      "name": "Aisha Williams",
+      "role": "Staff Engineer",
+      "email": "aisha.williams@company.com",
+      "capacity": 100,
+      "utilization": 43,
+      "status": "available",
+      "skills": [
+        "Kubernetes",
+        "Cloud",
+        "Frontend"
+      ],
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 37,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 35,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 33,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 46,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 44,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 42,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 55,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 53,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-20",
+      "name": "Ben Carter",
+      "role": "Engineer",
+      "email": "ben.carter@company.com",
+      "capacity": 100,
+      "utilization": 102,
+      "status": "overallocated",
+      "skills": [
+        "Mobile",
+        "Architecture",
+        "Analytics",
+        "Backend"
+      ],
+      "currentProjects": [
+        "proj-7",
+        "proj-4",
+        "proj-9"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 96,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 94,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 92,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 105,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 103,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 101,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 114,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 112,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-21",
+      "name": "Chloe Davis",
+      "role": "Senior Engineer",
+      "email": "chloe.davis@company.com",
+      "capacity": 100,
+      "utilization": 66,
+      "status": "allocated",
+      "skills": [
+        "Python",
+        "CI/CD",
+        "Frontend",
+        "Data Pipelines"
+      ],
+      "currentProjects": [
+        "proj-2"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 60,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 58,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 56,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 69,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 67,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 65,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 78,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 76,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-22",
+      "name": "Daniel Evans",
+      "role": "Senior Engineer",
+      "email": "daniel.evans@company.com",
+      "capacity": 100,
+      "utilization": 35,
+      "status": "available",
+      "skills": [
+        "TypeScript",
+        "Data Pipelines"
+      ],
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 29,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 27,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 25,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 38,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 36,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 34,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 47,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 45,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-23",
+      "name": "Fatima Ali",
+      "role": "Engineer",
+      "email": "fatima.ali@company.com",
+      "capacity": 100,
+      "utilization": 39,
+      "status": "available",
+      "skills": [
+        "React",
+        "Backend",
+        "Data Pipelines",
+        "ML"
+      ],
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 33,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 31,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 29,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 42,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 40,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 38,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 51,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 49,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-24",
+      "name": "Greg Murphy",
+      "role": "Senior Engineer",
+      "email": "greg.murphy@company.com",
+      "capacity": 100,
+      "utilization": 62,
+      "status": "allocated",
+      "skills": [
+        "FinTech",
+        "GCP",
+        "Go",
+        "Frontend",
+        "PostgreSQL"
+      ],
+      "currentProjects": [
+        "proj-3",
+        "proj-8",
+        "proj-4"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 56,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 54,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 52,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 65,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 63,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 61,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 74,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 72,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-25",
+      "name": "Hannah Lee",
+      "role": "Senior Engineer",
+      "email": "hannah.lee@company.com",
+      "capacity": 100,
+      "utilization": 87,
+      "status": "allocated",
+      "skills": [
+        "Mobile",
+        "DevOps"
+      ],
+      "currentProjects": [
+        "proj-1",
+        "proj-2"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 81,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 79,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 77,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 90,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 88,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 86,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 99,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 97,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-26",
+      "name": "Ivan Petrov",
+      "role": "Staff Engineer",
+      "email": "ivan.petrov@company.com",
+      "capacity": 100,
+      "utilization": 48,
+      "status": "available",
+      "skills": [
+        "GCP",
+        "PostgreSQL",
+        "Frontend"
+      ],
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 42,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 40,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 38,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 51,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 49,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 47,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 60,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 58,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-27",
+      "name": "Julia Santos",
+      "role": "Senior Engineer",
+      "email": "julia.santos@company.com",
+      "capacity": 100,
+      "utilization": 89,
+      "status": "allocated",
+      "skills": [
+        "Data Pipelines",
+        "React",
+        "Analytics",
+        "Go",
+        "TypeScript"
+      ],
+      "currentProjects": [
+        "proj-5"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 83,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 81,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 79,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 92,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 90,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 88,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 101,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 99,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-28",
+      "name": "Kevin Wright",
+      "role": "Senior Engineer",
+      "email": "kevin.wright@company.com",
+      "capacity": 100,
+      "utilization": 104,
+      "status": "overallocated",
+      "skills": [
+        "AWS",
+        "FinTech",
+        "Cloud"
+      ],
+      "currentProjects": [
+        "proj-2"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 98,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 96,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 94,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 107,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 105,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 103,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 116,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 114,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-29",
+      "name": "Luna Zhang",
+      "role": "Senior Engineer",
+      "email": "luna.zhang@company.com",
+      "capacity": 100,
+      "utilization": 86,
+      "status": "allocated",
+      "skills": [
+        "Python",
+        "Mobile",
+        "ML",
+        "Analytics",
+        "Security"
+      ],
+      "currentProjects": [
+        "proj-3"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 80,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 78,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 76,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 89,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 87,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 85,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 98,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 96,
+          "note": null
+        }
+      ],
+      "avatar": null
+    },
+    {
+      "id": "eng-30",
+      "name": "Noah Adams",
+      "role": "Senior Engineer",
+      "email": "noah.adams@company.com",
+      "capacity": 100,
+      "utilization": 106,
+      "status": "overallocated",
+      "skills": [
+        "GCP",
+        "TypeScript",
+        "Frontend",
+        "CI/CD"
+      ],
+      "currentProjects": [
+        "proj-8",
+        "proj-3",
+        "proj-4"
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
           "utilization": 100,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 98,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 96,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 109,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 107,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 105,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 118,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 116,
           "note": null
         }
       ],
@@ -832,7 +2176,163 @@
         }
       ],
       "opportunityId": "opp-6"
+    },
+    {
+      "id": "proj-6",
+      "name": "API Gateway Modernization",
+      "client": "TechVentures Ltd",
+      "status": "planning",
+      "progress": 12,
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "budget": 572154,
+      "spent": 122209,
+      "leadEngineer": "Marcus Webb",
+      "team": [
+        "eng-19",
+        "eng-16"
+      ],
+      "description": "Delivery initiative for TechVentures Ltd.",
+      "milestones": [
+        {
+          "id": "ms-6-1",
+          "title": "Kickoff",
+          "dueDate": "2026-04-15",
+          "completed": false
+        },
+        {
+          "id": "ms-6-2",
+          "title": "MVP Delivery",
+          "dueDate": "2026-08-01",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-7",
+      "name": "Customer Identity Platform",
+      "client": "Meridian Financial",
+      "status": "active",
+      "progress": 45,
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "budget": 443638,
+      "spent": 263535,
+      "leadEngineer": "Maya Brooks",
+      "team": [
+        "eng-2",
+        "eng-17"
+      ],
+      "description": "Delivery initiative for Meridian Financial.",
+      "milestones": [
+        {
+          "id": "ms-7-1",
+          "title": "Kickoff",
+          "dueDate": "2026-04-15",
+          "completed": true
+        },
+        {
+          "id": "ms-7-2",
+          "title": "MVP Delivery",
+          "dueDate": "2026-08-01",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-8",
+      "name": "IoT Fleet Monitoring",
+      "client": "GlobalLogistics Inc",
+      "status": "active",
+      "progress": 62,
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "budget": 222001,
+      "spent": 263174,
+      "leadEngineer": "David Kim",
+      "team": [
+        "eng-20",
+        "eng-3"
+      ],
+      "description": "Delivery initiative for GlobalLogistics Inc.",
+      "milestones": [
+        {
+          "id": "ms-8-1",
+          "title": "Kickoff",
+          "dueDate": "2026-04-15",
+          "completed": true
+        },
+        {
+          "id": "ms-8-2",
+          "title": "MVP Delivery",
+          "dueDate": "2026-08-01",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "id": "proj-9",
+      "name": "Regulatory Reporting Automation",
+      "client": "HealthFirst Systems",
+      "status": "planning",
+      "progress": 8,
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "budget": 534005,
+      "spent": 265920,
+      "leadEngineer": "Tyler Foster",
+      "team": [
+        "eng-4",
+        "eng-29",
+        "eng-19"
+      ],
+      "description": "Delivery initiative for HealthFirst Systems.",
+      "milestones": [
+        {
+          "id": "ms-9-1",
+          "title": "Kickoff",
+          "dueDate": "2026-04-15",
+          "completed": false
+        },
+        {
+          "id": "ms-9-2",
+          "title": "MVP Delivery",
+          "dueDate": "2026-08-01",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-10",
+      "name": "Real-time Fraud Detection",
+      "client": "Coastal Credit Union",
+      "status": "active",
+      "progress": 38,
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "budget": 309087,
+      "spent": 191760,
+      "leadEngineer": "Ben Carter",
+      "team": [
+        "eng-20",
+        "eng-3"
+      ],
+      "description": "Delivery initiative for Coastal Credit Union.",
+      "milestones": [
+        {
+          "id": "ms-10-1",
+          "title": "Kickoff",
+          "dueDate": "2026-04-15",
+          "completed": true
+        },
+        {
+          "id": "ms-10-2",
+          "title": "MVP Delivery",
+          "dueDate": "2026-08-01",
+          "completed": false
+        }
+      ]
     }
   ],
-  "lastUpdated": "2026-07-04T13:35:59.200884Z"
+  "lastUpdated": "2026-07-04T13:40:00Z"
 }

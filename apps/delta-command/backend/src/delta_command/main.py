@@ -11,6 +11,7 @@ from delta_command.metrics import compute_dashboard_metrics
 from delta_command.models import (
     DashboardMetrics,
     Engineer,
+    EngineerStatus,
     EngineerUtilizationUpdate,
     Opportunity,
     OpportunityStageUpdate,
@@ -20,8 +21,9 @@ from delta_command.models import (
     UtilizationTimelineUpdate,
 )
 from delta_command.store import (
-    load_database,
     get_utilization_timeline,
+    list_engineers,
+    load_database,
     update_engineer_utilization,
     update_opportunity_stage,
     update_project_status,
@@ -85,8 +87,11 @@ def patch_project(body: ProjectStatusUpdate) -> Project:
 
 
 @app.get("/api/engineers")
-def list_engineers() -> list[Engineer]:
-    return load_database().engineers
+def get_engineers(
+    search: str | None = None,
+    status: EngineerStatus | None = None,
+) -> list[Engineer]:
+    return list_engineers(search=search, status=status)
 
 
 @app.patch("/api/engineers")

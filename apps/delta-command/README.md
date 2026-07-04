@@ -54,7 +54,11 @@ backend/config/data.json
 
 Every API read and write uses this file. UI edits (opportunity stages, project status, utilization timeline cells) are saved directly to disk via atomic JSON writes.
 
-Customize your team by editing `data.json`, or change values in the UI — both update the same file.
+Customize your team by editing `data.json`, or regenerate a 30-engineer roster:
+
+```bash
+cd backend && uv run python scripts/seed_team.py
+```
 
 ### Example JSON structure
 

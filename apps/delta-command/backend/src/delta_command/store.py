@@ -38,6 +38,25 @@ def load_database() -> Database:
     return DatabaseAdapter.validate_python(raw)
 
 
+def list_engineers(
+    search: str | None = None,
+    status: EngineerStatus | None = None,
+) -> list[Engineer]:
+    engineers = load_database().engineers
+    if search:
+        query = search.strip().lower()
+        engineers = [
+            engineer
+            for engineer in engineers
+            if query in engineer.name.lower()
+            or query in engineer.role.lower()
+            or query in engineer.email.lower()
+        ]
+    if status is not None:
+        engineers = [engineer for engineer in engineers if engineer.status == status]
+    return engineers
+
+
 def save_database(db: Database) -> None:
     db.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     payload = db.model_dump(by_alias=True, mode="json")

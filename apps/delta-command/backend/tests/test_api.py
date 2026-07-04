@@ -33,8 +33,8 @@ def test_dashboard_metrics(client: TestClient) -> None:
     response = client.get("/api/dashboard")
     assert response.status_code == 200
     payload = response.json()
-    assert payload["teamSize"] == 8
-    assert payload["activeOpportunities"] == 6
+    assert payload["teamSize"] == 30
+    assert payload["activeOpportunities"] >= 6
 
 
 def test_opportunity_stage_update(client: TestClient) -> None:
@@ -65,7 +65,7 @@ def test_compute_dashboard_metrics_from_json() -> None:
     raw = load_json(config)
     db = Database.model_validate(raw)
     metrics = compute_dashboard_metrics(db)
-    assert metrics.team_size == 8
+    assert metrics.team_size == 30
 
 
 def test_utilization_timeline(client: TestClient) -> None:
@@ -73,7 +73,7 @@ def test_utilization_timeline(client: TestClient) -> None:
     assert response.status_code == 200
     payload = response.json()
     assert len(payload["weeks"]) == 8
-    assert len(payload["rows"]) == 8
+    assert len(payload["rows"]) == 30
     assert payload["rows"][0]["cells"][0]["utilization"] >= 0
 
 
@@ -92,6 +92,22 @@ def test_utilization_timeline_update(client: TestClient) -> None:
     assert response.status_code == 200
     updated_row = response.json()["rows"][0]
     assert updated_row["cells"][0]["utilization"] == 72
+
+
+def test_engineers_search_filter(client: TestClient) -> None:
+    response = client.get("/api/engineers", params={"search": "chen"})
+    assert response.status_code == 200
+    payload = response.json()
+    assert len(payload) >= 1
+    assert all("chen" in engineer["name"].lower() for engineer in payload)
+
+
+def test_engineers_status_filter(client: TestClient) -> None:
+    response = client.get("/api/engineers", params={"status": "overallocated"})
+    assert response.status_code == 200
+    payload = response.json()
+    assert len(payload) >= 1
+    assert all(engineer["status"] == "overallocated" for engineer in payload)
 
 
 def test_utilization_timeline_update_persists_to_disk(client: TestClient) -> None:
