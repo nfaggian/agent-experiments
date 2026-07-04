@@ -92,12 +92,12 @@ export const OPPORTUNITY_STAGES: {
   label: string;
   color: string;
 }[] = [
-  { id: "prospect", label: "Prospect", color: "bg-slate-400" },
-  { id: "qualified", label: "Qualified", color: "bg-blue-400" },
-  { id: "proposal", label: "Proposal", color: "bg-violet-400" },
-  { id: "negotiation", label: "Negotiation", color: "bg-amber-400" },
-  { id: "won", label: "Won", color: "bg-emerald-400" },
-  { id: "lost", label: "Lost", color: "bg-red-400" },
+  { id: "prospect", label: "Prospect", color: "bg-outline" },
+  { id: "qualified", label: "Qualified", color: "bg-primary" },
+  { id: "proposal", label: "Proposal", color: "bg-tertiary" },
+  { id: "negotiation", label: "Negotiation", color: "bg-secondary" },
+  { id: "won", label: "Won", color: "bg-primary" },
+  { id: "lost", label: "Lost", color: "bg-error" },
 ];
 
 export const PROJECT_STATUSES: {
@@ -105,9 +105,9 @@ export const PROJECT_STATUSES: {
   label: string;
   color: string;
 }[] = [
-  { id: "planning", label: "Planning", color: "bg-slate-400" },
-  { id: "active", label: "Active", color: "bg-emerald-500" },
-  { id: "on_hold", label: "On Hold", color: "bg-amber-400" },
-  { id: "at_risk", label: "At Risk", color: "bg-red-500" },
-  { id: "completed", label: "Completed", color: "bg-blue-500" },
+  { id: "planning", label: "Planning", color: "bg-outline" },
+  { id: "active", label: "Active", color: "bg-primary" },
+  { id: "on_hold", label: "On Hold", color: "bg-tertiary" },
+  { id: "at_risk", label: "At Risk", color: "bg-error" },
+  { id: "completed", label: "Completed", color: "bg-secondary" },
 ];

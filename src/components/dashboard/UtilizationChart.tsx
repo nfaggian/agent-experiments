@@ -18,10 +18,10 @@ interface UtilizationChartProps {
 }
 
 function getBarColor(utilization: number): string {
-  if (utilization >= 100) return "#ef4444";
-  if (utilization >= 85) return "#f59e0b";
-  if (utilization >= 60) return "#10b981";
-  return "#60a5fa";
+  if (utilization >= 100) return "#BA1A1A";
+  if (utilization >= 85) return "#6B5778";
+  if (utilization >= 60) return "#005FB0";
+  return "#535F70";
 }
 
 export function UtilizationChart({ engineers }: UtilizationChartProps) {

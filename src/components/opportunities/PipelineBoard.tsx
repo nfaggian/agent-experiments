@@ -19,57 +19,54 @@ export function OpportunityCard({
   const weightedValue = opportunity.value * (opportunity.probability / 100);
 
   return (
-    <div className="group rounded-lg border border-surface-border bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
+    <div className="card group p-4 transition-shadow hover:shadow-elevation-3">
       <div className="mb-3 flex items-start justify-between gap-2">
-        <h4 className="text-sm font-semibold leading-snug text-slate-900">
+        <h4 className="title-sm leading-snug text-surface-on">
           {opportunity.title}
         </h4>
-        <span className="shrink-0 text-sm font-bold text-brand-600">
+        <span className="shrink-0 title-sm text-primary">
           {formatCurrency(opportunity.value)}
         </span>
       </div>
 
-      <div className="mb-3 flex items-center gap-1.5 text-xs text-slate-500">
+      <div className="mb-3 flex items-center gap-1.5 label-md text-surface-on-variant">
         <Building2 className="h-3.5 w-3.5" />
         {opportunity.client}
       </div>
 
       {!compact && (
-        <p className="mb-3 line-clamp-2 text-xs text-slate-500">
+        <p className="mb-3 line-clamp-2 body-md text-surface-on-variant">
           {opportunity.description}
         </p>
       )}
 
       <div className="mb-3 flex flex-wrap gap-1">
         {opportunity.tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600"
-          >
+          <span key={tag} className="chip">
             {tag}
           </span>
         ))}
       </div>
 
       <div className="mb-3">
-        <div className="mb-1 flex items-center justify-between text-xs">
-          <span className="text-slate-500">Probability</span>
-          <span className="font-medium text-slate-700">
+        <div className="mb-1 flex items-center justify-between label-md">
+          <span className="text-surface-on-variant">Probability</span>
+          <span className="font-medium text-surface-on">
             {opportunity.probability}%
           </span>
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+        <div className="progress-track">
           <div
-            className="h-full rounded-full bg-brand-500 transition-all"
+            className="progress-indicator"
             style={{ width: `${opportunity.probability}%` }}
           />
         </div>
-        <p className="mt-1 text-[10px] text-slate-400">
+        <p className="mt-1 label-sm text-surface-on-variant/70">
           Weighted: {formatCurrency(weightedValue)}
         </p>
       </div>
 
-      <div className="flex items-center justify-between border-t border-surface-border pt-3 text-xs text-slate-500">
+      <div className="flex items-center justify-between border-t border-outline-variant/50 pt-3 label-md text-surface-on-variant">
         <div className="flex items-center gap-1">
           <User className="h-3.5 w-3.5" />
           {opportunity.owner.split(" ")[0]}
@@ -81,13 +78,13 @@ export function OpportunityCard({
       </div>
 
       {onStageChange && (
-        <div className="mt-3 border-t border-surface-border pt-3">
+        <div className="mt-3 border-t border-outline-variant/50 pt-3">
           <select
             value={opportunity.stage}
             onChange={(e) =>
               onStageChange(opportunity.id, e.target.value as OpportunityStage)
             }
-            className="w-full rounded-md border border-surface-border bg-slate-50 px-2 py-1.5 text-xs focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="text-field-outlined h-10 w-full text-label-md"
           >
             {OPPORTUNITY_STAGES.map((s) => (
               <option key={s.id} value={s.id}>
@@ -120,19 +117,19 @@ export function PipelineBoard({ opportunities, onStageChange }: PipelineBoardPro
         return (
           <div
             key={stage.id}
-            className="flex w-72 shrink-0 flex-col rounded-xl bg-slate-100/80 p-3"
+            className="flex w-72 shrink-0 flex-col rounded-lg bg-surface-container p-3"
           >
             <div className="mb-3 flex items-center justify-between px-1">
               <div className="flex items-center gap-2">
                 <div className={cn("h-2.5 w-2.5 rounded-full", stage.color)} />
-                <h3 className="text-sm font-semibold text-slate-700">
+                <h3 className="title-sm text-surface-on">
                   {stage.label}
                 </h3>
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-medium text-slate-600 shadow-sm">
+                <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-surface-bright px-1.5 label-md text-surface-on-variant shadow-elevation-1">
                   {stageOpps.length}
                 </span>
               </div>
-              <span className="text-xs font-medium text-slate-500">
+              <span className="label-md text-surface-on-variant">
                 {formatCurrency(stageValue)}
               </span>
             </div>
@@ -147,8 +144,8 @@ export function PipelineBoard({ opportunities, onStageChange }: PipelineBoardPro
                 />
               ))}
               {stageOpps.length === 0 && (
-                <div className="flex flex-1 items-center justify-center rounded-lg border-2 border-dashed border-slate-200 p-6">
-                  <p className="text-xs text-slate-400">No opportunities</p>
+                <div className="flex flex-1 items-center justify-center rounded-lg border-2 border-dashed border-outline-variant p-6">
+                  <p className="label-md text-surface-on-variant/60">No opportunities</p>
                 </div>
               )}
             </div>

@@ -53,7 +53,7 @@ export default async function DashboardPage() {
             change={12}
             changeLabel="vs last month"
             icon={DollarSign}
-            iconColor="bg-emerald-50 text-emerald-600"
+            iconColor="bg-primary-container text-primary-on-container"
           />
           <KPICard
             label="Active Opportunities"
@@ -61,13 +61,13 @@ export default async function DashboardPage() {
             change={8}
             changeLabel="vs last month"
             icon={Target}
-            iconColor="bg-violet-50 text-violet-600"
+            iconColor="bg-tertiary-container text-tertiary-on-container"
           />
           <KPICard
             label="Active Projects"
             value={String(metrics.activeProjects)}
             icon={FolderKanban}
-            iconColor="bg-blue-50 text-blue-600"
+            iconColor="bg-secondary-container text-secondary-on-container"
           />
           <KPICard
             label="Team Utilization"
@@ -75,23 +75,23 @@ export default async function DashboardPage() {
             change={metrics.avgUtilization > 85 ? -3 : 5}
             changeLabel="avg across team"
             icon={Users}
-            iconColor="bg-amber-50 text-amber-600"
+            iconColor="bg-primary-container text-primary-on-container"
           />
         </div>
 
         {metrics.atRiskProjects > 0 && (
-          <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4">
-            <AlertTriangle className="h-5 w-5 shrink-0 text-red-600" />
+          <div className="banner-error">
+            <AlertTriangle className="h-5 w-5 shrink-0" />
             <div className="flex-1">
-              <p className="text-sm font-semibold text-red-800">
+              <p className="title-sm">
                 {metrics.atRiskProjects} project
                 {metrics.atRiskProjects > 1 ? "s" : ""} at risk
               </p>
-              <p className="text-sm text-red-600">
+              <p className="body-md opacity-90">
                 Review flagged projects and reallocate resources as needed.
               </p>
             </div>
-            <Link href="/projects" className="btn-secondary text-red-700">
+            <Link href="/projects" className="btn-tonal">
               View Projects
             </Link>
           </div>
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
               <h3 className="section-title">Upcoming Closes</h3>
               <Link
                 href="/opportunities"
-                className="text-sm font-medium text-brand-600 hover:text-brand-700"
+                className="label-md text-primary hover:underline"
               >
                 View all
               </Link>
@@ -117,19 +117,19 @@ export default async function DashboardPage() {
               {upcomingCloses.map((opp) => (
                 <div
                   key={opp.id}
-                  className="flex items-start justify-between gap-3 border-b border-surface-border pb-4 last:border-0 last:pb-0"
+                  className="flex items-start justify-between gap-3 border-b border-outline-variant/50 pb-4 last:border-0 last:pb-0"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-slate-900">
+                    <p className="truncate title-sm text-surface-on">
                       {opp.title}
                     </p>
-                    <p className="text-xs text-slate-500">{opp.client}</p>
+                    <p className="label-md text-surface-on-variant">{opp.client}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="title-sm text-surface-on">
                       {formatCurrency(opp.value)}
                     </p>
-                    <p className="text-xs text-slate-400">
+                    <p className="label-md text-surface-on-variant/70">
                       {formatDate(opp.expectedClose)}
                     </p>
                   </div>
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
               <h3 className="section-title">Projects Needing Attention</h3>
               <Link
                 href="/projects"
-                className="text-sm font-medium text-brand-600 hover:text-brand-700"
+                className="label-md text-primary hover:underline"
               >
                 View all projects
               </Link>
@@ -165,14 +165,14 @@ export default async function DashboardPage() {
 
         <div className="card p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50">
-              <TrendingUp className="h-5 w-5 text-brand-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container">
+              <TrendingUp className="h-5 w-5 text-primary-on-container" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="title-sm text-surface-on">
                 Total Pipeline Value: {formatCurrency(metrics.totalPipeline)}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="body-md text-surface-on-variant">
                 {metrics.availableCapacity} engineers with capacity below 70% ·{" "}
                 Last updated {formatDate(metrics.lastUpdated.split("T")[0])}
               </p>

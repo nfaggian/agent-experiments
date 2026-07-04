@@ -50,7 +50,7 @@ export default function OpportunitiesPage() {
       <div>
         <Header title="Opportunity Pipeline" subtitle="Loading..." />
         <div className="flex h-64 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-200 border-t-brand-600" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-container border-t-primary" />
         </div>
       </div>
     );
@@ -66,46 +66,46 @@ export default function OpportunitiesPage() {
       <div className="space-y-6 p-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card p-4">
-            <p className="text-xs font-medium text-slate-500">Active Pipeline</p>
-            <p className="text-2xl font-bold text-slate-900">
+            <p className="metric-label">Active Pipeline</p>
+            <p className="metric-value text-[1.75rem]">
               {formatCurrency(totalValue)}
             </p>
           </div>
           <div className="card p-4">
-            <p className="text-xs font-medium text-slate-500">Weighted Value</p>
-            <p className="text-2xl font-bold text-brand-600">
+            <p className="metric-label">Weighted Value</p>
+            <p className="metric-value text-[1.75rem] text-primary">
               {formatCurrency(weightedValue)}
             </p>
           </div>
           <div className="card p-4">
             <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-emerald-500" />
-              <p className="text-xs font-medium text-slate-500">Won</p>
+              <Trophy className="h-4 w-4 text-primary" />
+              <p className="metric-label">Won</p>
             </div>
-            <p className="text-2xl font-bold text-emerald-600">
+            <p className="metric-value text-[1.75rem] text-primary">
               {wonOpps.length} · {formatCurrency(wonOpps.reduce((s, o) => s + o.value, 0))}
             </p>
           </div>
           <div className="card p-4">
             <div className="flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-red-400" />
-              <p className="text-xs font-medium text-slate-500">Lost</p>
+              <XCircle className="h-4 w-4 text-error" />
+              <p className="metric-label">Lost</p>
             </div>
-            <p className="text-2xl font-bold text-slate-400">
+            <p className="metric-value text-[1.75rem] text-surface-on-variant">
               {lostOpps.length}
             </p>
           </div>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex gap-1 rounded-lg border border-surface-border bg-white p-1">
+          <div className="flex gap-1 rounded-full bg-surface-container p-1">
             <button
               type="button"
               onClick={() => setView("board")}
-              className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 view === "board"
-                  ? "bg-brand-50 text-brand-700"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-secondary-container text-secondary-on-container shadow-elevation-1"
+                  : "text-surface-on-variant hover:bg-surface-on/[0.08]"
               }`}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -114,10 +114,10 @@ export default function OpportunitiesPage() {
             <button
               type="button"
               onClick={() => setView("list")}
-              className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 view === "list"
-                  ? "bg-brand-50 text-brand-700"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-secondary-container text-secondary-on-container shadow-elevation-1"
+                  : "text-surface-on-variant hover:bg-surface-on/[0.08]"
               }`}
             >
               <List className="h-4 w-4" />
@@ -133,7 +133,7 @@ export default function OpportunitiesPage() {
               return (
                 <span
                   key={stage.id}
-                  className="flex items-center gap-1.5 text-xs text-slate-500"
+                  className="flex items-center gap-1.5 label-md text-surface-on-variant"
                 >
                   <span className={`h-2 w-2 rounded-full ${stage.color}`} />
                   {stage.label}: {count}

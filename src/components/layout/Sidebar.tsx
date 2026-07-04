@@ -7,8 +7,7 @@ import {
   Target,
   Users,
   FolderKanban,
-  ChevronRight,
-  Zap,
+  Bolt,
 } from "lucide-react";
 import { cn } from "@/core/utils";
 
@@ -23,53 +22,48 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-surface-border bg-white">
-      <div className="flex h-16 items-center gap-3 border-b border-surface-border px-6">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600">
-          <Zap className="h-5 w-5 text-white" />
+    <aside className="nav-drawer">
+      <div className="flex h-16 items-center gap-3 px-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container">
+          <Bolt className="h-5 w-5 text-primary-on-container" />
         </div>
         <div>
-          <h1 className="text-base font-bold text-slate-900">Delta Command</h1>
-          <p className="text-xs text-slate-500">Engineering Hub</p>
+          <h1 className="title-md text-surface-on">Delta Command</h1>
+          <p className="label-md text-surface-on-variant">Engineering Hub</p>
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-4">
+      <nav className="flex-1 space-y-1 px-3 py-2">
+        <p className="mb-2 px-4 label-md uppercase tracking-wider text-surface-on-variant/70">
+          Navigation
+        </p>
         {navigation.map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (
             <Link
               key={item.name}
               href={item.href}
-              className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-brand-50 text-brand-700"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              )}
+              className={cn("nav-item", isActive && "nav-item-active")}
             >
               <item.icon
                 className={cn(
-                  "h-5 w-5 shrink-0",
-                  isActive ? "text-brand-600" : "text-slate-400 group-hover:text-slate-600"
+                  "h-6 w-6 shrink-0",
+                  isActive ? "text-secondary-on-container" : "text-surface-on-variant"
                 )}
               />
               {item.name}
-              {isActive && (
-                <ChevronRight className="ml-auto h-4 w-4 text-brand-400" />
-              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="border-t border-surface-border p-4">
-        <div className="rounded-lg bg-gradient-to-br from-brand-600 to-brand-800 p-4 text-white">
-          <p className="text-xs font-medium uppercase tracking-wider text-brand-200">
+      <div className="border-t border-outline-variant/50 p-4">
+        <div className="rounded-lg bg-primary-container p-4 shadow-elevation-1">
+          <p className="label-md uppercase tracking-wider text-primary-on-container/70">
             Delta Engineering
           </p>
-          <p className="mt-1 text-sm font-semibold">Q3 2026 Review</p>
-          <p className="mt-2 text-xs text-brand-100">
+          <p className="mt-1 title-sm text-primary-on-container">Q3 2026 Review</p>
+          <p className="mt-2 body-md text-primary-on-container/80">
             Leadership dashboard ready for weekly sync
           </p>
         </div>

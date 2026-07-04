@@ -12,38 +12,34 @@ export function Header({ title, subtitle }: HeaderProps) {
   const today = format(new Date(), "EEEE, MMMM d, yyyy");
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-surface-border bg-white/80 px-8 backdrop-blur-sm">
+    <header className="top-app-bar">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+        <h2 className="headline-md text-surface-on">{title}</h2>
         {subtitle && (
-          <p className="text-sm text-slate-500">{subtitle}</p>
+          <p className="body-md text-surface-on-variant">{subtitle}</p>
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <span className="hidden text-sm text-slate-500 md:block">{today}</span>
+      <div className="flex items-center gap-2">
+        <span className="hidden body-md text-surface-on-variant md:block">{today}</span>
 
         <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-surface-on-variant" />
           <input
             type="text"
             placeholder="Search..."
-            className="h-9 w-64 rounded-lg border border-surface-border bg-slate-50 pl-9 pr-4 text-sm placeholder:text-slate-400 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="text-field-outlined h-12 w-64 pl-12"
           />
         </div>
 
-        <button
-          type="button"
-          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-surface-border bg-white text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
-          aria-label="Notifications"
-        >
-          <Bell className="h-4 w-4" />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+        <button type="button" className="icon-btn" aria-label="Notifications">
+          <Bell className="h-5 w-5" />
+          <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-bold text-error-on">
             3
           </span>
         </button>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container title-sm text-primary-on-container">
           NF
         </div>
       </div>

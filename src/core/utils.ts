@@ -38,29 +38,29 @@ export function getInitials(name: string): string {
 }
 
 export function getUtilizationColor(utilization: number): string {
-  if (utilization >= 100) return "bg-red-500";
-  if (utilization >= 85) return "bg-amber-500";
-  if (utilization >= 60) return "bg-emerald-500";
-  return "bg-blue-400";
+  if (utilization >= 100) return "bg-error";
+  if (utilization >= 85) return "bg-tertiary";
+  if (utilization >= 60) return "bg-primary";
+  return "bg-secondary";
 }
 
 export function getUtilizationTextColor(utilization: number): string {
-  if (utilization >= 100) return "text-red-600";
-  if (utilization >= 85) return "text-amber-600";
-  if (utilization >= 60) return "text-emerald-600";
-  return "text-blue-600";
+  if (utilization >= 100) return "text-error";
+  if (utilization >= 85) return "text-tertiary";
+  if (utilization >= 60) return "text-primary";
+  return "text-secondary";
 }
 
 export function getStatusBadgeColor(status: string): string {
   const colors: Record<string, string> = {
-    available: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-    allocated: "bg-blue-50 text-blue-700 ring-blue-600/20",
-    overallocated: "bg-red-50 text-red-700 ring-red-600/20",
-    planning: "bg-slate-50 text-slate-700 ring-slate-600/20",
-    active: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-    on_hold: "bg-amber-50 text-amber-700 ring-amber-600/20",
-    at_risk: "bg-red-50 text-red-700 ring-red-600/20",
-    completed: "bg-blue-50 text-blue-700 ring-blue-600/20",
+    available: "bg-primary-container text-primary-on-container",
+    allocated: "bg-secondary-container text-secondary-on-container",
+    overallocated: "bg-error-container text-error-on-container",
+    planning: "bg-surface-container-highest text-surface-on-variant",
+    active: "bg-primary-container text-primary-on-container",
+    on_hold: "bg-tertiary-container text-tertiary-on-container",
+    at_risk: "bg-error-container text-error-on-container",
+    completed: "bg-secondary-container text-secondary-on-container",
   };
-  return colors[status] ?? "bg-slate-50 text-slate-700 ring-slate-600/20";
+  return colors[status] ?? "bg-surface-container-highest text-surface-on-variant";
 }
