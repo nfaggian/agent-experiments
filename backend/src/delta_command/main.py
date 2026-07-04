@@ -5,6 +5,7 @@ import os
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
+from delta_command.briefing import LLMError, LLMNotConfigured, generate_briefing
 from delta_command.models import (
     Database,
     Opportunity,
@@ -20,7 +21,7 @@ from delta_command.store import (
     update_timeline_cell,
 )
 
-app = FastAPI(title="Delta Command API", version="1.0.0")
+app = FastAPI(title="Delta Command API", version="1.1.0")
 
 
 @app.get("/api/state")
@@ -51,6 +52,18 @@ def patch_timeline(body: TimelineCellUpdate) -> Database:
         return update_timeline_cell(body.engineer_id, body.week_start, body.utilization, body.note)
     except ValueError as exc:
         raise HTTPException(404, str(exc)) from exc
+
+
+@app.post("/api/briefing")
+async def post_briefing() -> dict[str, str]:
+    """Generate an LLM-authored executive briefing from the current state."""
+    try:
+        briefing = await generate_briefing()
+    except LLMNotConfigured as exc:
+        raise HTTPException(503, str(exc)) from exc
+    except LLMError as exc:
+        raise HTTPException(502, str(exc)) from exc
+    return {"briefing": briefing}
 
 
 def run() -> None:
