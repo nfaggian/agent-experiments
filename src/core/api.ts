@@ -8,6 +8,7 @@ import type {
   OpportunityStage,
   Project,
   ProjectStatus,
+  UtilizationTimeline,
 } from "./types";
 
 const API_BASE = process.env.DELTA_API_URL ?? "http://127.0.0.1:8000";
@@ -43,6 +44,22 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getEngineers(): Promise<Engineer[]> {
   return apiFetch<Engineer[]>("/api/engineers");
+}
+
+export async function getUtilizationTimeline(): Promise<UtilizationTimeline> {
+  return apiFetch<UtilizationTimeline>("/api/utilization/timeline");
+}
+
+export async function updateTimelineCell(
+  engineerId: string,
+  weekStart: string,
+  utilization: number,
+  note?: string
+): Promise<UtilizationTimeline> {
+  return apiFetch<UtilizationTimeline>("/api/utilization/timeline", {
+    method: "PATCH",
+    body: JSON.stringify({ engineerId, weekStart, utilization, note }),
+  });
 }
 
 export async function getDatabase(): Promise<Database> {

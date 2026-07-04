@@ -58,3 +58,30 @@ def test_compute_dashboard_metrics_from_yaml() -> None:
     db = Database.model_validate(raw)
     metrics = compute_dashboard_metrics(db)
     assert metrics.team_size == 8
+
+
+def test_utilization_timeline(client: TestClient) -> None:
+    response = client.get("/api/utilization/timeline")
+    assert response.status_code == 200
+    payload = response.json()
+    assert len(payload["weeks"]) == 8
+    assert len(payload["rows"]) == 8
+    assert payload["rows"][0]["cells"][0]["utilization"] >= 0
+
+
+def test_utilization_timeline_update(client: TestClient) -> None:
+    timeline = client.get("/api/utilization/timeline").json()
+    row = timeline["rows"][0]
+    week = timeline["weeks"][0]["weekStart"]
+    response = client.patch(
+        "/api/utilization/timeline",
+        json={
+            "engineerId": row["engineerId"],
+            "weekStart": week,
+            "utilization": 72,
+        },
+    )
+    assert response.status_code == 200
+    updated_row = response.json()["rows"][0]
+    assert updated_row["cells"][0]["utilization"] == 72
+

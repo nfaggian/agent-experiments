@@ -15,6 +15,12 @@ export type ProjectStatus =
 
 export type EngineerStatus = "available" | "allocated" | "overallocated";
 
+export interface UtilizationWeek {
+  weekStart: string;
+  utilization: number;
+  note?: string;
+}
+
 export interface Engineer {
   id: string;
   name: string;
@@ -25,7 +31,32 @@ export interface Engineer {
   status: EngineerStatus;
   skills: string[];
   currentProjects: string[];
+  utilizationTimeline?: UtilizationWeek[];
   avatar?: string;
+}
+
+export interface UtilizationTimelineWeek {
+  weekStart: string;
+  label: string;
+  isCurrent: boolean;
+}
+
+export interface UtilizationTimelineCell {
+  weekStart: string;
+  utilization: number;
+  note?: string;
+}
+
+export interface UtilizationTimelineRow {
+  engineerId: string;
+  name: string;
+  role: string;
+  cells: UtilizationTimelineCell[];
+}
+
+export interface UtilizationTimeline {
+  weeks: UtilizationTimelineWeek[];
+  rows: UtilizationTimelineRow[];
 }
 
 export interface Opportunity {
