@@ -66,7 +66,7 @@ export function TeamPageClient({
           </div>
           <p className="body-md text-surface-on-variant">
             {view === "timeline"
-              ? "Click any week cell to update utilization — changes persist to config"
+              ? "Click any week cell to update utilization — changes save to data.json"
               : "Current-week snapshot and team member details"}
           </p>
         </div>

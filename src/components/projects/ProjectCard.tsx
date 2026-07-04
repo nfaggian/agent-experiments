@@ -12,9 +12,14 @@ import { Calendar, Users, AlertTriangle, CheckCircle2, Circle } from "lucide-rea
 interface ProjectCardProps {
   project: Project;
   engineerNames?: Record<string, string>;
+  onStatusChange?: (id: string, status: Project["status"]) => void;
 }
 
-export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  engineerNames = {},
+  onStatusChange,
+}: ProjectCardProps) {
   const statusConfig = PROJECT_STATUSES.find((s) => s.id === project.status);
   const daysLeft = daysUntil(project.endDate);
   const budgetUsed = Math.round((project.spent / project.budget) * 100);
@@ -92,6 +97,27 @@ export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
             {teamNames.length} team members
           </span>
         </div>
+
+        {onStatusChange && (
+          <div className="mb-4">
+            <label className="mb-1.5 block label-md text-surface-on-variant">
+              Update status
+            </label>
+            <select
+              value={project.status}
+              onChange={(e) =>
+                onStatusChange(project.id, e.target.value as Project["status"])
+              }
+              className="text-field-outlined h-10 w-full text-sm"
+            >
+              {PROJECT_STATUSES.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {project.status === "at_risk" && (
           <div className="banner-error mb-4 py-3">

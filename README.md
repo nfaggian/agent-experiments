@@ -8,7 +8,7 @@ A polished engineering operations dashboard for delta engineering teams. Track t
 |-------|-------|
 | **Frontend** | Next.js 15, TypeScript, Tailwind CSS, Recharts |
 | **Backend** | Python 3.12+, FastAPI, Pydantic |
-| **Config** | YAML (`backend/config/data.yaml`) |
+| **Database** | Single JSON file (`backend/config/data.json`) |
 | **Dependencies** | [UV](https://docs.astral.sh/uv/) (Python), npm (frontend) |
 
 ## Quick Start
@@ -44,71 +44,81 @@ make frontend   # start UI
 make test       # run backend tests + frontend build
 ```
 
-## Configuration
+## Database
 
-All team data lives in YAML:
+All data lives in **one JSON file**:
 
 ```
-backend/config/
-├── data.yaml      # Edit this — engineers, opportunities, projects
-└── runtime.yaml   # Auto-generated runtime state (gitignored)
+backend/config/data.json
 ```
 
-Edit `backend/config/data.yaml` to customize your team. Runtime mutations (e.g. moving an opportunity stage) persist to `runtime.yaml`. Reload defaults with:
+Every API read and write uses this file. UI edits (opportunity stages, project status, utilization timeline cells) are saved directly to disk via atomic JSON writes.
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/reset
+Customize your team by editing `data.json`, or change values in the UI — both update the same file.
+
+### Example JSON structure
+
+```json
+{
+  "lastUpdated": "2026-07-04T12:00:00Z",
+  "engineers": [
+    {
+      "id": "eng-1",
+      "name": "Sarah Chen",
+      "role": "Principal Engineer",
+      "utilization": 95,
+      "status": "allocated",
+      "skills": ["Architecture", "Cloud"],
+      "currentProjects": ["proj-1"]
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "opp-1",
+      "title": "Enterprise Data Platform",
+      "client": "Meridian Financial",
+      "stage": "negotiation",
+      "value": 850000,
+      "probability": 75
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "name": "Core Banking Migration",
+      "status": "active",
+      "progress": 68,
+      "milestones": [
+        {
+          "id": "ms-1",
+          "title": "Architecture Sign-off",
+          "dueDate": "2026-02-15",
+          "completed": true
+        }
+      ]
+    }
+  ]
+}
 ```
 
-### Example YAML structure
-
-```yaml
-lastUpdated: "2026-07-04T12:00:00Z"
-
-engineers:
-  - id: eng-1
-    name: Sarah Chen
-    role: Principal Engineer
-    utilization: 95
-    status: allocated
-    skills: [Architecture, Cloud]
-    currentProjects: [proj-1]
-
-opportunities:
-  - id: opp-1
-    title: Enterprise Data Platform
-    client: Meridian Financial
-    stage: negotiation
-    value: 850000
-    probability: 75
-
-projects:
-  - id: proj-1
-    name: Core Banking Migration
-    status: active
-    progress: 68
-    milestones:
-      - id: ms-1
-        title: Architecture Sign-off
-        dueDate: "2026-02-15"
-        completed: true
-```
+Persistence is handled by `delta_command/json_db.py` (I/O) and `delta_command/store.py` (domain operations).
 
 ## Features
 
 - **Executive Dashboard** — KPIs, pipeline funnel, utilization charts, at-risk alerts
-- **Opportunity Pipeline** — Kanban board with stage management
-- **Team Utilization** — Capacity planning and overallocation warnings
-- **Project Execution** — Progress, budget, and milestone tracking
+- **Opportunity Pipeline** — Kanban board with stage management (persisted)
+- **Team Utilization** — Editable timeline grid (persisted)
+- **Project Execution** — Progress, budget, milestone tracking with status updates (persisted)
 
 ## Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DELTA_API_URL` | `http://127.0.0.1:8000` | Backend URL (Next.js server-side) |
-| `DELTA_CONFIG_PATH` | `backend/config/data.yaml` | YAML config source |
-| `DELTA_RUNTIME_PATH` | `backend/config/runtime.yaml` | Runtime state file |
+| `DELTA_DATA_PATH` | `backend/config/data.json` | JSON database file |
 | `DELTA_HOST` / `DELTA_PORT` | `127.0.0.1` / `8000` | API bind address |
+
+`DELTA_CONFIG_PATH` is supported as an alias for `DELTA_DATA_PATH`.
 
 ## Production
 
@@ -120,4 +130,4 @@ cd backend && uv sync --no-dev && uv run uvicorn delta_command.main:app --host 0
 npm run build && npm start
 ```
 
-For production, replace the YAML file store with PostgreSQL or another database by extending `delta_command/store.py`.
+For production at scale, replace the JSON file store with PostgreSQL by extending `delta_command/store.py` — the Pydantic models and API routes can stay the same.

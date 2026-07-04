@@ -179,8 +179,3 @@ class UtilizationTimelineUpdate(BaseModel):
     week_start: str = Field(alias="weekStart")
     utilization: int
     note: str | None = None
-
-
-class ResetResponse(BaseModel):
-    message: str
-    last_updated: str = Field(alias="lastUpdated")

@@ -6,6 +6,7 @@ import { PipelineBoard } from "@/components/opportunities/PipelineBoard";
 import { OpportunityCard } from "@/components/opportunities/PipelineBoard";
 import type { Opportunity, OpportunityStage } from "@/core/types";
 import { OPPORTUNITY_STAGES } from "@/core/types";
+import { updateOpportunityStage } from "@/core/api";
 import { formatCurrency, cn } from "@/core/utils";
 import { LayoutGrid, List, Trophy, XCircle } from "lucide-react";
 
@@ -26,12 +27,8 @@ export default function OpportunitiesPage() {
   }, [fetchOpportunities]);
 
   const handleStageChange = async (id: string, stage: OpportunityStage) => {
-    await fetch("/api/opportunities", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, stage }),
-    });
-    fetchOpportunities();
+    await updateOpportunityStage(id, stage);
+    await fetchOpportunities();
   };
 
   const activeOpps = opportunities.filter(
