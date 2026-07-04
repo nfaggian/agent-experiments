@@ -1,0 +1,492 @@
+{
+  "lastUpdated": "2026-07-04T12:00:00Z",
+  "engineers": [
+    {
+      "id": "eng-1",
+      "name": "Sarah Chen",
+      "role": "Principal Engineer",
+      "email": "sarah.chen@company.com",
+      "capacity": 100,
+      "utilization": 95,
+      "status": "allocated",
+      "skills": [
+        "Architecture",
+        "Cloud",
+        "Leadership"
+      ],
+      "currentProjects": [
+        "proj-1",
+        "proj-3"
+      ]
+    },
+    {
+      "id": "eng-2",
+      "name": "Marcus Webb",
+      "role": "Senior Engineer",
+      "email": "marcus.webb@company.com",
+      "capacity": 100,
+      "utilization": 110,
+      "status": "overallocated",
+      "skills": [
+        "Backend",
+        "Python",
+        "Data Pipelines"
+      ],
+      "currentProjects": [
+        "proj-1",
+        "proj-2",
+        "proj-4"
+      ]
+    },
+    {
+      "id": "eng-3",
+      "name": "Priya Sharma",
+      "role": "Senior Engineer",
+      "email": "priya.sharma@company.com",
+      "capacity": 100,
+      "utilization": 80,
+      "status": "allocated",
+      "skills": [
+        "Frontend",
+        "React",
+        "UX"
+      ],
+      "currentProjects": [
+        "proj-2"
+      ]
+    },
+    {
+      "id": "eng-4",
+      "name": "James O'Brien",
+      "role": "Engineer",
+      "email": "james.obrien@company.com",
+      "capacity": 100,
+      "utilization": 65,
+      "status": "allocated",
+      "skills": [
+        "DevOps",
+        "Kubernetes",
+        "CI/CD"
+      ],
+      "currentProjects": [
+        "proj-3"
+      ]
+    },
+    {
+      "id": "eng-5",
+      "name": "Elena Rodriguez",
+      "role": "Engineer",
+      "email": "elena.rodriguez@company.com",
+      "capacity": 100,
+      "utilization": 45,
+      "status": "available",
+      "skills": [
+        "ML",
+        "Python",
+        "Analytics"
+      ],
+      "currentProjects": [
+        "proj-4"
+      ]
+    },
+    {
+      "id": "eng-6",
+      "name": "David Kim",
+      "role": "Staff Engineer",
+      "email": "david.kim@company.com",
+      "capacity": 100,
+      "utilization": 75,
+      "status": "allocated",
+      "skills": [
+        "Security",
+        "Infrastructure",
+        "Compliance"
+      ],
+      "currentProjects": [
+        "proj-5"
+      ]
+    },
+    {
+      "id": "eng-7",
+      "name": "Amara Okonkwo",
+      "role": "Engineer",
+      "email": "amara.okonkwo@company.com",
+      "capacity": 100,
+      "utilization": 30,
+      "status": "available",
+      "skills": [
+        "Mobile",
+        "React Native",
+        "API Design"
+      ],
+      "currentProjects": []
+    },
+    {
+      "id": "eng-8",
+      "name": "Thomas Berg",
+      "role": "Senior Engineer",
+      "email": "thomas.berg@company.com",
+      "capacity": 100,
+      "utilization": 90,
+      "status": "allocated",
+      "skills": [
+        "Integration",
+        "APIs",
+        "Legacy Systems"
+      ],
+      "currentProjects": [
+        "proj-5",
+        "proj-2"
+      ]
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "opp-1",
+      "title": "Enterprise Data Platform Modernization",
+      "client": "Meridian Financial",
+      "stage": "negotiation",
+      "value": 850000,
+      "probability": 75,
+      "owner": "Sarah Chen",
+      "expectedClose": "2026-07-15",
+      "description": "Full-stack data platform migration from legacy on-prem to cloud-native architecture.",
+      "tags": [
+        "Data",
+        "Cloud",
+        "Enterprise"
+      ],
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-06-28"
+    },
+    {
+      "id": "opp-2",
+      "title": "AI-Powered Customer Analytics Suite",
+      "client": "RetailMax Group",
+      "stage": "proposal",
+      "value": 620000,
+      "probability": 55,
+      "owner": "Elena Rodriguez",
+      "expectedClose": "2026-08-01",
+      "description": "Build ML-driven analytics dashboard for customer behavior prediction and segmentation.",
+      "tags": [
+        "AI/ML",
+        "Analytics",
+        "Retail"
+      ],
+      "createdAt": "2026-04-10",
+      "updatedAt": "2026-06-25"
+    },
+    {
+      "id": "opp-3",
+      "title": "Zero-Trust Security Architecture",
+      "client": "HealthFirst Systems",
+      "stage": "qualified",
+      "value": 480000,
+      "probability": 40,
+      "owner": "David Kim",
+      "expectedClose": "2026-09-15",
+      "description": "Design and implement zero-trust security framework for healthcare data systems.",
+      "tags": [
+        "Security",
+        "Healthcare",
+        "Compliance"
+      ],
+      "createdAt": "2026-05-01",
+      "updatedAt": "2026-06-20"
+    },
+    {
+      "id": "opp-4",
+      "title": "Mobile Banking App Redesign",
+      "client": "Coastal Credit Union",
+      "stage": "prospect",
+      "value": 320000,
+      "probability": 20,
+      "owner": "Amara Okonkwo",
+      "expectedClose": "2026-10-01",
+      "description": "Complete redesign of mobile banking experience with biometric auth and real-time notifications.",
+      "tags": [
+        "Mobile",
+        "FinTech",
+        "UX"
+      ],
+      "createdAt": "2026-06-01",
+      "updatedAt": "2026-06-15"
+    },
+    {
+      "id": "opp-5",
+      "title": "Supply Chain Visibility Platform",
+      "client": "GlobalLogistics Inc",
+      "stage": "proposal",
+      "value": 750000,
+      "probability": 60,
+      "owner": "Marcus Webb",
+      "expectedClose": "2026-07-30",
+      "description": "Real-time supply chain tracking and predictive delay analytics platform.",
+      "tags": [
+        "IoT",
+        "Logistics",
+        "Real-time"
+      ],
+      "createdAt": "2026-04-20",
+      "updatedAt": "2026-06-27"
+    },
+    {
+      "id": "opp-6",
+      "title": "Legacy ERP Integration Hub",
+      "client": "ManufactureCo",
+      "stage": "won",
+      "value": 540000,
+      "probability": 100,
+      "owner": "Thomas Berg",
+      "expectedClose": "2026-06-01",
+      "description": "Integration middleware connecting SAP, Salesforce, and custom manufacturing systems.",
+      "tags": [
+        "Integration",
+        "ERP",
+        "Manufacturing"
+      ],
+      "createdAt": "2026-01-15",
+      "updatedAt": "2026-06-01"
+    },
+    {
+      "id": "opp-7",
+      "title": "Cloud Cost Optimization Program",
+      "client": "TechVentures Ltd",
+      "stage": "qualified",
+      "value": 180000,
+      "probability": 35,
+      "owner": "James O'Brien",
+      "expectedClose": "2026-08-15",
+      "description": "Audit and optimize multi-cloud infrastructure spending with automated right-sizing.",
+      "tags": [
+        "Cloud",
+        "FinOps",
+        "Optimization"
+      ],
+      "createdAt": "2026-05-15",
+      "updatedAt": "2026-06-22"
+    },
+    {
+      "id": "opp-8",
+      "title": "Digital Twin for Smart Factory",
+      "client": "AutoParts Global",
+      "stage": "lost",
+      "value": 920000,
+      "probability": 0,
+      "owner": "Sarah Chen",
+      "expectedClose": "2026-05-30",
+      "description": "IoT-enabled digital twin platform for predictive maintenance in automotive manufacturing.",
+      "tags": [
+        "IoT",
+        "Digital Twin",
+        "Manufacturing"
+      ],
+      "createdAt": "2026-02-01",
+      "updatedAt": "2026-05-30"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "name": "Meridian Core Banking Migration",
+      "client": "Meridian Financial",
+      "status": "active",
+      "progress": 68,
+      "startDate": "2026-01-15",
+      "endDate": "2026-09-30",
+      "budget": 720000,
+      "spent": 489600,
+      "leadEngineer": "Sarah Chen",
+      "team": [
+        "eng-1",
+        "eng-2"
+      ],
+      "description": "Migrating core banking systems to cloud-native microservices architecture.",
+      "milestones": [
+        {
+          "id": "ms-1",
+          "title": "Architecture Sign-off",
+          "dueDate": "2026-02-15",
+          "completed": true
+        },
+        {
+          "id": "ms-2",
+          "title": "Phase 1 Migration",
+          "dueDate": "2026-05-01",
+          "completed": true
+        },
+        {
+          "id": "ms-3",
+          "title": "Integration Testing",
+          "dueDate": "2026-07-15",
+          "completed": false
+        },
+        {
+          "id": "ms-4",
+          "title": "Production Cutover",
+          "dueDate": "2026-09-30",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-2",
+      "name": "RetailMax Analytics Dashboard",
+      "client": "RetailMax Group",
+      "status": "active",
+      "progress": 42,
+      "startDate": "2026-03-01",
+      "endDate": "2026-10-15",
+      "budget": 450000,
+      "spent": 189000,
+      "leadEngineer": "Priya Sharma",
+      "team": [
+        "eng-2",
+        "eng-3",
+        "eng-8"
+      ],
+      "description": "Customer analytics dashboard with real-time KPI tracking and drill-down capabilities.",
+      "opportunityId": "opp-2",
+      "milestones": [
+        {
+          "id": "ms-5",
+          "title": "UI/UX Prototype",
+          "dueDate": "2026-04-01",
+          "completed": true
+        },
+        {
+          "id": "ms-6",
+          "title": "Data Pipeline MVP",
+          "dueDate": "2026-06-15",
+          "completed": true
+        },
+        {
+          "id": "ms-7",
+          "title": "Beta Release",
+          "dueDate": "2026-08-01",
+          "completed": false
+        },
+        {
+          "id": "ms-8",
+          "title": "GA Launch",
+          "dueDate": "2026-10-15",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-3",
+      "name": "HealthFirst Compliance Portal",
+      "client": "HealthFirst Systems",
+      "status": "at_risk",
+      "progress": 55,
+      "startDate": "2026-02-01",
+      "endDate": "2026-08-01",
+      "budget": 380000,
+      "spent": 209000,
+      "leadEngineer": "Sarah Chen",
+      "team": [
+        "eng-1",
+        "eng-4"
+      ],
+      "description": "HIPAA-compliant patient data portal with audit logging and access controls.",
+      "milestones": [
+        {
+          "id": "ms-9",
+          "title": "Security Audit",
+          "dueDate": "2026-03-15",
+          "completed": true
+        },
+        {
+          "id": "ms-10",
+          "title": "Compliance Review",
+          "dueDate": "2026-06-01",
+          "completed": false
+        },
+        {
+          "id": "ms-11",
+          "title": "Penetration Testing",
+          "dueDate": "2026-07-01",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-4",
+      "name": "GlobalLogistics Tracking MVP",
+      "client": "GlobalLogistics Inc",
+      "status": "planning",
+      "progress": 15,
+      "startDate": "2026-06-01",
+      "endDate": "2026-11-30",
+      "budget": 600000,
+      "spent": 90000,
+      "leadEngineer": "Marcus Webb",
+      "team": [
+        "eng-2",
+        "eng-5"
+      ],
+      "description": "Minimum viable product for real-time shipment tracking across global logistics network.",
+      "opportunityId": "opp-5",
+      "milestones": [
+        {
+          "id": "ms-12",
+          "title": "Requirements Finalization",
+          "dueDate": "2026-06-30",
+          "completed": false
+        },
+        {
+          "id": "ms-13",
+          "title": "Prototype Demo",
+          "dueDate": "2026-08-15",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "proj-5",
+      "name": "ManufactureCo ERP Integration",
+      "client": "ManufactureCo",
+      "status": "active",
+      "progress": 78,
+      "startDate": "2026-03-15",
+      "endDate": "2026-07-30",
+      "budget": 540000,
+      "spent": 421200,
+      "leadEngineer": "Thomas Berg",
+      "team": [
+        "eng-6",
+        "eng-8"
+      ],
+      "description": "Middleware integration hub connecting SAP, Salesforce, and MES systems.",
+      "opportunityId": "opp-6",
+      "milestones": [
+        {
+          "id": "ms-14",
+          "title": "SAP Connector",
+          "dueDate": "2026-04-30",
+          "completed": true
+        },
+        {
+          "id": "ms-15",
+          "title": "Salesforce Sync",
+          "dueDate": "2026-06-01",
+          "completed": true
+        },
+        {
+          "id": "ms-16",
+          "title": "End-to-End Testing",
+          "dueDate": "2026-07-15",
+          "completed": false
+        },
+        {
+          "id": "ms-17",
+          "title": "Go-Live",
+          "dueDate": "2026-07-30",
+          "completed": false
+        }
+      ]
+    }
+  ]
+}

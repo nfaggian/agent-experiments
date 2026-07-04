@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from delta_command.json_db import database_path
 from delta_command.metrics import compute_dashboard_metrics
 from delta_command.models import (
     DashboardMetrics,
@@ -16,13 +16,11 @@ from delta_command.models import (
     OpportunityStageUpdate,
     Project,
     ProjectStatusUpdate,
-    ResetResponse,
     UtilizationTimelineResponse,
     UtilizationTimelineUpdate,
 )
 from delta_command.store import (
     load_database,
-    reset_database,
     get_utilization_timeline,
     update_engineer_utilization,
     update_opportunity_stage,
@@ -47,7 +45,11 @@ app.add_middleware(
 
 @app.get("/api/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "datastore": "json",
+        "path": str(database_path()),
+    }
 
 
 @app.get("/api/dashboard")
@@ -111,12 +113,6 @@ def patch_timeline(body: UtilizationTimelineUpdate) -> UtilizationTimelineRespon
         )
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
-
-
-@app.post("/api/reset")
-def post_reset() -> ResetResponse:
-    db = reset_database()
-    return ResetResponse(message="Database reset", lastUpdated=db.last_updated)
 
 
 def run() -> None:
