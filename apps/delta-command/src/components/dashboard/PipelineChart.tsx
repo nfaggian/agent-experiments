@@ -12,23 +12,26 @@ import {
 } from "recharts";
 import { OPPORTUNITY_STAGES } from "@/core/types";
 import type { Opportunity } from "@/core/types";
-import { formatCurrency, CHART_GRID, CHART_TICK, CHART_TOOLTIP_STYLE } from "@/core/utils";
+import {
+  formatCurrency,
+  CHART_GRID,
+  CHART_TICK,
+  CHART_TOOLTIP_STYLE,
+  GOOGLE_COLORS,
+} from "@/core/utils";
 
 interface PipelineChartProps {
   opportunities: Opportunity[];
 }
 
 const STAGE_COLORS: Record<string, string> = {
-  prospect: "#A1A1AA",
-  qualified: "#3B82F6",
-  proposal: "#8B5CF6",
-  negotiation: "#6366F1",
-  won: "#10B981",
-  lost: "#EF4444",
+  prospect: GOOGLE_COLORS.gray,
+  qualified: GOOGLE_COLORS.blue,
+  proposal: GOOGLE_COLORS.yellow,
+  negotiation: "#1967D2",
+  won: GOOGLE_COLORS.green,
+  lost: GOOGLE_COLORS.red,
 };
-
-const CHART_GRID_COLOR = CHART_GRID;
-const CHART_TICK_COLOR = CHART_TICK;
 
 export function PipelineChart({ opportunities }: PipelineChartProps) {
   const data = OPPORTUNITY_STAGES.filter((s) => !["lost"].includes(s.id)).map(
@@ -52,15 +55,15 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} barSize={40}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
             <XAxis
               dataKey="stage"
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
             />
@@ -71,7 +74,7 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
                 return [value, "Count"];
               }}
             />
-            <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}

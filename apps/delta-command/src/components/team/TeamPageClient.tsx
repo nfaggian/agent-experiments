@@ -105,7 +105,7 @@ export function TeamPageClient({
           </div>
           <div className="card p-5">
             <div className="stat-inline">
-              <div className="stat-icon bg-blue-500/15 text-blue-400">
+              <div className="stat-icon bg-blue-50 text-brand-600">
                 <Clock className="h-4 w-4" />
               </div>
               <div>
@@ -116,7 +116,7 @@ export function TeamPageClient({
           </div>
           <div className="card p-5">
             <div className="stat-inline">
-              <div className="stat-icon bg-emerald-500/15 text-emerald-400">
+              <div className="stat-icon bg-green-50 text-google-green">
                 <CheckCircle className="h-4 w-4" />
               </div>
               <div>
@@ -127,7 +127,7 @@ export function TeamPageClient({
           </div>
           <div className="card p-5">
             <div className="stat-inline">
-              <div className="stat-icon bg-red-500/15 text-red-400">
+              <div className="stat-icon bg-red-50 text-google-red">
                 <AlertTriangle className="h-4 w-4" />
               </div>
               <div>
