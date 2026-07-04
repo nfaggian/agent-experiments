@@ -58,8 +58,12 @@ ENV/
 env.bak/
 venv.bak/
 
-# macOS
+# macOS / Xcode
 .DS_Store
+*.xcuserstate
+xcuserdata/
+DerivedData/
+build/
 
 # VSCode
 .vscode/

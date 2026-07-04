@@ -28,7 +28,7 @@ make prefect-server
   - Uses Gemini Live API for real-time voice conversations
   - Pluggable skills (Home Assistant, routines) via `config/skills.yaml`
   - Safety guardrails via `config/guardrails.yaml`
-  - iPhone-friendly PWA served by the voice WebSocket server
+  - Native iOS app (`ios/`) and web PWA served by the voice WebSocket server
 
 ### Workflows
 - **`pipeline.py`**: Prefect workflow for orchestrating document creation and content generation
@@ -75,8 +75,10 @@ src/
 │       └── tools/
 ├── server/
 │   ├── voice_server.py      # WebSocket voice server + PWA
-│   └── static/              # iPhone web client
+│   └── static/              # Browser web client
 └── workflows/
+ios/
+└── HomeVoiceAgent.xcodeproj # Native iPhone app (SwiftUI)
 ```
 
 ## Configuration
@@ -92,11 +94,22 @@ src/
 
 ## Home Voice Agent (iPhone)
 
-1. Copy `.env.example` to `.env` and add your Gemini + Home Assistant credentials.
-2. Start the voice server: `make voice`
-3. On your iPhone (same Wi‑Fi), open `http://<your-computer-ip>:8000`
-4. Tap **Start Voice**, allow the microphone, and talk to your home.
-5. Add to Home Screen for a native-feeling shortcut.
+### Native iOS app (recommended)
+
+1. Copy `.env.example` to `.env` and add your Gemini + Home Assistant credentials
+2. Start the voice server on your Mac: `make voice`
+3. Open `ios/HomeVoiceAgent.xcodeproj` in Xcode
+4. Set your development team, build to your iPhone
+5. In app Settings, enter your server host (e.g. `192.168.1.42:8000`)
+6. Tap **Start Voice** and talk to your home
+
+See `ios/README.md` for full setup and remote access options.
+
+### Web client (alternative)
+
+1. Start the voice server: `make voice`
+2. On your iPhone (same Wi‑Fi), open `http://<your-computer-ip>:8000`
+3. Tap **Start Voice**, allow the microphone, and talk to your home
 
 For HTTPS/WSS from your phone outside the LAN, put the server behind a reverse proxy
 or tunnel (e.g. Cloudflare Tunnel, Tailscale) and use `wss://`.
