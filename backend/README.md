@@ -1,6 +1,6 @@
 # Delta Command Backend
 
-Python API for Delta Command, backed by YAML configuration.
+Python API for Delta Command, backed by a JSON file database.
 
 ## Setup
 
@@ -17,8 +17,10 @@ uv run delta-command
 
 API available at http://127.0.0.1:8000
 
-## Configuration
+## Database
 
-Edit `config/data.yaml` to customize engineers, opportunities, and projects.
-Runtime mutations are persisted to `config/runtime.yaml`.
-Call `POST /api/reset` to reload from `data.yaml`.
+- **Seed:** `config/data.json` — edit to customize engineers, opportunities, and projects
+- **Runtime:** `config/runtime.json` — live database (gitignored, created automatically)
+- **Reset:** `POST /api/reset` reloads runtime from seed
+
+Persistence uses atomic JSON writes via `delta_command/json_db.py`.

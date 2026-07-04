@@ -8,7 +8,7 @@ A polished engineering operations dashboard for delta engineering teams. Track t
 |-------|-------|
 | **Frontend** | Next.js 15, TypeScript, Tailwind CSS, Recharts |
 | **Backend** | Python 3.12+, FastAPI, Pydantic |
-| **Config** | YAML (`backend/config/data.yaml`) |
+| **Database** | JSON file store (`backend/config/data.json`) |
 | **Dependencies** | [UV](https://docs.astral.sh/uv/) (Python), npm (frontend) |
 
 ## Quick Start
@@ -44,55 +44,70 @@ make frontend   # start UI
 make test       # run backend tests + frontend build
 ```
 
-## Configuration
+## Database
 
-All team data lives in YAML:
+All application data is stored in a **JSON document database** on disk:
 
 ```
 backend/config/
-├── data.yaml      # Edit this — engineers, opportunities, projects
-└── runtime.yaml   # Auto-generated runtime state (gitignored)
+├── data.json      # Seed data — engineers, opportunities, projects
+└── runtime.json   # Live working copy (gitignored, auto-created on first request)
 ```
 
-Edit `backend/config/data.yaml` to customize your team. Runtime mutations (e.g. moving an opportunity stage) persist to `runtime.yaml`. Reload defaults with:
+On startup, the API copies `data.json` → `runtime.json` if no runtime file exists. All reads and writes go through `runtime.json`. Mutations (stage changes, utilization edits, timeline updates) persist atomically to that file.
+
+Reload defaults from seed:
 
 ```bash
 curl -X POST http://127.0.0.1:8000/api/reset
 ```
 
-### Example YAML structure
+### Example JSON structure
 
-```yaml
-lastUpdated: "2026-07-04T12:00:00Z"
-
-engineers:
-  - id: eng-1
-    name: Sarah Chen
-    role: Principal Engineer
-    utilization: 95
-    status: allocated
-    skills: [Architecture, Cloud]
-    currentProjects: [proj-1]
-
-opportunities:
-  - id: opp-1
-    title: Enterprise Data Platform
-    client: Meridian Financial
-    stage: negotiation
-    value: 850000
-    probability: 75
-
-projects:
-  - id: proj-1
-    name: Core Banking Migration
-    status: active
-    progress: 68
-    milestones:
-      - id: ms-1
-        title: Architecture Sign-off
-        dueDate: "2026-02-15"
-        completed: true
+```json
+{
+  "lastUpdated": "2026-07-04T12:00:00Z",
+  "engineers": [
+    {
+      "id": "eng-1",
+      "name": "Sarah Chen",
+      "role": "Principal Engineer",
+      "utilization": 95,
+      "status": "allocated",
+      "skills": ["Architecture", "Cloud"],
+      "currentProjects": ["proj-1"]
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "opp-1",
+      "title": "Enterprise Data Platform",
+      "client": "Meridian Financial",
+      "stage": "negotiation",
+      "value": 850000,
+      "probability": 75
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "name": "Core Banking Migration",
+      "status": "active",
+      "progress": 68,
+      "milestones": [
+        {
+          "id": "ms-1",
+          "title": "Architecture Sign-off",
+          "dueDate": "2026-02-15",
+          "completed": true
+        }
+      ]
+    }
+  ]
+}
 ```
+
+Edit `backend/config/data.json` to customize your team. The store layer lives in `backend/src/delta_command/json_db.py` (I/O) and `store.py` (domain operations).
 
 ## Features
 
@@ -106,8 +121,8 @@ projects:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DELTA_API_URL` | `http://127.0.0.1:8000` | Backend URL (Next.js server-side) |
-| `DELTA_CONFIG_PATH` | `backend/config/data.yaml` | YAML config source |
-| `DELTA_RUNTIME_PATH` | `backend/config/runtime.yaml` | Runtime state file |
+| `DELTA_CONFIG_PATH` | `backend/config/data.json` | JSON seed file |
+| `DELTA_RUNTIME_PATH` | `backend/config/runtime.json` | Runtime JSON database |
 | `DELTA_HOST` / `DELTA_PORT` | `127.0.0.1` / `8000` | API bind address |
 
 ## Production
@@ -120,4 +135,4 @@ cd backend && uv sync --no-dev && uv run uvicorn delta_command.main:app --host 0
 npm run build && npm start
 ```
 
-For production, replace the YAML file store with PostgreSQL or another database by extending `delta_command/store.py`.
+For production at scale, replace the JSON file store with PostgreSQL or another database by extending `delta_command/store.py` — the Pydantic models and API routes can stay the same.
