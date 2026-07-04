@@ -70,7 +70,6 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "pydantic" },
-    { name = "pyyaml" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -85,7 +84,6 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "pydantic", specifier = ">=2.10.0" },
-    { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.34.0" },
 ]
 

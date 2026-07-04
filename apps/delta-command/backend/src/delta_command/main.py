@@ -7,6 +7,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from delta_command.json_db import runtime_path, seed_path
 from delta_command.metrics import compute_dashboard_metrics
 from delta_command.models import (
     DashboardMetrics,
@@ -47,7 +48,12 @@ app.add_middleware(
 
 @app.get("/api/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "datastore": "json",
+        "seed": str(seed_path()),
+        "runtime": str(runtime_path()),
+    }
 
 
 @app.get("/api/dashboard")
