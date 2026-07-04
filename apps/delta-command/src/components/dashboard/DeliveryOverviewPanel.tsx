@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { DeliveryInsight, TeamInsight } from "@/core/dashboard-analytics";
-import { formatCurrency, cn, getUtilizationTextColor } from "@/core/utils";
+import { cn, formatCurrency, utilizationVariant } from "@/core/utils";
 import { Users, Wallet, Clock, UserCheck } from "lucide-react";
 
 interface DeliveryOverviewPanelProps {
@@ -100,7 +100,7 @@ export function TeamSnapshotPanel({
 
       <div className="mb-4 grid grid-cols-3 gap-3 text-center">
         <div className="rounded-xl border border-white/[0.06] bg-surface-container-low/60 p-3">
-          <p className={cn("title-lg", getUtilizationTextColor(avgUtilization))}>
+          <p className={cn("title-lg", utilizationVariant(avgUtilization).text)}>
             {avgUtilization}%
           </p>
           <p className="label-md text-surface-on-variant">Avg util</p>

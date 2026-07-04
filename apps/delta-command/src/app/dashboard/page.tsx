@@ -67,42 +67,42 @@ export default async function DashboardPage() {
             value={formatCurrency(metrics.pipelineValue)}
             context={`${formatCurrency(metrics.totalPipeline)} unweighted · ${pipeline.closingWithin30Days} closing in 30d`}
             icon={DollarSign}
-            iconColor="bg-blue-500/15 text-blue-400"
+            accent="blue"
           />
           <KPICard
             label="Late-Stage Pipeline"
             value={String(pipeline.lateStage)}
             context={`${formatCurrency(pipeline.lateStageValue)} in proposal & negotiation`}
             icon={Layers}
-            iconColor="bg-violet-500/15 text-violet-400"
+            accent="violet"
           />
           <KPICard
             label="In Negotiation"
             value={String(pipeline.inNegotiation)}
             context={`${formatCurrency(pipeline.negotiationValue)} · ${pipeline.avgProbability}% avg probability`}
             icon={Target}
-            iconColor="bg-indigo-500/15 text-indigo-400"
+            accent="indigo"
           />
           <KPICard
             label="Active Delivery"
             value={String(metrics.activeProjects)}
             context={`${delivery.planningCount} in planning · ${delivery.atRiskCount} at risk`}
             icon={FolderKanban}
-            iconColor="bg-emerald-500/15 text-emerald-400"
+            accent="emerald"
           />
           <KPICard
             label="Budget Burn"
             value={`${delivery.burnPercent}%`}
             context={`${formatCurrency(delivery.totalSpent)} of ${formatCurrency(delivery.totalBudget)} active budget`}
             icon={Flame}
-            iconColor="bg-amber-500/15 text-amber-400"
+            accent="amber"
           />
           <KPICard
             label="Team Utilization"
             value={`${metrics.avgUtilization}%`}
             context={`${team.overallocated.length} overallocated · ${team.benchCapacityPercent}% bench capacity`}
             icon={Users}
-            iconColor="bg-blue-500/15 text-blue-400"
+            accent="blue"
           />
         </div>
 

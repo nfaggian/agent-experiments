@@ -1,63 +1,46 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import type { Engineer, Project, ProjectStatus } from "@/core/types";
 import { PROJECT_STATUSES } from "@/core/types";
 import { updateProjectStatus } from "@/core/api";
-import { formatCurrency, cn } from "@/core/utils";
+import { cn, formatCurrency } from "@/core/utils";
 import { FolderKanban, AlertTriangle, CheckCircle2, PauseCircle } from "lucide-react";
 
-export function ProjectsPageClient() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [engineers, setEngineers] = useState<Engineer[]>([]);
-  const [loading, setLoading] = useState(true);
+const STATUS_ICONS = {
+  active: FolderKanban,
+  at_risk: AlertTriangle,
+  planning: PauseCircle,
+  completed: CheckCircle2,
+  on_hold: PauseCircle,
+} as const;
 
-  const fetchData = useCallback(async () => {
-    const [projectsRes, engineersRes] = await Promise.all([
-      fetch("/api/projects"),
-      fetch("/api/engineers"),
-    ]);
-    setProjects(await projectsRes.json());
-    setEngineers(await engineersRes.json());
-    setLoading(false);
-  }, []);
+interface ProjectsPageClientProps {
+  initialProjects: Project[];
+  engineers: Engineer[];
+}
 
-  useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
+export function ProjectsPageClient({
+  initialProjects,
+  engineers,
+}: ProjectsPageClientProps) {
+  const [projects, setProjects] = useState(initialProjects);
+  const router = useRouter();
+  const [, startTransition] = useTransition();
 
   const handleStatusChange = async (id: string, status: ProjectStatus) => {
-    await updateProjectStatus(id, status);
-    await fetchData();
+    const updated = await updateProjectStatus(id, status);
+    setProjects((prev) => prev.map((p) => (p.id === id ? updated : p)));
+    startTransition(() => router.refresh());
   };
-
-  if (loading) {
-    return (
-      <div>
-        <Header title="Active Projects" subtitle="Loading..." />
-        <div className="flex h-64 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-outline-variant border-t-accent" />
-        </div>
-      </div>
-    );
-  }
 
   const engineerNames = Object.fromEntries(engineers.map((e) => [e.id, e.name]));
-  const activeProjects = projects.filter((p) => p.status === "active");
-  const atRiskProjects = projects.filter((p) => p.status === "at_risk");
-  const planningProjects = projects.filter((p) => p.status === "planning");
+  const byStatus = (s: ProjectStatus) => projects.filter((p) => p.status === s);
   const totalBudget = projects.reduce((sum, p) => sum + p.budget, 0);
   const totalSpent = projects.reduce((sum, p) => sum + p.spent, 0);
-
-  const statusIcons: Record<string, typeof FolderKanban> = {
-    active: FolderKanban,
-    at_risk: AlertTriangle,
-    planning: PauseCircle,
-    completed: CheckCircle2,
-    on_hold: PauseCircle,
-  };
 
   const renderSection = (title: string, items: Project[]) =>
     items.length > 0 ? (
@@ -76,6 +59,11 @@ export function ProjectsPageClient() {
       </div>
     ) : null;
 
+  const atRisk = byStatus("at_risk");
+  const active = byStatus("active");
+  const planning = byStatus("planning");
+  const inDelivery = active.length + atRisk.length;
+
   return (
     <div>
       <Header
@@ -92,7 +80,7 @@ export function ProjectsPageClient() {
           <div className="card p-4">
             <p className="metric-label">In Delivery</p>
             <p className="metric-value text-[1.75rem] text-accent-foreground">
-              {activeProjects.length + atRiskProjects.length}
+              {inDelivery}
             </p>
           </div>
           <div className="card p-4">
@@ -105,15 +93,15 @@ export function ProjectsPageClient() {
               {formatCurrency(totalSpent)}
             </p>
             <p className="label-md text-surface-on-variant/70">
-              {Math.round((totalSpent / totalBudget) * 100)}% of total budget
+              {totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0}% of total budget
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap gap-3">
           {PROJECT_STATUSES.map((status) => {
-            const count = projects.filter((p) => p.status === status.id).length;
-            const Icon = statusIcons[status.id] ?? FolderKanban;
+            const count = byStatus(status.id).length;
+            const Icon = STATUS_ICONS[status.id] ?? FolderKanban;
             return (
               <div
                 key={status.id}
@@ -130,14 +118,14 @@ export function ProjectsPageClient() {
           })}
         </div>
 
-        {atRiskProjects.length > 0 && (
+        {atRisk.length > 0 && (
           <div>
             <h3 className="section-title mb-4 flex items-center gap-2 text-error">
               <AlertTriangle className="h-5 w-5" />
               At Risk
             </h3>
             <div className="grid gap-6 md:grid-cols-2">
-              {atRiskProjects.map((project) => (
+              {atRisk.map((project) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
@@ -148,8 +136,8 @@ export function ProjectsPageClient() {
             </div>
           </div>
         )}
-        {renderSection("Active Delivery", activeProjects)}
-        {renderSection("In Planning", planningProjects)}
+        {renderSection("Active Delivery", active)}
+        {renderSection("In Planning", planning)}
       </div>
     </div>
   );
