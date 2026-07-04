@@ -33,5 +33,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Data (persisted at runtime)
-/data/db.json
+# Next.js build output
+/.next/
+/out/
+
+# Legacy JSON store
+/data/

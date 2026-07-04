@@ -74,6 +74,19 @@ export interface Database {
   lastUpdated: string;
 }
 
+export interface DashboardMetrics {
+  pipelineValue: number;
+  totalPipeline: number;
+  activeOpportunities: number;
+  activeProjects: number;
+  atRiskProjects: number;
+  avgUtilization: number;
+  availableCapacity: number;
+  wonThisQuarter: number;
+  teamSize: number;
+  lastUpdated: string;
+}
+
 export const OPPORTUNITY_STAGES: {
   id: OpportunityStage;
   label: string;

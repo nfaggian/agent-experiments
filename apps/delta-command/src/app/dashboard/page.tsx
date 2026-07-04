@@ -3,7 +3,7 @@ import { KPICard } from "@/components/dashboard/KPICard";
 import { PipelineChart } from "@/components/dashboard/PipelineChart";
 import { UtilizationChart } from "@/components/dashboard/UtilizationChart";
 import { ProjectCard } from "@/components/projects/ProjectCard";
-import { getDatabase, getDashboardMetrics } from "@/core/store";
+import { getDashboardMetrics, getEngineers, getOpportunities, getProjects } from "@/core/api";
 import { formatCurrency, formatDate } from "@/core/utils";
 import {
   DollarSign,
@@ -15,12 +15,18 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function DashboardPage() {
-  const db = getDatabase();
-  const metrics = getDashboardMetrics(db);
+export const dynamic = "force-dynamic";
 
-  const atRiskProjects = db.projects.filter((p) => p.status === "at_risk");
-  const upcomingCloses = db.opportunities
+export default async function DashboardPage() {
+  const [metrics, engineers, opportunities, projects] = await Promise.all([
+    getDashboardMetrics(),
+    getEngineers(),
+    getOpportunities(),
+    getProjects(),
+  ]);
+
+  const atRiskProjects = projects.filter((p) => p.status === "at_risk");
+  const upcomingCloses = opportunities
     .filter((o) => !["won", "lost"].includes(o.stage))
     .sort(
       (a, b) =>
@@ -29,7 +35,7 @@ export default function DashboardPage() {
     .slice(0, 4);
 
   const engineerNames = Object.fromEntries(
-    db.engineers.map((e) => [e.id, e.name])
+    engineers.map((e) => [e.id, e.name])
   );
 
   return (
@@ -92,8 +98,8 @@ export default function DashboardPage() {
         )}
 
         <div className="grid gap-6 xl:grid-cols-2">
-          <PipelineChart opportunities={db.opportunities} />
-          <UtilizationChart engineers={db.engineers} />
+          <PipelineChart opportunities={opportunities} />
+          <UtilizationChart engineers={engineers} />
         </div>
 
         <div className="grid gap-6 xl:grid-cols-3">
@@ -145,7 +151,7 @@ export default function DashboardPage() {
             <div className="grid gap-6 md:grid-cols-2">
               {(atRiskProjects.length > 0
                 ? atRiskProjects
-                : db.projects.filter((p) => p.status === "active").slice(0, 2)
+                : projects.filter((p) => p.status === "active").slice(0, 2)
               ).map((project) => (
                 <ProjectCard
                   key={project.id}
@@ -168,7 +174,7 @@ export default function DashboardPage() {
               </p>
               <p className="text-sm text-slate-500">
                 {metrics.availableCapacity} engineers with capacity below 70% ·{" "}
-                Last updated {formatDate(db.lastUpdated.split("T")[0])}
+                Last updated {formatDate(metrics.lastUpdated.split("T")[0])}
               </p>
             </div>
           </div>
