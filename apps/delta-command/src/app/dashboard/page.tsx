@@ -12,7 +12,7 @@ import {
   TeamSnapshotPanel,
 } from "@/components/dashboard/DeliveryOverviewPanel";
 import { ProjectCard } from "@/components/projects/ProjectCard";
-import { getDashboardMetrics, getEngineers, getOpportunities, getProjects } from "@/core/api";
+import { getState } from "@/core/api";
 import { buildDashboardInsights } from "@/core/dashboard-analytics";
 import { formatCurrency, formatDate } from "@/core/utils";
 import {
@@ -29,28 +29,25 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [metrics, engineers, opportunities, projects] = await Promise.all([
-    getDashboardMetrics(),
-    getEngineers(),
-    getOpportunities(),
-    getProjects(),
-  ]);
-
+  const { engineers, opportunities, projects, lastUpdated } = await getState();
   const insights = buildDashboardInsights(engineers, opportunities, projects);
   const { pipeline, delivery, team, actions, milestones } = insights;
 
-  const atRiskProjects = projects.filter((p) => p.status === "at_risk");
-  const upcomingCloses = opportunities
-    .filter((o) => !["won", "lost"].includes(o.stage))
-    .sort(
-      (a, b) =>
-        new Date(a.expectedClose).getTime() - new Date(b.expectedClose).getTime()
-    )
-    .slice(0, 5);
+  const activeOpps = opportunities.filter((o) => !["won", "lost"].includes(o.stage));
+  const pipelineValue = activeOpps.reduce((s, o) => s + o.value * (o.probability / 100), 0);
+  const totalPipeline = activeOpps.reduce((s, o) => s + o.value, 0);
+  const avgUtilization = engineers.length
+    ? Math.round(engineers.reduce((s, e) => s + e.utilization, 0) / engineers.length)
+    : 0;
+  const activeProjects = projects.filter((p) => p.status === "active" || p.status === "at_risk");
+  const availableCapacity = engineers.filter((e) => e.utilization < 70).length;
 
-  const engineerNames = Object.fromEntries(
-    engineers.map((e) => [e.id, e.name])
-  );
+  const atRiskProjects = projects.filter((p) => p.status === "at_risk");
+  const upcomingCloses = activeOpps
+    .slice()
+    .sort((a, b) => new Date(a.expectedClose).getTime() - new Date(b.expectedClose).getTime())
+    .slice(0, 5);
+  const engineerNames = Object.fromEntries(engineers.map((e) => [e.id, e.name]));
 
   return (
     <div>
@@ -60,75 +57,70 @@ export default async function DashboardPage() {
       />
 
       <div className="space-y-8 p-8">
-        {/* Primary KPIs — derived from live data */}
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
           <KPICard
             label="Weighted Pipeline"
-            value={formatCurrency(metrics.pipelineValue)}
-            context={`${formatCurrency(metrics.totalPipeline)} unweighted · ${pipeline.closingWithin30Days} closing in 30d`}
+            value={formatCurrency(pipelineValue)}
+            context={`${formatCurrency(totalPipeline)} unweighted · ${pipeline.closingWithin30Days} closing in 30d`}
             icon={DollarSign}
-            iconColor="bg-blue-500/15 text-blue-400"
+            accent="blue"
           />
           <KPICard
             label="Late-Stage Pipeline"
             value={String(pipeline.lateStage)}
             context={`${formatCurrency(pipeline.lateStageValue)} in proposal & negotiation`}
             icon={Layers}
-            iconColor="bg-violet-500/15 text-violet-400"
+            accent="violet"
           />
           <KPICard
             label="In Negotiation"
             value={String(pipeline.inNegotiation)}
             context={`${formatCurrency(pipeline.negotiationValue)} · ${pipeline.avgProbability}% avg probability`}
             icon={Target}
-            iconColor="bg-indigo-500/15 text-indigo-400"
+            accent="indigo"
           />
           <KPICard
             label="Active Delivery"
-            value={String(metrics.activeProjects)}
+            value={String(activeProjects.length)}
             context={`${delivery.planningCount} in planning · ${delivery.atRiskCount} at risk`}
             icon={FolderKanban}
-            iconColor="bg-emerald-500/15 text-emerald-400"
+            accent="emerald"
           />
           <KPICard
             label="Budget Burn"
             value={`${delivery.burnPercent}%`}
             context={`${formatCurrency(delivery.totalSpent)} of ${formatCurrency(delivery.totalBudget)} active budget`}
             icon={Flame}
-            iconColor="bg-amber-500/15 text-amber-400"
+            accent="amber"
           />
           <KPICard
             label="Team Utilization"
-            value={`${metrics.avgUtilization}%`}
+            value={`${avgUtilization}%`}
             context={`${team.overallocated.length} overallocated · ${team.benchCapacityPercent}% bench capacity`}
             icon={Users}
-            iconColor="bg-blue-500/15 text-blue-400"
+            accent="blue"
           />
         </div>
 
-        {/* Prioritized actions */}
         <ActionItemsPanel items={actions} />
 
-        {/* Charts */}
         <div className="grid gap-6 xl:grid-cols-2">
           <PipelineChart opportunities={opportunities} />
           <UtilizationChart engineers={engineers} />
         </div>
 
-        {/* Insight panels */}
         <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
           <PipelineHealthPanel pipeline={pipeline} />
           <MilestonesPanel milestones={milestones} />
           <TeamSnapshotPanel
             team={team}
-            teamSize={metrics.teamSize}
-            avgUtilization={metrics.avgUtilization}
+            teamSize={engineers.length}
+            avgUtilization={avgUtilization}
           />
         </div>
 
         <DeliveryOverviewPanel delivery={delivery} />
 
-        {/* Closes + projects */}
         <div className="grid gap-6 xl:grid-cols-3">
           <div className="card p-6 xl:col-span-1">
             <div className="mb-4 flex items-center justify-between">
@@ -138,9 +130,7 @@ export default async function DashboardPage() {
                   {formatCurrency(pipeline.closingValue30Days)} in next 30 days
                 </p>
               </div>
-              <Link href="/opportunities" className="link-subtle">
-                View all
-              </Link>
+              <Link href="/opportunities" className="link-subtle">View all</Link>
             </div>
             <div className="space-y-4">
               {upcomingCloses.map((opp) => (
@@ -149,9 +139,7 @@ export default async function DashboardPage() {
                   className="flex items-start justify-between gap-3 border-b border-outline-variant/50 pb-4 last:border-0 last:pb-0"
                 >
                   <div className="min-w-0">
-                    <p className="truncate title-sm text-surface-on">
-                      {opp.title}
-                    </p>
+                    <p className="truncate title-sm text-surface-on">{opp.title}</p>
                     <p className="label-md text-surface-on-variant">{opp.client}</p>
                     <div className="mt-1 flex items-center gap-2">
                       <span className="chip capitalize">{opp.stage}</span>
@@ -161,9 +149,7 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="title-sm text-surface-on">
-                      {formatCurrency(opp.value)}
-                    </p>
+                    <p className="title-sm text-surface-on">{formatCurrency(opp.value)}</p>
                     <p className="flex items-center justify-end gap-1 label-md text-surface-on-variant/70">
                       <CalendarClock className="h-3 w-3" />
                       {formatDate(opp.expectedClose)}
@@ -187,9 +173,7 @@ export default async function DashboardPage() {
                     : "Active delivery status"}
                 </p>
               </div>
-              <Link href="/projects" className="link-subtle">
-                View all projects
-              </Link>
+              <Link href="/projects" className="link-subtle">View all projects</Link>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               {(atRiskProjects.length > 0
@@ -208,9 +192,8 @@ export default async function DashboardPage() {
 
         <div className="card p-6">
           <p className="body-md text-surface-on-variant">
-            Last updated {formatDate(metrics.lastUpdated.split("T")[0])} ·{" "}
-            {metrics.teamSize} engineers · {metrics.activeOpportunities} active
-            opportunities · {metrics.availableCapacity} with capacity below 70%
+            Last updated {formatDate(lastUpdated.split("T")[0])} · {engineers.length} engineers ·{" "}
+            {activeOpps.length} active opportunities · {availableCapacity} with capacity below 70%
           </p>
         </div>
       </div>

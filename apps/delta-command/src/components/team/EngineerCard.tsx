@@ -2,9 +2,8 @@ import type { Engineer } from "@/core/types";
 import {
   cn,
   getInitials,
-  getUtilizationColor,
-  getUtilizationTextColor,
   getStatusBadgeColor,
+  utilizationVariant,
 } from "@/core/utils";
 import { Mail, Briefcase } from "lucide-react";
 
@@ -40,9 +39,7 @@ export function EngineerCard({ engineer, projectNames = {} }: EngineerCardProps)
       <div className="mb-4">
         <div className="mb-1.5 flex items-center justify-between">
           <span className="label-md text-surface-on-variant">Utilization</span>
-          <span
-            className={cn("title-sm", getUtilizationTextColor(engineer.utilization))}
-          >
+          <span className={cn("title-sm", utilizationVariant(engineer.utilization).text)}>
             {engineer.utilization}%
           </span>
         </div>
@@ -50,7 +47,7 @@ export function EngineerCard({ engineer, projectNames = {} }: EngineerCardProps)
           <div
             className={cn(
               "h-full rounded-full transition-all",
-              getUtilizationColor(engineer.utilization)
+              utilizationVariant(engineer.utilization).bar
             )}
             style={{ width: `${Math.min(engineer.utilization, 100)}%` }}
           />

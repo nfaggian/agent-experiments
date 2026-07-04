@@ -1,5 +1,5 @@
 import type { Engineer, Opportunity, Project } from "./types";
-import { daysUntil } from "./utils";
+import { daysUntil, formatCurrency } from "./utils";
 
 export type ActionSeverity = "critical" | "warning" | "info";
 
@@ -156,12 +156,14 @@ export function buildDashboardInsights(
     });
   }
 
-  for (const opp of activeOpps.filter((o) => daysUntil(o.expectedClose) <= 7 && daysUntil(o.expectedClose) >= 0)) {
+  for (const opp of activeOpps) {
+    const days = daysUntil(opp.expectedClose);
+    if (days < 0 || days > 7) continue;
     actions.push({
       id: `close-${opp.id}`,
       severity: "warning",
       title: `Close imminent: ${opp.client}`,
-      detail: `${formatCurrencyShort(opp.value)} · ${opp.probability}% probability · ${daysUntil(opp.expectedClose)}d left`,
+      detail: `${formatCurrency(opp.value)} · ${opp.probability}% probability · ${days}d left`,
       href: "/opportunities",
     });
   }
@@ -183,7 +185,7 @@ export function buildDashboardInsights(
       id: `budget-${project.id}`,
       severity: "warning",
       title: `Budget nearly exhausted: ${project.name}`,
-      detail: `${Math.round((project.spent / project.budget) * 100)}% of ${formatCurrencyShort(project.budget)} spent`,
+      detail: `${Math.round((project.spent / project.budget) * 100)}% of ${formatCurrency(project.budget)} spent`,
       href: "/projects",
     });
   }
@@ -253,10 +255,4 @@ export function buildDashboardInsights(
       unassigned,
     },
   };
-}
-
-function formatCurrencyShort(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
-  return `$${value.toLocaleString()}`;
 }

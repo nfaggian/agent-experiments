@@ -1,32 +1,24 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import type { UtilizationTimeline } from "@/core/types";
+import { useCallback, useMemo, useState } from "react";
+import type { Database, Engineer } from "@/core/types";
 import { updateTimelineCell } from "@/core/api";
-import {
-  cn,
-  getUtilizationCellStyle,
-  getUtilizationColor,
-  getUtilizationTextColor,
-} from "@/core/utils";
-import { CalendarRange, Pencil, Check, X } from "lucide-react";
+import { cn, deriveTimelineWeeks, utilizationVariant } from "@/core/utils";
+import { CalendarRange, Check, Pencil, X } from "lucide-react";
 
 interface UtilizationTimelineProps {
-  initialData: UtilizationTimeline;
+  engineers: Engineer[];
   visibleEngineerIds?: Set<string>;
-  totalEngineers?: number;
+  onDatabaseChange?: (db: Database) => void;
 }
 
 export function UtilizationTimelineView({
-  initialData,
+  engineers,
   visibleEngineerIds,
-  totalEngineers,
+  onDatabaseChange,
 }: UtilizationTimelineProps) {
-  const [timeline, setTimeline] = useState(initialData);
-  const [editing, setEditing] = useState<{
-    engineerId: string;
-    weekStart: string;
-  } | null>(null);
+  const weeks = useMemo(() => deriveTimelineWeeks(engineers), [engineers]);
+  const [editing, setEditing] = useState<{ engineerId: string; weekStart: string } | null>(null);
   const [draftValue, setDraftValue] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -45,25 +37,21 @@ export function UtilizationTimelineView({
     const utilization = Math.max(0, Math.min(150, parseInt(draftValue, 10) || 0));
     setSaving(true);
     try {
-      const updated = await updateTimelineCell(
-        editing.engineerId,
-        editing.weekStart,
-        utilization
-      );
-      setTimeline(updated);
+      const db = await updateTimelineCell(editing.engineerId, editing.weekStart, utilization);
+      onDatabaseChange?.(db);
       setEditing(null);
       setDraftValue("");
     } finally {
       setSaving(false);
     }
-  }, [draftValue, editing]);
+  }, [draftValue, editing, onDatabaseChange]);
+
+  const visibleEngineers = visibleEngineerIds
+    ? engineers.filter((e) => visibleEngineerIds.has(e.id))
+    : engineers;
 
   const rowAverage = (cells: { utilization: number }[]) =>
-    Math.round(cells.reduce((sum, c) => sum + c.utilization, 0) / cells.length);
-
-  const visibleRows = visibleEngineerIds
-    ? timeline.rows.filter((row) => visibleEngineerIds.has(row.engineerId))
-    : timeline.rows;
+    cells.length ? Math.round(cells.reduce((s, c) => s + c.utilization, 0) / cells.length) : 0;
 
   return (
     <div className="card overflow-hidden">
@@ -75,11 +63,9 @@ export function UtilizationTimelineView({
           </h3>
           <p className="body-md text-surface-on-variant">
             Weekly capacity by engineer — click any cell to edit allocation
-            {totalEngineers !== undefined && (
-              <span className="ml-1 text-surface-on-variant/70">
-                · showing {visibleRows.length} of {totalEngineers}
-              </span>
-            )}
+            <span className="ml-1 text-surface-on-variant/70">
+              · showing {visibleEngineers.length} of {engineers.length}
+            </span>
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 label-md text-surface-on-variant">
@@ -105,14 +91,12 @@ export function UtilizationTimelineView({
               <th className="sticky left-0 z-10 min-w-[180px] bg-surface-container-low/95 px-4 py-3 text-left label-md text-surface-on-variant backdrop-blur-sm">
                 Engineer
               </th>
-              {timeline.weeks.map((week) => (
+              {weeks.map((week) => (
                 <th
                   key={week.weekStart}
                   className={cn(
                     "min-w-[88px] px-2 py-3 text-center label-md",
-                    week.isCurrent
-                      ? "bg-accent-muted text-accent-foreground"
-                      : "text-surface-on-variant"
+                    week.isCurrent ? "bg-accent-muted text-accent-foreground" : "text-surface-on-variant"
                   )}
                 >
                   <div>{week.label}</div>
@@ -129,30 +113,23 @@ export function UtilizationTimelineView({
             </tr>
           </thead>
           <tbody>
-            {visibleRows.map((row) => (
+            {visibleEngineers.map((engineer) => (
               <tr
-                key={row.engineerId}
+                key={engineer.id}
                 className="border-b border-outline-variant/30 hover:bg-surface-on/[0.02]"
               >
                 <td className="sticky left-0 z-10 bg-surface-bright/95 px-4 py-3 backdrop-blur-sm">
-                  <p className="title-sm text-surface-on">{row.name}</p>
-                  <p className="label-md text-surface-on-variant">{row.role}</p>
+                  <p className="title-sm text-surface-on">{engineer.name}</p>
+                  <p className="label-md text-surface-on-variant">{engineer.role}</p>
                 </td>
-                {row.cells.map((cell) => {
+                {engineer.utilizationTimeline.map((cell) => {
                   const isEditing =
-                    editing?.engineerId === row.engineerId &&
-                    editing.weekStart === cell.weekStart;
-                  const weekMeta = timeline.weeks.find(
-                    (w) => w.weekStart === cell.weekStart
-                  );
-
+                    editing?.engineerId === engineer.id && editing.weekStart === cell.weekStart;
+                  const weekMeta = weeks.find((w) => w.weekStart === cell.weekStart);
                   return (
                     <td
                       key={cell.weekStart}
-                      className={cn(
-                        "px-1 py-2 text-center",
-                        weekMeta?.isCurrent && "bg-accent-muted/30"
-                      )}
+                      className={cn("px-1 py-2 text-center", weekMeta?.isCurrent && "bg-accent-muted/30")}
                     >
                       {isEditing ? (
                         <div className="flex items-center justify-center gap-1">
@@ -191,18 +168,12 @@ export function UtilizationTimelineView({
                       ) : (
                         <button
                           type="button"
-                          onClick={() =>
-                            startEdit(row.engineerId, cell.weekStart, cell.utilization)
-                          }
+                          onClick={() => startEdit(engineer.id, cell.weekStart, cell.utilization)}
                           className={cn(
                             "util-cell group relative",
-                            getUtilizationCellStyle(cell.utilization)
+                            utilizationVariant(cell.utilization).cell
                           )}
-                          title={
-                            cell.note
-                              ? cell.note
-                              : `Click to edit — ${cell.utilization}%`
-                          }
+                          title={cell.note ?? `Click to edit — ${cell.utilization}%`}
                         >
                           <span className="title-sm">{cell.utilization}%</span>
                           <Pencil className="mt-0.5 h-3 w-3 opacity-0 transition-opacity group-hover:opacity-60" />
@@ -215,10 +186,10 @@ export function UtilizationTimelineView({
                   <span
                     className={cn(
                       "title-sm",
-                      getUtilizationTextColor(rowAverage(row.cells))
+                      utilizationVariant(rowAverage(engineer.utilizationTimeline)).text
                     )}
                   >
-                    {rowAverage(row.cells)}%
+                    {rowAverage(engineer.utilizationTimeline)}%
                   </span>
                 </td>
               </tr>
@@ -229,22 +200,19 @@ export function UtilizationTimelineView({
               <td className="sticky left-0 z-10 bg-surface-container-low/95 px-4 py-3 label-md font-medium text-surface-on-variant backdrop-blur-sm">
                 Team average
               </td>
-              {timeline.weeks.map((week, weekIndex) => {
-                const values = visibleRows.map((row) => row.cells[weekIndex]?.utilization ?? 0);
-                const avg = Math.round(
-                  values.reduce((sum, v) => sum + v, 0) / (values.length || 1)
+              {weeks.map((week, weekIndex) => {
+                const values = visibleEngineers.map(
+                  (e) => e.utilizationTimeline[weekIndex]?.utilization ?? 0
                 );
+                const avg = Math.round(values.reduce((s, v) => s + v, 0) / (values.length || 1));
                 return (
                   <td
                     key={week.weekStart}
-                    className={cn(
-                      "px-2 py-3 text-center",
-                      week.isCurrent && "bg-accent-muted/40"
-                    )}
+                    className={cn("px-2 py-3 text-center", week.isCurrent && "bg-accent-muted/40")}
                   >
                     <div className="mx-auto flex h-2 max-w-[72px] overflow-hidden rounded-full bg-surface-container-highest">
                       <div
-                        className={cn("h-full rounded-full", getUtilizationColor(avg))}
+                        className={cn("h-full rounded-full", utilizationVariant(avg).bar)}
                         style={{ width: `${Math.min(avg, 100)}%` }}
                       />
                     </div>

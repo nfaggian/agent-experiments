@@ -26,9 +26,6 @@ function getBarColor(utilization: number): string {
   return "#10B981";
 }
 
-const CHART_GRID_COLOR = CHART_GRID;
-const CHART_TICK_COLOR = CHART_TICK;
-
 export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChartProps) {
   const data = [...engineers]
     .sort((a, b) => b.utilization - a.utilization)
@@ -54,11 +51,11 @@ export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChar
         <div style={{ height: chartHeight }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" barSize={16}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} horizontal={false} />
             <XAxis
               type="number"
               domain={[0, 120]}
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${v}%`}
@@ -66,7 +63,7 @@ export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChar
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
+              tick={{ fontSize: 12, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
               width={60}
