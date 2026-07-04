@@ -31,32 +31,15 @@ export interface Engineer {
   status: EngineerStatus;
   skills: string[];
   currentProjects: string[];
-  utilizationTimeline?: UtilizationWeek[];
+  utilizationTimeline: UtilizationWeek[];
   avatar?: string;
 }
 
-export interface UtilizationTimelineWeek {
-  weekStart: string;
-  label: string;
-  isCurrent: boolean;
-}
-
-export interface UtilizationTimelineCell {
-  weekStart: string;
-  utilization: number;
-  note?: string;
-}
-
-export interface UtilizationTimelineRow {
-  engineerId: string;
-  name: string;
-  role: string;
-  cells: UtilizationTimelineCell[];
-}
-
-export interface UtilizationTimeline {
-  weeks: UtilizationTimelineWeek[];
-  rows: UtilizationTimelineRow[];
+export interface Milestone {
+  id: string;
+  title: string;
+  dueDate: string;
+  completed: boolean;
 }
 
 export interface Opportunity {
@@ -91,13 +74,6 @@ export interface Project {
   opportunityId?: string;
 }
 
-export interface Milestone {
-  id: string;
-  title: string;
-  dueDate: string;
-  completed: boolean;
-}
-
 export interface Database {
   engineers: Engineer[];
   opportunities: Opportunity[];
@@ -105,17 +81,11 @@ export interface Database {
   lastUpdated: string;
 }
 
-export interface DashboardMetrics {
-  pipelineValue: number;
-  totalPipeline: number;
-  activeOpportunities: number;
-  activeProjects: number;
-  atRiskProjects: number;
-  avgUtilization: number;
-  availableCapacity: number;
-  wonThisQuarter: number;
-  teamSize: number;
-  lastUpdated: string;
+/** Timeline column derived on the fly from any engineer's timeline. */
+export interface TimelineWeek {
+  weekStart: string;
+  label: string;
+  isCurrent: boolean;
 }
 
 export const OPPORTUNITY_STAGES: {

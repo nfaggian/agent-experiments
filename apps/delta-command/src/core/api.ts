@@ -1,29 +1,23 @@
 /**
- * API client for the Delta Command Python backend.
+ * API client for the Delta Command backend.
  *
- * On the server (Node.js runtime) we hit the backend directly at DELTA_API_URL.
- * In the browser we go through the Next.js rewrite at "/api/*" so requests
- * stay same-origin (see `next.config.ts`).
+ * On the server (Node.js) requests go directly to DELTA_API_URL.
+ * In the browser they use the Next.js rewrite so requests stay same-origin.
  */
 
 import type {
-  DashboardMetrics,
-  Engineer,
+  Database,
   Opportunity,
   OpportunityStage,
   Project,
   ProjectStatus,
-  UtilizationTimeline,
 } from "./types";
 
 const SERVER_API_BASE = process.env.DELTA_API_URL ?? "http://127.0.0.1:8000";
 
-function apiUrl(path: string): string {
-  return typeof window === "undefined" ? `${SERVER_API_BASE}${path}` : path;
-}
-
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(apiUrl(path), {
+  const url = typeof window === "undefined" ? `${SERVER_API_BASE}${path}` : path;
+  const response = await fetch(url, {
     ...init,
     cache: "no-store",
     headers: { "Content-Type": "application/json", ...init?.headers },
@@ -34,54 +28,33 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export async function getDashboardMetrics(): Promise<DashboardMetrics> {
-  return apiFetch<DashboardMetrics>("/api/dashboard");
+/** Fetch the entire database. Every page derives what it needs from this. */
+export function getState(): Promise<Database> {
+  return apiFetch<Database>("/api/state");
 }
 
-export async function getOpportunities(): Promise<Opportunity[]> {
-  return apiFetch<Opportunity[]>("/api/opportunities");
-}
-
-export async function getProjects(): Promise<Project[]> {
-  return apiFetch<Project[]>("/api/projects");
-}
-
-export async function getEngineers(): Promise<Engineer[]> {
-  return apiFetch<Engineer[]>("/api/engineers");
-}
-
-export async function getUtilizationTimeline(): Promise<UtilizationTimeline> {
-  return apiFetch<UtilizationTimeline>("/api/utilization/timeline");
-}
-
-export async function updateTimelineCell(
-  engineerId: string,
-  weekStart: string,
-  utilization: number,
-  note?: string
-): Promise<UtilizationTimeline> {
-  return apiFetch<UtilizationTimeline>("/api/utilization/timeline", {
-    method: "PATCH",
-    body: JSON.stringify({ engineerId, weekStart, utilization, note }),
-  });
-}
-
-export async function updateOpportunityStage(
-  id: string,
-  stage: OpportunityStage
-): Promise<Opportunity> {
+export function updateOpportunityStage(id: string, stage: OpportunityStage): Promise<Opportunity> {
   return apiFetch<Opportunity>("/api/opportunities", {
     method: "PATCH",
     body: JSON.stringify({ id, stage }),
   });
 }
 
-export async function updateProjectStatus(
-  id: string,
-  status: ProjectStatus
-): Promise<Project> {
+export function updateProjectStatus(id: string, status: ProjectStatus): Promise<Project> {
   return apiFetch<Project>("/api/projects", {
     method: "PATCH",
     body: JSON.stringify({ id, status }),
+  });
+}
+
+export function updateTimelineCell(
+  engineerId: string,
+  weekStart: string,
+  utilization: number,
+  note?: string
+): Promise<Database> {
+  return apiFetch<Database>("/api/timeline", {
+    method: "PATCH",
+    body: JSON.stringify({ engineerId, weekStart, utilization, note }),
   });
 }

@@ -6,23 +6,26 @@ import { EngineerCard } from "@/components/team/EngineerCard";
 import { TeamFilters, filterEngineers } from "@/components/team/TeamFilters";
 import type { TeamFilterState } from "@/components/team/TeamFilters";
 import { UtilizationTimelineView } from "@/components/team/UtilizationTimeline";
-import type { Engineer, Project, UtilizationTimeline } from "@/core/types";
+import type { Engineer, Project } from "@/core/types";
 import { cn, formatNameList, utilizationVariant } from "@/core/utils";
-import { Users, AlertTriangle, CheckCircle, Clock, CalendarRange, LayoutGrid } from "lucide-react";
+import {
+  Users,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  CalendarRange,
+  LayoutGrid,
+} from "lucide-react";
 
 type TeamView = "timeline" | "overview";
 
 interface TeamPageClientProps {
   engineers: Engineer[];
   projects: Project[];
-  timeline: UtilizationTimeline;
 }
 
-export function TeamPageClient({
-  engineers,
-  projects,
-  timeline,
-}: TeamPageClientProps) {
+export function TeamPageClient({ engineers: initial, projects }: TeamPageClientProps) {
+  const [engineers, setEngineers] = useState(initial);
   const [view, setView] = useState<TeamView>("timeline");
   const [filters, setFilters] = useState<TeamFilterState>({ search: "", status: "all" });
 
@@ -31,16 +34,12 @@ export function TeamPageClient({
     () => filterEngineers(engineers, filters),
     [engineers, filters]
   );
-  const filteredEngineerIds = useMemo(
-    () => new Set(filteredEngineers.map((engineer) => engineer.id)),
-    [filteredEngineers]
-  );
 
   const overallocated = engineers.filter((e) => e.status === "overallocated");
   const available = engineers.filter((e) => e.utilization < 70);
-  const avgUtil = Math.round(
-    engineers.reduce((sum, e) => sum + e.utilization, 0) / engineers.length
-  );
+  const avgUtil = engineers.length
+    ? Math.round(engineers.reduce((sum, e) => sum + e.utilization, 0) / engineers.length)
+    : 0;
   const sortedEngineers = [...filteredEngineers].sort((a, b) => b.utilization - a.utilization);
 
   return (
@@ -56,10 +55,7 @@ export function TeamPageClient({
             <button
               type="button"
               onClick={() => setView("timeline")}
-              className={cn(
-                "segmented-item",
-                view === "timeline" && "segmented-item-active"
-              )}
+              className={cn("segmented-item", view === "timeline" && "segmented-item-active")}
             >
               <CalendarRange className="h-4 w-4" />
               Timeline
@@ -67,10 +63,7 @@ export function TeamPageClient({
             <button
               type="button"
               onClick={() => setView("overview")}
-              className={cn(
-                "segmented-item",
-                view === "overview" && "segmented-item-active"
-              )}
+              className={cn("segmented-item", view === "overview" && "segmented-item-active")}
             >
               <LayoutGrid className="h-4 w-4" />
               Overview
@@ -91,50 +84,20 @@ export function TeamPageClient({
         />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="card p-5">
-            <div className="stat-inline">
-              <div className="stat-icon bg-accent-muted text-accent-foreground">
-                <Users className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="metric-value text-[1.75rem]">{engineers.length}</p>
-                <p className="metric-label">Team Members</p>
-              </div>
-            </div>
-          </div>
-          <div className="card p-5">
-            <div className="stat-inline">
-              <div className="stat-icon bg-blue-500/15 text-blue-400">
-                <Clock className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="metric-value text-[1.75rem]">{avgUtil}%</p>
-                <p className="metric-label">This Week Avg</p>
-              </div>
-            </div>
-          </div>
-          <div className="card p-5">
-            <div className="stat-inline">
-              <div className="stat-icon bg-emerald-500/15 text-emerald-400">
-                <CheckCircle className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="metric-value text-[1.75rem]">{available.length}</p>
-                <p className="metric-label">Available Capacity</p>
-              </div>
-            </div>
-          </div>
-          <div className="card p-5">
-            <div className="stat-inline">
-              <div className="stat-icon bg-red-500/15 text-red-400">
-                <AlertTriangle className="h-4 w-4" />
-              </div>
-              <div>
-                <p className="metric-value text-[1.75rem]">{overallocated.length}</p>
-                <p className="metric-label">Overallocated</p>
-              </div>
-            </div>
-          </div>
+          <StatCard icon={Users} label="Team Members" value={engineers.length} tone="accent" />
+          <StatCard icon={Clock} label="This Week Avg" value={`${avgUtil}%`} tone="blue" />
+          <StatCard
+            icon={CheckCircle}
+            label="Available Capacity"
+            value={available.length}
+            tone="emerald"
+          />
+          <StatCard
+            icon={AlertTriangle}
+            label="Overallocated"
+            value={overallocated.length}
+            tone="red"
+          />
         </div>
 
         {overallocated.length > 0 && (
@@ -144,17 +107,17 @@ export function TeamPageClient({
               <span className="title-sm">
                 {formatNameList(overallocated.map((e) => e.name.split(" ")[0]))}
               </span>{" "}
-              {overallocated.length === 1 ? "is" : "are"} overallocated this week.
-              Adjust the timeline to plan redistribution.
+              {overallocated.length === 1 ? "is" : "are"} overallocated this week. Adjust the timeline
+              to plan redistribution.
             </p>
           </div>
         )}
 
         {view === "timeline" ? (
           <UtilizationTimelineView
-            initialData={timeline}
-            visibleEngineerIds={filteredEngineerIds}
-            totalEngineers={engineers.length}
+            engineers={engineers}
+            visibleEngineerIds={new Set(filteredEngineers.map((e) => e.id))}
+            onDatabaseChange={(db) => setEngineers(db.engineers)}
           />
         ) : (
           <>
@@ -173,9 +136,7 @@ export function TeamPageClient({
                             "flex h-full items-center justify-end rounded-full pr-2 text-[10px] font-medium text-white transition-all",
                             utilizationVariant(engineer.utilization).bar
                           )}
-                          style={{
-                            width: `${Math.min(engineer.utilization, 100)}%`,
-                          }}
+                          style={{ width: `${Math.min(engineer.utilization, 100)}%` }}
                         >
                           {engineer.utilization >= 30 && `${engineer.utilization}%`}
                         </div>
@@ -187,7 +148,9 @@ export function TeamPageClient({
                   </div>
                 ))}
                 {sortedEngineers.length === 0 && (
-                  <p className="body-md text-surface-on-variant">No engineers match your filters.</p>
+                  <p className="body-md text-surface-on-variant">
+                    No engineers match your filters.
+                  </p>
                 )}
               </div>
             </div>
@@ -204,11 +167,46 @@ export function TeamPageClient({
                 ))}
               </div>
               {sortedEngineers.length === 0 && (
-                <p className="body-md text-surface-on-variant">No engineers match your filters.</p>
+                <p className="body-md text-surface-on-variant">
+                  No engineers match your filters.
+                </p>
               )}
             </div>
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+const TONE_CLASSES = {
+  accent: "bg-accent-muted text-accent-foreground",
+  blue: "bg-blue-500/15 text-blue-400",
+  emerald: "bg-emerald-500/15 text-emerald-400",
+  red: "bg-red-500/15 text-red-400",
+} as const;
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: typeof Users;
+  label: string;
+  value: string | number;
+  tone: keyof typeof TONE_CLASSES;
+}) {
+  return (
+    <div className="card p-5">
+      <div className="stat-inline">
+        <div className={cn("stat-icon", TONE_CLASSES[tone])}>
+          <Icon className="h-4 w-4" />
+        </div>
+        <div>
+          <p className="metric-value text-[1.75rem]">{value}</p>
+          <p className="metric-label">{label}</p>
+        </div>
       </div>
     </div>
   );

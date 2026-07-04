@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { format, parseISO, differenceInDays } from "date-fns";
+import { format, parseISO, differenceInDays, startOfWeek } from "date-fns";
+import type { Engineer, TimelineWeek } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -109,3 +110,19 @@ export const CHART_TOOLTIP_STYLE = {
 
 export const CHART_GRID = "#27272A";
 export const CHART_TICK = "#A1A1AA";
+
+/**
+ * Derive timeline column metadata from any engineer's stored weeks.
+ * Backend stores raw week cells; labels and the "current week" flag are
+ * cheap to compute on the client from `today`.
+ */
+export function deriveTimelineWeeks(engineers: Engineer[]): TimelineWeek[] {
+  const source = engineers.find((e) => e.utilizationTimeline.length > 0);
+  if (!source) return [];
+  const monday = format(startOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd");
+  return source.utilizationTimeline.map((cell) => ({
+    weekStart: cell.weekStart,
+    label: format(parseISO(cell.weekStart), "MMM d"),
+    isCurrent: cell.weekStart === monday,
+  }));
+}
