@@ -28,9 +28,9 @@ export function KPICard({
     change === undefined
       ? ""
       : change > 0
-        ? "text-emerald-600"
+        ? "text-emerald-400"
         : change < 0
-          ? "text-red-600"
+          ? "text-red-400"
           : "text-surface-on-variant";
 
   return (

@@ -87,7 +87,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
         <table className="w-full min-w-[900px] border-collapse">
           <thead>
             <tr className="border-b border-outline-variant/50 bg-surface-container-low">
-              <th className="sticky left-0 z-10 min-w-[180px] bg-surface-container-low px-4 py-3 text-left label-md text-surface-on-variant">
+              <th className="sticky left-0 z-10 min-w-[180px] bg-surface-container-low/95 px-4 py-3 text-left label-md text-surface-on-variant backdrop-blur-sm">
                 Engineer
               </th>
               {timeline.weeks.map((week) => (
@@ -119,7 +119,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                 key={row.engineerId}
                 className="border-b border-outline-variant/30 hover:bg-surface-on/[0.02]"
               >
-                <td className="sticky left-0 z-10 bg-surface-bright px-4 py-3">
+                <td className="sticky left-0 z-10 bg-surface-bright/95 px-4 py-3 backdrop-blur-sm">
                   <p className="title-sm text-surface-on">{row.name}</p>
                   <p className="label-md text-surface-on-variant">{row.role}</p>
                 </td>
@@ -211,7 +211,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
           </tbody>
           <tfoot>
             <tr className="bg-surface-container-low">
-              <td className="sticky left-0 z-10 bg-surface-container-low px-4 py-3 label-md font-medium text-surface-on-variant">
+              <td className="sticky left-0 z-10 bg-surface-container-low/95 px-4 py-3 label-md font-medium text-surface-on-variant backdrop-blur-sm">
                 Team average
               </td>
               {timeline.weeks.map((week, weekIndex) => {

@@ -45,29 +45,41 @@ export function getUtilizationColor(utilization: number): string {
 }
 
 export function getUtilizationTextColor(utilization: number): string {
-  if (utilization >= 100) return "text-red-600";
-  if (utilization >= 85) return "text-amber-600";
+  if (utilization >= 100) return "text-red-400";
+  if (utilization >= 85) return "text-amber-400";
   if (utilization >= 60) return "text-accent-foreground";
-  return "text-emerald-600";
+  return "text-emerald-400";
 }
 
 export function getUtilizationCellStyle(utilization: number): string {
-  if (utilization >= 100) return "bg-red-50 text-red-700 ring-red-200/80";
-  if (utilization >= 85) return "bg-amber-50 text-amber-700 ring-amber-200/80";
-  if (utilization >= 60) return "bg-blue-50 text-blue-700 ring-blue-200/80";
-  return "bg-emerald-50 text-emerald-700 ring-emerald-200/80";
+  if (utilization >= 100) return "bg-red-500/15 text-red-300 ring-red-500/30";
+  if (utilization >= 85) return "bg-amber-500/15 text-amber-300 ring-amber-500/30";
+  if (utilization >= 60) return "bg-blue-500/15 text-blue-300 ring-blue-500/30";
+  return "bg-emerald-500/15 text-emerald-300 ring-emerald-500/30";
 }
 
 export function getStatusBadgeColor(status: string): string {
   const colors: Record<string, string> = {
-    available: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200/80",
-    allocated: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200/80",
-    overallocated: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200/80",
-    planning: "bg-zinc-100 text-zinc-600 ring-1 ring-inset ring-zinc-200/80",
-    active: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200/80",
-    on_hold: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200/80",
-    at_risk: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200/80",
-    completed: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200/80",
+    available: "bg-emerald-500/15 text-emerald-300 ring-1 ring-inset ring-emerald-500/30",
+    allocated: "bg-blue-500/15 text-blue-300 ring-1 ring-inset ring-blue-500/30",
+    overallocated: "bg-red-500/15 text-red-300 ring-1 ring-inset ring-red-500/30",
+    planning: "bg-zinc-500/15 text-zinc-300 ring-1 ring-inset ring-zinc-500/30",
+    active: "bg-blue-500/15 text-blue-300 ring-1 ring-inset ring-blue-500/30",
+    on_hold: "bg-amber-500/15 text-amber-300 ring-1 ring-inset ring-amber-500/30",
+    at_risk: "bg-red-500/15 text-red-300 ring-1 ring-inset ring-red-500/30",
+    completed: "bg-emerald-500/15 text-emerald-300 ring-1 ring-inset ring-emerald-500/30",
   };
-  return colors[status] ?? "bg-zinc-100 text-zinc-600 ring-1 ring-inset ring-zinc-200/80";
+  return colors[status] ?? "bg-zinc-500/15 text-zinc-300 ring-1 ring-inset ring-zinc-500/30";
 }
+
+export const CHART_TOOLTIP_STYLE = {
+  borderRadius: "12px",
+  border: "1px solid rgb(255 255 255 / 0.08)",
+  backgroundColor: "#18181B",
+  color: "#FAFAFA",
+  boxShadow: "0 8px 24px -4px rgb(0 0 0 / 0.6)",
+  fontSize: "13px",
+} as const;
+
+export const CHART_GRID = "#27272A";
+export const CHART_TICK = "#A1A1AA";

@@ -56,7 +56,7 @@ export function Sidebar() {
       </nav>
 
       <div className="border-t border-sidebar-border p-4">
-        <div className="rounded-xl border border-sidebar-border bg-zinc-900/50 p-4">
+        <div className="rounded-xl border border-sidebar-border bg-white/[0.03] p-4">
           <p className="text-[10px] font-semibold uppercase tracking-widest text-sidebar-muted">
             Q3 Review
           </p>

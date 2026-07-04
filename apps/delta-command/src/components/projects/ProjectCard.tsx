@@ -134,7 +134,7 @@ export function ProjectCard({
             {project.milestones.map((milestone) => (
               <li key={milestone.id} className="flex items-center gap-2 label-md">
                 {milestone.completed ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
                 ) : (
                   <Circle className="h-3.5 w-3.5 shrink-0 text-outline-variant" />
                 )}

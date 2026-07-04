@@ -39,7 +39,7 @@ export function Header({ title, subtitle }: HeaderProps) {
           </span>
         </button>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-on text-xs font-semibold text-white">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20 text-xs font-semibold text-accent-foreground ring-1 ring-accent/30">
           NF
         </div>
       </div>

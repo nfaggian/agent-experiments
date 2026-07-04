@@ -69,7 +69,7 @@ export function DeliveryOverviewPanel({ delivery }: DeliveryOverviewPanelProps) 
           </span>
         ))}
         {delivery.projectsEnding30Days > 0 && (
-          <span className="text-amber-600">
+          <span className="text-amber-400">
             · {delivery.projectsEnding30Days} ending in 30d
           </span>
         )}
@@ -99,17 +99,17 @@ export function TeamSnapshotPanel({
       </div>
 
       <div className="mb-4 grid grid-cols-3 gap-3 text-center">
-        <div className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-3">
+        <div className="rounded-xl border border-white/[0.06] bg-surface-container-low/60 p-3">
           <p className={cn("title-lg", getUtilizationTextColor(avgUtilization))}>
             {avgUtilization}%
           </p>
           <p className="label-md text-surface-on-variant">Avg util</p>
         </div>
-        <div className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-3">
-          <p className="title-lg text-emerald-600">{team.benchCapacityPercent}%</p>
+        <div className="rounded-xl border border-white/[0.06] bg-surface-container-low/60 p-3">
+          <p className="title-lg text-emerald-400">{team.benchCapacityPercent}%</p>
           <p className="label-md text-surface-on-variant">Bench</p>
         </div>
-        <div className="rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-3">
+        <div className="rounded-xl border border-white/[0.06] bg-surface-container-low/60 p-3">
           <p className="title-lg text-surface-on">{team.available.length}</p>
           <p className="label-md text-surface-on-variant">Available</p>
         </div>
@@ -139,7 +139,7 @@ export function TeamSnapshotPanel({
             {team.unassigned.map((e) => (
               <li
                 key={e.id}
-                className="flex items-center gap-1.5 rounded-lg bg-accent-muted px-3 py-1 label-md text-accent-foreground ring-1 ring-inset ring-blue-200/60"
+                className="flex items-center gap-1.5 rounded-lg bg-accent-muted px-3 py-1 label-md text-accent-foreground ring-1 ring-inset ring-blue-500/20"
               >
                 <UserCheck className="h-3.5 w-3.5" />
                 {e.name.split(" ")[0]}

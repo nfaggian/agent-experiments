@@ -76,10 +76,10 @@ export default function OpportunitiesPage() {
           </div>
           <div className="card p-4">
             <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-emerald-600" />
+              <Trophy className="h-4 w-4 text-emerald-400" />
               <p className="metric-label">Won</p>
             </div>
-            <p className="metric-value text-[1.75rem] text-emerald-600">
+            <p className="metric-value text-[1.75rem] text-emerald-400">
               {wonOpps.length} · {formatCurrency(wonOpps.reduce((s, o) => s + o.value, 0))}
             </p>
           </div>

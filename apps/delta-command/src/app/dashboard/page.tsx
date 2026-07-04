@@ -67,42 +67,42 @@ export default async function DashboardPage() {
             value={formatCurrency(metrics.pipelineValue)}
             context={`${formatCurrency(metrics.totalPipeline)} unweighted · ${pipeline.closingWithin30Days} closing in 30d`}
             icon={DollarSign}
-            iconColor="bg-accent-muted text-accent-foreground"
+            iconColor="bg-blue-500/15 text-blue-400"
           />
           <KPICard
             label="Late-Stage Pipeline"
             value={String(pipeline.lateStage)}
             context={`${formatCurrency(pipeline.lateStageValue)} in proposal & negotiation`}
             icon={Layers}
-            iconColor="bg-violet-50 text-violet-700"
+            iconColor="bg-violet-500/15 text-violet-400"
           />
           <KPICard
             label="In Negotiation"
             value={String(pipeline.inNegotiation)}
             context={`${formatCurrency(pipeline.negotiationValue)} · ${pipeline.avgProbability}% avg probability`}
             icon={Target}
-            iconColor="bg-indigo-50 text-indigo-700"
+            iconColor="bg-indigo-500/15 text-indigo-400"
           />
           <KPICard
             label="Active Delivery"
             value={String(metrics.activeProjects)}
             context={`${delivery.planningCount} in planning · ${delivery.atRiskCount} at risk`}
             icon={FolderKanban}
-            iconColor="bg-emerald-50 text-emerald-700"
+            iconColor="bg-emerald-500/15 text-emerald-400"
           />
           <KPICard
             label="Budget Burn"
             value={`${delivery.burnPercent}%`}
             context={`${formatCurrency(delivery.totalSpent)} of ${formatCurrency(delivery.totalBudget)} active budget`}
             icon={Flame}
-            iconColor="bg-amber-50 text-amber-700"
+            iconColor="bg-amber-500/15 text-amber-400"
           />
           <KPICard
             label="Team Utilization"
             value={`${metrics.avgUtilization}%`}
             context={`${team.overallocated.length} overallocated · ${team.benchCapacityPercent}% bench capacity`}
             icon={Users}
-            iconColor="bg-blue-50 text-blue-700"
+            iconColor="bg-blue-500/15 text-blue-400"
           />
         </div>
 
