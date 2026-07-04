@@ -13,9 +13,15 @@ import { CalendarRange, Pencil, Check, X } from "lucide-react";
 
 interface UtilizationTimelineProps {
   initialData: UtilizationTimeline;
+  visibleEngineerIds?: Set<string>;
+  totalEngineers?: number;
 }
 
-export function UtilizationTimelineView({ initialData }: UtilizationTimelineProps) {
+export function UtilizationTimelineView({
+  initialData,
+  visibleEngineerIds,
+  totalEngineers,
+}: UtilizationTimelineProps) {
   const [timeline, setTimeline] = useState(initialData);
   const [editing, setEditing] = useState<{
     engineerId: string;
@@ -55,6 +61,10 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
   const rowAverage = (cells: { utilization: number }[]) =>
     Math.round(cells.reduce((sum, c) => sum + c.utilization, 0) / cells.length);
 
+  const visibleRows = visibleEngineerIds
+    ? timeline.rows.filter((row) => visibleEngineerIds.has(row.engineerId))
+    : timeline.rows;
+
   return (
     <div className="card overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/50 px-6 py-4">
@@ -65,6 +75,11 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
           </h3>
           <p className="body-md text-surface-on-variant">
             Weekly capacity by engineer — click any cell to edit allocation
+            {totalEngineers !== undefined && (
+              <span className="ml-1 text-surface-on-variant/70">
+                · showing {visibleRows.length} of {totalEngineers}
+              </span>
+            )}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 label-md text-surface-on-variant">
@@ -83,10 +98,10 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="max-h-[32rem] overflow-auto">
         <table className="w-full min-w-[900px] border-collapse">
-          <thead>
-            <tr className="border-b border-outline-variant/50 bg-surface-container-low">
+          <thead className="sticky top-0 z-20">
+            <tr className="border-b border-outline-variant/50 bg-surface-container-low/95 backdrop-blur-sm">
               <th className="sticky left-0 z-10 min-w-[180px] bg-surface-container-low/95 px-4 py-3 text-left label-md text-surface-on-variant backdrop-blur-sm">
                 Engineer
               </th>
@@ -114,7 +129,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
             </tr>
           </thead>
           <tbody>
-            {timeline.rows.map((row) => (
+            {visibleRows.map((row) => (
               <tr
                 key={row.engineerId}
                 className="border-b border-outline-variant/30 hover:bg-surface-on/[0.02]"
@@ -215,7 +230,7 @@ export function UtilizationTimelineView({ initialData }: UtilizationTimelineProp
                 Team average
               </td>
               {timeline.weeks.map((week, weekIndex) => {
-                const values = timeline.rows.map((row) => row.cells[weekIndex]?.utilization ?? 0);
+                const values = visibleRows.map((row) => row.cells[weekIndex]?.utilization ?? 0);
                 const avg = Math.round(
                   values.reduce((sum, v) => sum + v, 0) / (values.length || 1)
                 );

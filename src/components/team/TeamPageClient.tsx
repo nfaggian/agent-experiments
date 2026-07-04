@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { EngineerCard } from "@/components/team/EngineerCard";
+import { TeamFilters, filterEngineers } from "@/components/team/TeamFilters";
+import type { TeamFilterState } from "@/components/team/TeamFilters";
 import { UtilizationTimelineView } from "@/components/team/UtilizationTimeline";
 import type { Engineer, Project, UtilizationTimeline } from "@/core/types";
+import { formatNameList } from "@/core/team-utils";
 import { cn, getUtilizationColor } from "@/core/utils";
 import { Users, AlertTriangle, CheckCircle, Clock, CalendarRange, LayoutGrid } from "lucide-react";
 
@@ -22,20 +25,30 @@ export function TeamPageClient({
   timeline,
 }: TeamPageClientProps) {
   const [view, setView] = useState<TeamView>("timeline");
+  const [filters, setFilters] = useState<TeamFilterState>({ search: "", status: "all" });
 
   const projectNames = Object.fromEntries(projects.map((p) => [p.id, p.name]));
+  const filteredEngineers = useMemo(
+    () => filterEngineers(engineers, filters),
+    [engineers, filters]
+  );
+  const filteredEngineerIds = useMemo(
+    () => new Set(filteredEngineers.map((engineer) => engineer.id)),
+    [filteredEngineers]
+  );
+
   const overallocated = engineers.filter((e) => e.status === "overallocated");
   const available = engineers.filter((e) => e.utilization < 70);
   const avgUtil = Math.round(
     engineers.reduce((sum, e) => sum + e.utilization, 0) / engineers.length
   );
-  const sortedEngineers = [...engineers].sort((a, b) => b.utilization - a.utilization);
+  const sortedEngineers = [...filteredEngineers].sort((a, b) => b.utilization - a.utilization);
 
   return (
     <div>
       <Header
         title="Team Utilization"
-        subtitle="Plan and edit weekly capacity across the delta engineering team"
+        subtitle={`Plan and edit weekly capacity across ${engineers.length} delta engineers`}
       />
 
       <div className="space-y-8 p-8">
@@ -70,6 +83,13 @@ export function TeamPageClient({
               : "Current-week snapshot and team member details"}
           </p>
         </div>
+
+        <TeamFilters
+          filters={filters}
+          onChange={setFilters}
+          resultCount={filteredEngineers.length}
+          totalCount={engineers.length}
+        />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card p-5">
@@ -123,7 +143,7 @@ export function TeamPageClient({
             <AlertTriangle className="h-5 w-5 shrink-0" />
             <p className="body-md">
               <span className="title-sm">
-                {overallocated.map((e) => e.name.split(" ")[0]).join(", ")}
+                {formatNameList(overallocated.map((e) => e.name.split(" ")[0]))}
               </span>{" "}
               {overallocated.length === 1 ? "is" : "are"} overallocated this week.
               Adjust the timeline to plan redistribution.
@@ -132,22 +152,26 @@ export function TeamPageClient({
         )}
 
         {view === "timeline" ? (
-          <UtilizationTimelineView initialData={timeline} />
+          <UtilizationTimelineView
+            initialData={timeline}
+            visibleEngineerIds={filteredEngineerIds}
+            totalEngineers={engineers.length}
+          />
         ) : (
           <>
             <div className="card p-6">
               <h3 className="section-title mb-4">Current Week Capacity</h3>
-              <div className="space-y-3">
+              <div className="max-h-[28rem] space-y-3 overflow-y-auto pr-1">
                 {sortedEngineers.map((engineer) => (
                   <div key={engineer.id} className="flex items-center gap-4">
-                    <span className="w-32 truncate title-sm text-surface-on">
+                    <span className="w-36 truncate title-sm text-surface-on">
                       {engineer.name.split(" ")[0]}
                     </span>
                     <div className="relative flex-1">
-                      <div className="h-6 overflow-hidden rounded-full bg-surface-container-highest">
+                      <div className="h-5 overflow-hidden rounded-full bg-surface-container-highest">
                         <div
                           className={cn(
-                            "flex h-full items-center justify-end rounded-full pr-2 label-md font-medium text-white transition-all",
+                            "flex h-full items-center justify-end rounded-full pr-2 text-[10px] font-medium text-white transition-all",
                             getUtilizationColor(engineer.utilization)
                           )}
                           style={{
@@ -163,6 +187,9 @@ export function TeamPageClient({
                     </span>
                   </div>
                 ))}
+                {sortedEngineers.length === 0 && (
+                  <p className="body-md text-surface-on-variant">No engineers match your filters.</p>
+                )}
               </div>
             </div>
 
@@ -177,6 +204,9 @@ export function TeamPageClient({
                   />
                 ))}
               </div>
+              {sortedEngineers.length === 0 && (
+                <p className="body-md text-surface-on-variant">No engineers match your filters.</p>
+              )}
             </div>
           </>
         )}

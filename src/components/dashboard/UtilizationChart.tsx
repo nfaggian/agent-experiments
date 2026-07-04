@@ -16,6 +16,7 @@ import { CHART_GRID, CHART_TICK, CHART_TOOLTIP_STYLE } from "@/core/utils";
 
 interface UtilizationChartProps {
   engineers: Engineer[];
+  maxVisible?: number;
 }
 
 function getBarColor(utilization: number): string {
@@ -28,24 +29,31 @@ function getBarColor(utilization: number): string {
 const CHART_GRID_COLOR = CHART_GRID;
 const CHART_TICK_COLOR = CHART_TICK;
 
-export function UtilizationChart({ engineers }: UtilizationChartProps) {
+export function UtilizationChart({ engineers, maxVisible = 30 }: UtilizationChartProps) {
   const data = [...engineers]
     .sort((a, b) => b.utilization - a.utilization)
+    .slice(0, maxVisible)
     .map((e) => ({
       name: e.name.split(" ")[0],
       utilization: e.utilization,
       fill: getBarColor(e.utilization),
     }));
 
+  const chartHeight = Math.min(520, Math.max(256, data.length * 26));
+
   return (
     <div className="card p-6">
       <h3 className="section-title mb-1">Team Utilization</h3>
       <p className="mb-6 body-md text-surface-on-variant">
         Current allocation across the delta engineering team
+        {engineers.length > maxVisible && (
+          <span className="text-surface-on-variant/70"> · top {maxVisible} by utilization</span>
+        )}
       </p>
-      <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" barSize={18}>
+      <div className="overflow-y-auto" style={{ maxHeight: chartHeight }}>
+        <div style={{ height: chartHeight }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} layout="vertical" barSize={16}>
             <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} horizontal={false} />
             <XAxis
               type="number"
@@ -73,8 +81,9 @@ export function UtilizationChart({ engineers }: UtilizationChartProps) {
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
