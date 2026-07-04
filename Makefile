@@ -28,6 +28,14 @@ test: ## Run all tests
 		--cov-report=term-missing \
 		--junitxml=junit.xml
 
+.PHONY: voice
+voice: ## Run the iPhone-friendly voice server
+	@PYTHONPATH=src/agents:src python3 -m server.voice_server
+
+.PHONY: home_web
+home_web: ## Run ADK web UI for the home agent
+	@uv run adk web --reload src/agents/home_agent
+
 .PHONY: web
 web: ## Run the ADK web demo server
 	@uv run adk web --reload src/agents/

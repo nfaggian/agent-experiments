@@ -24,6 +24,11 @@ make prefect-server
 - **`doc_agent`**: Technical writing assistant with Google Docs integration
   - Uses local Ollama models (`gpt-oss:20b`) via LiteLLM
   - Includes Google Docs tools for creating and formatting documents
+- **`home_agent`**: Voice-controlled home assistant for iPhone and browsers
+  - Uses Gemini Live API for real-time voice conversations
+  - Pluggable skills (Home Assistant, routines) via `config/skills.yaml`
+  - Safety guardrails via `config/guardrails.yaml`
+  - iPhone-friendly PWA served by the voice WebSocket server
 
 ### Workflows
 - **`pipeline.py`**: Prefect workflow for orchestrating document creation and content generation
@@ -45,6 +50,8 @@ make prefect-server
 
 ```bash
 make web              # Run ADK web interface
+make home_web         # Run ADK web UI for home agent only
+make voice            # Run iPhone-friendly voice server
 make api_server       # Run ADK FastAPI server
 make prefect-server   # Start Prefect server and serve flows
 make prefect-flows    # Serve flows (server must be running)
@@ -57,18 +64,39 @@ make check            # Lint and type check
 ```
 src/
 ├── agents/
-│   └── doc_agent/           # Technical writing assistant
-│       ├── agent.py         # Agent definition
+│   ├── doc_agent/           # Technical writing assistant
+│   │   ├── agent.py
+│   │   └── tools/
+│   └── home_agent/          # Voice home assistant
+│       ├── agent.py
+│       ├── config/          # skills.yaml, guardrails.yaml
+│       ├── guardrails/
+│       ├── skills/
 │       └── tools/
-│           └── google_docs_tool.py  # Google Docs integration
+├── server/
+│   ├── voice_server.py      # WebSocket voice server + PWA
+│   └── static/              # iPhone web client
 └── workflows/
-    ├── pipeline.py          # Main Prefect workflow
-    ├── serve.py             # Flow serving entry point
-    └── discover.py          # Flow discovery utility
 ```
 
 ## Configuration
 
 - **Ollama**: Set `OLLAMA_API_BASE` in `.env` or environment
 - **Google Docs**: Place `credentials.json` in project root (token.json auto-generated)
+- **Home Voice Agent**: Copy `.env.example` to `.env` and set:
+  - `GOOGLE_API_KEY` — Gemini API key (required for voice)
+  - `HOME_ASSISTANT_URL` and `HOME_ASSISTANT_TOKEN` — Home Assistant access
+  - Customize skills in `src/agents/home_agent/config/skills.yaml`
+  - Customize guardrails in `src/agents/home_agent/config/guardrails.yaml`
 - **Prefect UI**: Available at `http://127.0.0.1:4200` (or port specified by `PREFECT_PORT`)
+
+## Home Voice Agent (iPhone)
+
+1. Copy `.env.example` to `.env` and add your Gemini + Home Assistant credentials.
+2. Start the voice server: `make voice`
+3. On your iPhone (same Wi‑Fi), open `http://<your-computer-ip>:8000`
+4. Tap **Start Voice**, allow the microphone, and talk to your home.
+5. Add to Home Screen for a native-feeling shortcut.
+
+For HTTPS/WSS from your phone outside the LAN, put the server behind a reverse proxy
+or tunnel (e.g. Cloudflare Tunnel, Tailscale) and use `wss://`.

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Home Voice Agent</title>
+    <link rel="stylesheet" href="/static/css/app.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>Home Voice Agent</h1>
+        <p class="subtitle">Talk to your home</p>
+      </header>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <form id="messageForm" class="composer">
+        <input
+          id="message"
+          type="text"
+          placeholder="Type a message..."
+          autocomplete="off"
+          enterkeyhint="send"
+        />
+        <button id="sendButton" type="submit" disabled>Send</button>
+      </form>
+
+      <button id="startAudioButton" class="voice-button" type="button">
+        Start Voice
+      </button>
+      <p class="hint">
+        Tap Start Voice, allow microphone access, then speak naturally.
+        Add this page to your iPhone home screen for quick access.
+      </p>
+    </main>
+
+    <script type="module" src="/static/js/app.js"></script>
+  </body>
+</html>
