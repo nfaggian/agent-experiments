@@ -5,19 +5,15 @@ import os
 import tempfile
 from pathlib import Path
 
-DEFAULT_SEED_PATH = Path(__file__).resolve().parents[2] / "config" / "data.json"
-DEFAULT_RUNTIME_PATH = Path(__file__).resolve().parents[2] / "config" / "runtime.json"
+DEFAULT_DATA_PATH = Path(__file__).resolve().parents[2] / "config" / "data.json"
+LEGACY_RUNTIME_PATH = Path(__file__).resolve().parents[2] / "config" / "runtime.json"
 
 
-def seed_path() -> Path:
-    return Path(os.environ.get("DELTA_CONFIG_PATH", DEFAULT_SEED_PATH))
-
-
-def runtime_path() -> Path:
-    override = os.environ.get("DELTA_RUNTIME_PATH")
+def database_path() -> Path:
+    override = os.environ.get("DELTA_DATA_PATH") or os.environ.get("DELTA_CONFIG_PATH")
     if override:
         return Path(override)
-    return DEFAULT_RUNTIME_PATH
+    return DEFAULT_DATA_PATH
 
 
 def load_json(path: Path) -> dict:
@@ -47,3 +43,17 @@ def save_json(path: Path, data: dict) -> None:
     finally:
         if temp_path.exists():
             temp_path.unlink(missing_ok=True)
+
+
+def migrate_legacy_runtime(data_path: Path | None = None) -> None:
+    """One-time migration: merge legacy runtime.json into the single data file."""
+    target = data_path or database_path()
+    legacy = LEGACY_RUNTIME_PATH
+    if not legacy.exists():
+        return
+    legacy_data = load_json(legacy)
+    if not legacy_data.get("engineers"):
+        legacy.unlink(missing_ok=True)
+        return
+    save_json(target, legacy_data)
+    legacy.unlink(missing_ok=True)

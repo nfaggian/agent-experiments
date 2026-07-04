@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import shutil
 from datetime import datetime, timezone
-from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from delta_command.json_db import load_json, runtime_path, save_json, seed_path
+from delta_command.json_db import database_path, load_json, migrate_legacy_runtime, save_json
 from delta_command.models import (
     Database,
     Engineer,
@@ -29,25 +27,21 @@ from delta_command.utilization_timeline import (
 DatabaseAdapter = TypeAdapter(Database)
 
 
-def _ensure_runtime_config() -> Path:
-    runtime = runtime_path()
-    seed = seed_path()
-    if not runtime.exists() or not load_json(runtime).get("engineers"):
-        shutil.copy(seed, runtime)
-    return runtime
+def _data_path():
+    path = database_path()
+    migrate_legacy_runtime(path)
+    return path
 
 
 def load_database() -> Database:
-    path = _ensure_runtime_config()
-    raw = load_json(path)
+    raw = load_json(_data_path())
     return DatabaseAdapter.validate_python(raw)
 
 
 def save_database(db: Database) -> None:
-    path = _ensure_runtime_config()
     db.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     payload = db.model_dump(by_alias=True, mode="json")
-    save_json(path, payload)
+    save_json(_data_path(), payload)
 
 
 def update_opportunity_stage(opportunity_id: str, stage: OpportunityStage) -> Opportunity | None:
@@ -190,10 +184,3 @@ def update_timeline_cell(
 
     save_database(db)
     return get_utilization_timeline()
-
-
-def reset_database() -> Database:
-    seed = seed_path()
-    runtime = runtime_path()
-    shutil.copy(seed, runtime)
-    return load_database()

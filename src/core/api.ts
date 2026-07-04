@@ -97,7 +97,3 @@ export async function updateProjectStatus(
     body: JSON.stringify({ id, status }),
   });
 }
-
-export async function resetDatabase(): Promise<void> {
-  await apiFetch("/api/reset", { method: "POST" });
-}
