@@ -23,7 +23,14 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { "Content-Type": "application/json", ...init?.headers },
   });
   if (!response.ok) {
-    throw new Error(`API ${path} failed: ${response.status} ${response.statusText}`);
+    let detail = response.statusText;
+    try {
+      const body = await response.json();
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      // response wasn't JSON; keep statusText
+    }
+    throw new Error(detail);
   }
   return response.json() as Promise<T>;
 }
@@ -57,4 +64,9 @@ export function updateTimelineCell(
     method: "PATCH",
     body: JSON.stringify({ engineerId, weekStart, utilization, note }),
   });
+}
+
+/** Ask the LLM to author an executive briefing from the current state. */
+export function generateBriefing(): Promise<{ briefing: string }> {
+  return apiFetch<{ briefing: string }>("/api/briefing", { method: "POST" });
 }

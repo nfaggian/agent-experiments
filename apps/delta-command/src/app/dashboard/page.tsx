@@ -3,6 +3,7 @@ import { KPICard } from "@/components/dashboard/KPICard";
 import { PipelineChart } from "@/components/dashboard/PipelineChart";
 import { UtilizationChart } from "@/components/dashboard/UtilizationChart";
 import { ActionItemsPanel } from "@/components/dashboard/ActionItemsPanel";
+import { ExecutiveBriefingPanel } from "@/components/dashboard/ExecutiveBriefingPanel";
 import {
   PipelineHealthPanel,
   MilestonesPanel,
@@ -101,6 +102,8 @@ export default async function DashboardPage() {
             accent="blue"
           />
         </div>
+
+        <ExecutiveBriefingPanel />
 
         <ActionItemsPanel items={actions} />
 
