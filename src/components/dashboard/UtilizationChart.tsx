@@ -12,6 +12,7 @@ import {
   Cell,
 } from "recharts";
 import type { Engineer } from "@/core/types";
+import { CHART_GRID, CHART_TICK, CHART_TOOLTIP_STYLE } from "@/core/utils";
 
 interface UtilizationChartProps {
   engineers: Engineer[];
@@ -24,8 +25,8 @@ function getBarColor(utilization: number): string {
   return "#10B981";
 }
 
-const CHART_GRID = "#E4E4E7";
-const CHART_TICK = "#71717A";
+const CHART_GRID_COLOR = CHART_GRID;
+const CHART_TICK_COLOR = CHART_TICK;
 
 export function UtilizationChart({ engineers }: UtilizationChartProps) {
   const data = [...engineers]
@@ -45,11 +46,11 @@ export function UtilizationChart({ engineers }: UtilizationChartProps) {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" barSize={18}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} horizontal={false} />
             <XAxis
               type="number"
               domain={[0, 120]}
-              tick={{ fontSize: 12, fill: CHART_TICK }}
+              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${v}%`}
@@ -57,18 +58,13 @@ export function UtilizationChart({ engineers }: UtilizationChartProps) {
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fontSize: 12, fill: CHART_TICK }}
+              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
               axisLine={false}
               tickLine={false}
               width={60}
             />
             <Tooltip
-              contentStyle={{
-                borderRadius: "12px",
-                border: "1px solid #E4E4E7",
-                boxShadow: "0 8px 24px -4px rgb(0 0 0 / 0.08)",
-                fontSize: "13px",
-              }}
+              contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(value: number) => [`${value}%`, "Utilization"]}
             />
             <ReferenceLine x={100} stroke="#EF4444" strokeDasharray="4 4" label={{ value: "100%", position: "top", fill: "#EF4444", fontSize: 11 }} />

@@ -1,5 +1,4 @@
 {
-  "lastUpdated": "2026-07-04T12:00:00Z",
   "engineers": [
     {
       "id": "eng-1",
@@ -17,7 +16,50 @@
       "currentProjects": [
         "proj-1",
         "proj-3"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 89,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 87,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 85,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 98,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 96,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 94,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 107,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 105,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-2",
@@ -36,7 +78,50 @@
         "proj-1",
         "proj-2",
         "proj-4"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 104,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 102,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 100,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 113,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 111,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 109,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 122,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 120,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-3",
@@ -53,7 +138,50 @@
       ],
       "currentProjects": [
         "proj-2"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 74,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 72,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 70,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 83,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 81,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 79,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 92,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 90,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-4",
@@ -70,7 +198,50 @@
       ],
       "currentProjects": [
         "proj-3"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 59,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 57,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 55,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 68,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 66,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 64,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 77,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 75,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-5",
@@ -87,7 +258,50 @@
       ],
       "currentProjects": [
         "proj-4"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 39,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 37,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 35,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 48,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 46,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 44,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 57,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 55,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-6",
@@ -104,7 +318,50 @@
       ],
       "currentProjects": [
         "proj-5"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 69,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 67,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 65,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 78,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 76,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 74,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 87,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 85,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-7",
@@ -119,7 +376,50 @@
         "React Native",
         "API Design"
       ],
-      "currentProjects": []
+      "currentProjects": [],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 24,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 22,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 20,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 33,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 31,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 29,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 42,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 40,
+          "note": null
+        }
+      ],
+      "avatar": null
     },
     {
       "id": "eng-8",
@@ -137,7 +437,50 @@
       "currentProjects": [
         "proj-5",
         "proj-2"
-      ]
+      ],
+      "utilizationTimeline": [
+        {
+          "weekStart": "2026-06-15",
+          "utilization": 84,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-22",
+          "utilization": 82,
+          "note": null
+        },
+        {
+          "weekStart": "2026-06-29",
+          "utilization": 80,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-06",
+          "utilization": 93,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-13",
+          "utilization": 91,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-20",
+          "utilization": 89,
+          "note": null
+        },
+        {
+          "weekStart": "2026-07-27",
+          "utilization": 102,
+          "note": null
+        },
+        {
+          "weekStart": "2026-08-03",
+          "utilization": 100,
+          "note": null
+        }
+      ],
+      "avatar": null
     }
   ],
   "opportunities": [
@@ -328,7 +671,8 @@
           "dueDate": "2026-09-30",
           "completed": false
         }
-      ]
+      ],
+      "opportunityId": null
     },
     {
       "id": "proj-2",
@@ -347,7 +691,6 @@
         "eng-8"
       ],
       "description": "Customer analytics dashboard with real-time KPI tracking and drill-down capabilities.",
-      "opportunityId": "opp-2",
       "milestones": [
         {
           "id": "ms-5",
@@ -373,7 +716,8 @@
           "dueDate": "2026-10-15",
           "completed": false
         }
-      ]
+      ],
+      "opportunityId": "opp-2"
     },
     {
       "id": "proj-3",
@@ -410,7 +754,8 @@
           "dueDate": "2026-07-01",
           "completed": false
         }
-      ]
+      ],
+      "opportunityId": null
     },
     {
       "id": "proj-4",
@@ -428,7 +773,6 @@
         "eng-5"
       ],
       "description": "Minimum viable product for real-time shipment tracking across global logistics network.",
-      "opportunityId": "opp-5",
       "milestones": [
         {
           "id": "ms-12",
@@ -442,7 +786,8 @@
           "dueDate": "2026-08-15",
           "completed": false
         }
-      ]
+      ],
+      "opportunityId": "opp-5"
     },
     {
       "id": "proj-5",
@@ -460,7 +805,6 @@
         "eng-8"
       ],
       "description": "Middleware integration hub connecting SAP, Salesforce, and MES systems.",
-      "opportunityId": "opp-6",
       "milestones": [
         {
           "id": "ms-14",
@@ -486,7 +830,9 @@
           "dueDate": "2026-07-30",
           "completed": false
         }
-      ]
+      ],
+      "opportunityId": "opp-6"
     }
-  ]
+  ],
+  "lastUpdated": "2026-07-04T13:35:59.200884Z"
 }

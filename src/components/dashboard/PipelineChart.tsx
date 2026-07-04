@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import { OPPORTUNITY_STAGES } from "@/core/types";
 import type { Opportunity } from "@/core/types";
-import { formatCurrency } from "@/core/utils";
+import { formatCurrency, CHART_GRID, CHART_TICK, CHART_TOOLTIP_STYLE } from "@/core/utils";
 
 interface PipelineChartProps {
   opportunities: Opportunity[];
@@ -27,8 +27,8 @@ const STAGE_COLORS: Record<string, string> = {
   lost: "#EF4444",
 };
 
-const CHART_GRID = "#E4E4E7";
-const CHART_TICK = "#71717A";
+const CHART_GRID_COLOR = CHART_GRID;
+const CHART_TICK_COLOR = CHART_TICK;
 
 export function PipelineChart({ opportunities }: PipelineChartProps) {
   const data = OPPORTUNITY_STAGES.filter((s) => !["lost"].includes(s.id)).map(
@@ -52,25 +52,20 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} barSize={40}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID_COLOR} vertical={false} />
             <XAxis
               dataKey="stage"
-              tick={{ fontSize: 12, fill: CHART_TICK }}
+              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: CHART_TICK }}
+              tick={{ fontSize: 12, fill: CHART_TICK_COLOR }}
               axisLine={false}
               tickLine={false}
             />
             <Tooltip
-              contentStyle={{
-                borderRadius: "12px",
-                border: "1px solid #E4E4E7",
-                boxShadow: "0 8px 24px -4px rgb(0 0 0 / 0.08)",
-                fontSize: "13px",
-              }}
+              contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(value: number, name: string) => {
                 if (name === "value") return [formatCurrency(value), "Total Value"];
                 return [value, "Count"];

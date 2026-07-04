@@ -13,15 +13,15 @@ const severityStyles: Record<
   { container: string; icon: typeof AlertCircle }
 > = {
   critical: {
-    container: "border-red-200/80 bg-red-50/60",
+    container: "border-red-500/30 bg-red-500/10",
     icon: AlertCircle,
   },
   warning: {
-    container: "border-amber-200/80 bg-amber-50/60",
+    container: "border-amber-500/30 bg-amber-500/10",
     icon: AlertTriangle,
   },
   info: {
-    container: "border-blue-200/80 bg-blue-50/60",
+    container: "border-blue-500/30 bg-blue-500/10",
     icon: Info,
   },
 };
