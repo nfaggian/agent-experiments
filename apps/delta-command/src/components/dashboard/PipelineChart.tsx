@@ -19,12 +19,12 @@ interface PipelineChartProps {
 }
 
 const STAGE_COLORS: Record<string, string> = {
-  prospect: "#94a3b8",
-  qualified: "#60a5fa",
-  proposal: "#a78bfa",
-  negotiation: "#fbbf24",
-  won: "#34d399",
-  lost: "#f87171",
+  prospect: "#74777F",
+  qualified: "#005FB0",
+  proposal: "#6B5778",
+  negotiation: "#535F70",
+  won: "#005FB0",
+  lost: "#BA1A1A",
 };
 
 export function PipelineChart({ opportunities }: PipelineChartProps) {
@@ -43,7 +43,7 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
   return (
     <div className="card p-6">
       <h3 className="section-title mb-1">Pipeline by Stage</h3>
-      <p className="mb-6 text-sm text-slate-500">
+      <p className="mb-6 body-md text-surface-on-variant">
         Opportunity count and value across the sales funnel
       </p>
       <div className="h-64">

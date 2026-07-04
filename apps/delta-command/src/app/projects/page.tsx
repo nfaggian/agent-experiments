@@ -38,27 +38,27 @@ export default async function ProjectsPage() {
       <div className="space-y-8 p-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card p-4">
-            <p className="text-xs font-medium text-slate-500">Total Projects</p>
-            <p className="text-2xl font-bold text-slate-900">{projects.length}</p>
+            <p className="metric-label">Total Projects</p>
+            <p className="metric-value text-[1.75rem]">{projects.length}</p>
           </div>
           <div className="card p-4">
-            <p className="text-xs font-medium text-slate-500">In Delivery</p>
-            <p className="text-2xl font-bold text-emerald-600">
+            <p className="metric-label">In Delivery</p>
+            <p className="metric-value text-[1.75rem] text-primary">
               {activeProjects.length + atRiskProjects.length}
             </p>
           </div>
           <div className="card p-4">
-            <p className="text-xs font-medium text-slate-500">Total Budget</p>
-            <p className="text-2xl font-bold text-slate-900">
+            <p className="metric-label">Total Budget</p>
+            <p className="metric-value text-[1.75rem]">
               {formatCurrency(totalBudget)}
             </p>
           </div>
           <div className="card p-4">
-            <p className="text-xs font-medium text-slate-500">Spent to Date</p>
-            <p className="text-2xl font-bold text-brand-600">
+            <p className="metric-label">Spent to Date</p>
+            <p className="metric-value text-[1.75rem] text-primary">
               {formatCurrency(totalSpent)}
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="label-md text-surface-on-variant/70">
               {Math.round((totalSpent / totalBudget) * 100)}% of total budget
             </p>
           </div>
@@ -71,14 +71,14 @@ export default async function ProjectsPage() {
             return (
               <div
                 key={status.id}
-                className="flex items-center gap-2 rounded-lg border border-surface-border bg-white px-4 py-2"
+                className="flex items-center gap-2 rounded-full border border-outline-variant/50 bg-surface-bright px-4 py-2 shadow-elevation-1"
               >
                 <span className={cn("h-2.5 w-2.5 rounded-full", status.color)} />
-                <Icon className="h-4 w-4 text-slate-400" />
-                <span className="text-sm font-medium text-slate-700">
+                <Icon className="h-4 w-4 text-surface-on-variant" />
+                <span className="title-sm text-surface-on">
                   {status.label}
                 </span>
-                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
+                <span className="rounded-full bg-secondary-container px-2 py-0.5 label-md text-secondary-on-container">
                   {count}
                 </span>
               </div>
@@ -88,7 +88,7 @@ export default async function ProjectsPage() {
 
         {atRiskProjects.length > 0 && (
           <div>
-            <h3 className="section-title mb-4 flex items-center gap-2 text-red-700">
+            <h3 className="section-title mb-4 flex items-center gap-2 text-error">
               <AlertTriangle className="h-5 w-5" />
               At Risk
             </h3>

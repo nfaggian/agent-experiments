@@ -22,12 +22,12 @@ export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
   const completedMilestones = project.milestones.filter((m) => m.completed).length;
 
   return (
-    <div className="card overflow-hidden transition-shadow hover:shadow-elevated">
-      <div className="border-b border-surface-border px-6 py-4">
+    <div className="card overflow-hidden">
+      <div className="border-b border-outline-variant/50 px-6 py-4">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-semibold text-slate-900">{project.name}</h3>
-            <p className="text-sm text-slate-500">{project.client}</p>
+            <h3 className="title-sm text-surface-on">{project.name}</h3>
+            <p className="body-md text-surface-on-variant">{project.client}</p>
           </div>
           <span className={cn("badge capitalize", getStatusBadgeColor(project.status))}>
             {statusConfig?.label ?? project.status}
@@ -36,18 +36,18 @@ export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
       </div>
 
       <div className="px-6 py-4">
-        <p className="mb-4 text-sm text-slate-600">{project.description}</p>
+        <p className="mb-4 body-md text-surface-on-variant">{project.description}</p>
 
         <div className="mb-4">
-          <div className="mb-1.5 flex items-center justify-between text-sm">
-            <span className="text-slate-500">Progress</span>
-            <span className="font-semibold text-slate-900">{project.progress}%</span>
+          <div className="mb-1.5 flex items-center justify-between body-md">
+            <span className="text-surface-on-variant">Progress</span>
+            <span className="title-sm text-surface-on">{project.progress}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+          <div className="progress-track h-2">
             <div
               className={cn(
                 "h-full rounded-full transition-all",
-                project.status === "at_risk" ? "bg-red-500" : "bg-brand-500"
+                project.status === "at_risk" ? "bg-error" : "bg-primary"
               )}
               style={{ width: `${project.progress}%` }}
             />
@@ -56,72 +56,72 @@ export function ProjectCard({ project, engineerNames = {} }: ProjectCardProps) {
 
         <div className="mb-4 grid grid-cols-2 gap-4">
           <div>
-            <p className="text-xs font-medium text-slate-500">Budget</p>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className="label-md text-surface-on-variant">Budget</p>
+            <p className="title-sm text-surface-on">
               {formatCurrency(project.spent)} / {formatCurrency(project.budget)}
             </p>
             <p
               className={cn(
-                "text-xs",
-                budgetUsed > 90 ? "text-red-500" : "text-slate-400"
+                "label-md",
+                budgetUsed > 90 ? "text-error" : "text-surface-on-variant/70"
               )}
             >
               {budgetUsed}% utilized
             </p>
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500">Timeline</p>
-            <div className="flex items-center gap-1 text-sm font-semibold text-slate-900">
-              <Calendar className="h-3.5 w-3.5 text-slate-400" />
+            <p className="label-md text-surface-on-variant">Timeline</p>
+            <div className="flex items-center gap-1 title-sm text-surface-on">
+              <Calendar className="h-3.5 w-3.5 text-surface-on-variant" />
               {daysLeft > 0 ? `${daysLeft}d remaining` : "Past due"}
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="label-md text-surface-on-variant/70">
               Due {formatDate(project.endDate)}
             </p>
           </div>
         </div>
 
         <div className="mb-4 flex items-center gap-2">
-          <Users className="h-4 w-4 text-slate-400" />
-          <span className="text-xs text-slate-500">Lead:</span>
-          <span className="text-xs font-medium text-slate-700">
+          <Users className="h-4 w-4 text-surface-on-variant" />
+          <span className="label-md text-surface-on-variant">Lead:</span>
+          <span className="label-md font-medium text-surface-on">
             {project.leadEngineer}
           </span>
-          <span className="text-xs text-slate-300">|</span>
-          <span className="text-xs text-slate-500">
+          <span className="label-md text-outline-variant">|</span>
+          <span className="label-md text-surface-on-variant">
             {teamNames.length} team members
           </span>
         </div>
 
         {project.status === "at_risk" && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+          <div className="banner-error mb-4 py-3">
             <AlertTriangle className="h-4 w-4 shrink-0" />
-            Project flagged as at-risk — review milestones and budget
+            <span className="body-md">Project flagged as at-risk — review milestones and budget</span>
           </div>
         )}
 
-        <div className="border-t border-surface-border pt-4">
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-xs font-medium text-slate-500">
-              Milestones ({completedMilestones}/{project.milestones.length})
-            </p>
-          </div>
+        <div className="border-t border-outline-variant/50 pt-4">
+          <p className="mb-2 label-md text-surface-on-variant">
+            Milestones ({completedMilestones}/{project.milestones.length})
+          </p>
           <ul className="space-y-2">
             {project.milestones.map((milestone) => (
-              <li key={milestone.id} className="flex items-center gap-2 text-xs">
+              <li key={milestone.id} className="flex items-center gap-2 label-md">
                 {milestone.completed ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" />
                 ) : (
-                  <Circle className="h-3.5 w-3.5 shrink-0 text-slate-300" />
+                  <Circle className="h-3.5 w-3.5 shrink-0 text-outline-variant" />
                 )}
                 <span
                   className={cn(
-                    milestone.completed ? "text-slate-400 line-through" : "text-slate-700"
+                    milestone.completed
+                      ? "text-surface-on-variant/60 line-through"
+                      : "text-surface-on"
                   )}
                 >
                   {milestone.title}
                 </span>
-                <span className="ml-auto text-slate-400">
+                <span className="ml-auto text-surface-on-variant/70">
                   {formatDate(milestone.dueDate)}
                 </span>
               </li>
