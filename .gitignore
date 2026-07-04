@@ -63,6 +63,17 @@ venv.bak/
 
 # VSCode
 .vscode/
+
+# Xcode
+ios/**/xcuserdata/
+ios/**/DerivedData/
+ios/**/*.xcworkspace/xcuserdata/
+ios/**/*.xcodeproj/project.xcworkspace/xcuserdata/
+ios/**/*.xcodeproj/xcuserdata/
+ios/**/build/
+*.ipa
+*.dSYM.zip
+*.dSYM
 ml_agent/__pycache__/__init__.cpython-313.pyc
 uv.lock
 ml_agent/__pycache__/__init__.cpython-313.pyc
