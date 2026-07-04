@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Target,
-  Users,
-  FolderKanban,
-  Zap,
-} from "lucide-react";
+import { LayoutDashboard, Target, Users, FolderKanban, Zap } from "lucide-react";
 import { cn } from "@/core/utils";
 
 const navigation = [
@@ -24,13 +18,10 @@ export function Sidebar() {
   return (
     <aside className="nav-drawer">
       <div className="flex h-[4.25rem] items-center gap-3 border-b border-sidebar-border px-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent shadow-glow">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent shadow-glow">
           <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
         </div>
-        <div>
-          <h1 className="text-sm font-semibold tracking-tight text-white">Delta Command</h1>
-          <p className="text-[11px] text-sidebar-muted">Engineering Hub</p>
-        </div>
+        <h1 className="text-sm font-semibold tracking-tight text-white">Delta Command</h1>
       </div>
 
       <nav className="flex-1 space-y-0.5 px-3 py-4">
@@ -54,18 +45,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="border-t border-sidebar-border p-4">
-        <div className="rounded-xl border border-sidebar-border bg-white/[0.03] p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-sidebar-muted">
-            Q3 Review
-          </p>
-          <p className="mt-1.5 text-sm font-medium text-white">Leadership sync</p>
-          <p className="mt-1 text-xs leading-relaxed text-sidebar-muted">
-            Pipeline, delivery & capacity
-          </p>
-        </div>
-      </div>
     </aside>
   );
 }
