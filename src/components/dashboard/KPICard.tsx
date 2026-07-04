@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 interface KPICardProps {
   label: string;
   value: string;
+  context?: string;
   change?: number;
   changeLabel?: string;
   icon: LucideIcon;
@@ -14,6 +15,7 @@ interface KPICardProps {
 export function KPICard({
   label,
   value,
+  context,
   change,
   changeLabel,
   icon: Icon,
@@ -37,6 +39,9 @@ export function KPICard({
         <div className="space-y-1">
           <p className="metric-label">{label}</p>
           <p className="metric-value">{value}</p>
+          {context && (
+            <p className="label-md text-surface-on-variant/80">{context}</p>
+          )}
           {change !== undefined && TrendIcon && (
             <div className={cn("flex items-center gap-1 label-md", trendColor)}>
               <TrendIcon className="h-4 w-4" />
