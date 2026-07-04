@@ -20,36 +20,23 @@ export interface MilestoneItem {
   overdue: boolean;
 }
 
+/** Only the fields actually rendered on the dashboard live here. */
 export interface PipelineInsight {
-  inProposal: number;
-  proposalValue: number;
-  lateStage: number;
-  lateStageValue: number;
   closingWithin30Days: number;
   closingValue30Days: number;
-  inNegotiation: number;
-  negotiationValue: number;
-  avgDealSize: number;
-  avgProbability: number;
 }
 
 export interface DeliveryInsight {
   totalBudget: number;
   totalSpent: number;
   burnPercent: number;
-  activeCount: number;
   planningCount: number;
   atRiskCount: number;
-  milestonesDue14Days: number;
-  overdueMilestones: number;
-  projectsEnding30Days: number;
 }
 
 export interface TeamInsight {
   overallocated: Engineer[];
-  available: Engineer[];
   benchCapacityPercent: number;
-  unassigned: Engineer[];
 }
 
 export interface DashboardInsights {
@@ -60,7 +47,7 @@ export interface DashboardInsights {
   team: TeamInsight;
 }
 
-function isActiveOpportunity(o: Opportunity): boolean {
+function isActive(o: Opportunity): boolean {
   return !["won", "lost"].includes(o.stage);
 }
 
@@ -69,12 +56,7 @@ export function buildDashboardInsights(
   opportunities: Opportunity[],
   projects: Project[]
 ): DashboardInsights {
-  const activeOpps = opportunities.filter(isActiveOpportunity);
-  const inProposal = activeOpps.filter((o) => o.stage === "proposal");
-  const inNegotiation = activeOpps.filter((o) => o.stage === "negotiation");
-  const lateStage = activeOpps.filter((o) =>
-    ["proposal", "negotiation"].includes(o.stage)
-  );
+  const activeOpps = opportunities.filter(isActive);
   const closingSoon = activeOpps.filter((o) => {
     const days = daysUntil(o.expectedClose);
     return days >= 0 && days <= 30;
@@ -101,27 +83,21 @@ export function buildDashboardInsights(
         };
       })
   );
-
   const sortedMilestones = [...allMilestones].sort(
     (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
   );
-
-  const overdueMilestones = sortedMilestones.filter((m) => m.overdue);
-  const milestonesDue14 = sortedMilestones.filter(
-    (m) => !m.overdue && m.daysUntil <= 14
-  );
+  const overdue = sortedMilestones.filter((m) => m.overdue);
+  const dueIn14 = sortedMilestones.filter((m) => !m.overdue && m.daysUntil <= 14);
 
   const overallocated = engineers.filter((e) => e.status === "overallocated");
-  const available = engineers.filter((e) => e.utilization < 70);
   const unassigned = engineers.filter((e) => e.currentProjects.length === 0);
 
-  const benchCapacity = engineers.reduce(
-    (sum, e) => sum + Math.max(0, 100 - e.utilization),
-    0
-  );
   const benchCapacityPercent =
     engineers.length > 0
-      ? Math.round(benchCapacity / engineers.length)
+      ? Math.round(
+          engineers.reduce((sum, e) => sum + Math.max(0, 100 - e.utilization), 0) /
+            engineers.length
+        )
       : 0;
 
   const actions: ActionItem[] = [];
@@ -146,7 +122,7 @@ export function buildDashboardInsights(
     });
   }
 
-  for (const m of overdueMilestones) {
+  for (const m of overdue) {
     actions.push({
       id: `ms-over-${m.id}`,
       severity: "critical",
@@ -168,7 +144,7 @@ export function buildDashboardInsights(
     });
   }
 
-  for (const m of milestonesDue14) {
+  for (const m of dueIn14) {
     actions.push({
       id: `ms-soon-${m.id}`,
       severity: "warning",
@@ -178,9 +154,7 @@ export function buildDashboardInsights(
     });
   }
 
-  for (const project of activeProjects.filter(
-    (p) => p.spent / p.budget >= 0.9
-  )) {
+  for (const project of activeProjects.filter((p) => p.spent / p.budget >= 0.9)) {
     actions.push({
       id: `budget-${project.id}`,
       severity: "warning",
@@ -200,59 +174,23 @@ export function buildDashboardInsights(
     });
   }
 
-  const severityOrder: Record<ActionSeverity, number> = {
-    critical: 0,
-    warning: 1,
-    info: 2,
-  };
+  const severityOrder: Record<ActionSeverity, number> = { critical: 0, warning: 1, info: 2 };
   actions.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 
   return {
     actions,
     milestones: sortedMilestones.slice(0, 8),
     pipeline: {
-      inProposal: inProposal.length,
-      proposalValue: inProposal.reduce((s, o) => s + o.value, 0),
-      lateStage: lateStage.length,
-      lateStageValue: lateStage.reduce((s, o) => s + o.value, 0),
       closingWithin30Days: closingSoon.length,
       closingValue30Days: closingSoon.reduce((s, o) => s + o.value, 0),
-      inNegotiation: inNegotiation.length,
-      negotiationValue: inNegotiation.reduce((s, o) => s + o.value, 0),
-      avgDealSize:
-        activeOpps.length > 0
-          ? Math.round(
-              activeOpps.reduce((s, o) => s + o.value, 0) / activeOpps.length
-            )
-          : 0,
-      avgProbability:
-        activeOpps.length > 0
-          ? Math.round(
-              activeOpps.reduce((s, o) => s + o.probability, 0) /
-                activeOpps.length
-            )
-          : 0,
     },
     delivery: {
       totalBudget,
       totalSpent,
-      burnPercent:
-        totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0,
-      activeCount: projects.filter((p) => p.status === "active").length,
+      burnPercent: totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0,
       planningCount: projects.filter((p) => p.status === "planning").length,
       atRiskCount: projects.filter((p) => p.status === "at_risk").length,
-      milestonesDue14Days: milestonesDue14.length,
-      overdueMilestones: overdueMilestones.length,
-      projectsEnding30Days: projects.filter((p) => {
-        const d = daysUntil(p.endDate);
-        return d >= 0 && d <= 30 && p.status !== "completed";
-      }).length,
     },
-    team: {
-      overallocated,
-      available,
-      benchCapacityPercent,
-      unassigned,
-    },
+    team: { overallocated, benchCapacityPercent },
   };
 }
