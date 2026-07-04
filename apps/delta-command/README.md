@@ -46,6 +46,28 @@ The whole app is small on purpose:
 | `DELTA_API_URL` | `http://127.0.0.1:8000` | Backend URL (used by Next.js server-side and rewrites). |
 | `DELTA_DATA_PATH` | `backend/config/data.json` | JSON database file. |
 | `DELTA_HOST` / `DELTA_PORT` | `127.0.0.1` / `8000` | Backend bind address. |
+| `LLM_API_KEY` | *(unset)* | Enables the **AI Executive Briefing** on the dashboard. |
+| `LLM_BASE_URL` | `https://api.openai.com/v1` | Any OpenAI-compatible endpoint (Groq, Ollama, etc.). |
+| `LLM_MODEL` | `gpt-4o-mini` | Model name. |
+
+### AI briefing
+
+With `LLM_API_KEY` set, a **Generate** button on the dashboard produces a 2–3 paragraph leadership summary of the live pipeline, capacity, and delivery risks. Works with any OpenAI-compatible provider:
+
+```bash
+# OpenAI
+export LLM_API_KEY=sk-...
+
+# Groq
+export LLM_API_KEY=gsk_...
+export LLM_BASE_URL=https://api.groq.com/openai/v1
+export LLM_MODEL=llama-3.1-70b-versatile
+
+# Local Ollama
+export LLM_API_KEY=ollama
+export LLM_BASE_URL=http://localhost:11434/v1
+export LLM_MODEL=llama3.2
+```
 
 ## Production
 
