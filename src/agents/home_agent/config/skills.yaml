@@ -1,0 +1,12 @@
+# Skills define which tool modules the home agent can use.
+# Add new skills by creating a module under skills/ and listing it here.
+skills:
+  - name: home_assistant
+    enabled: true
+    description: Control lights, switches, climate, and scenes via Home Assistant
+    module: home_assistant
+
+  - name: routines
+    enabled: true
+    description: Run predefined home routines (goodnight, away, movie mode)
+    module: routines

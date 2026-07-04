@@ -1,0 +1,38 @@
+# Guardrails enforce safety policies before the model or tools run.
+guardrails:
+  blocked_topics:
+    - unlock all doors
+    - disable security
+    - delete all
+    - factory reset
+
+  blocked_tools:
+    - shell_execute
+    - run_command
+
+  # Tools that always require explicit confirmation in the response.
+  confirm_tools:
+    - call_service
+    - run_routine
+
+  # Home Assistant domains the agent may control.
+  allowed_domains:
+    - light
+    - switch
+    - climate
+    - scene
+    - script
+    - automation
+
+  # Entity IDs or patterns that must never be changed.
+  blocked_entities:
+    - alarm_control_panel.*
+    - lock.front_door
+
+  temperature:
+    min_celsius: 16
+    max_celsius: 30
+
+  response_on_block: >-
+    I can't help with that request because it conflicts with your home safety
+    rules. I can help with lights, climate, scenes, and approved routines.
