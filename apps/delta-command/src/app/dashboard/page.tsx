@@ -20,7 +20,7 @@ import {
   Target,
   FolderKanban,
   Users,
-  Trophy,
+  Layers,
   Flame,
   CalendarClock,
 } from "lucide-react";
@@ -70,10 +70,10 @@ export default async function DashboardPage() {
             iconColor="bg-primary-container text-primary-on-container"
           />
           <KPICard
-            label="Win Rate"
-            value={`${pipeline.winRate}%`}
-            context={`${pipeline.wonCount} won · ${pipeline.lostCount} lost · ${formatCurrency(pipeline.wonValue)} booked`}
-            icon={Trophy}
+            label="Late-Stage Pipeline"
+            value={String(pipeline.lateStage)}
+            context={`${formatCurrency(pipeline.lateStageValue)} in proposal & negotiation`}
+            icon={Layers}
             iconColor="bg-secondary-container text-secondary-on-container"
           />
           <KPICard

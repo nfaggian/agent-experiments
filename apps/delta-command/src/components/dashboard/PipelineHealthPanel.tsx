@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { MilestoneItem } from "@/core/dashboard-analytics";
 import type { PipelineInsight } from "@/core/dashboard-analytics";
 import { formatCurrency, formatShortDate, cn } from "@/core/utils";
-import { Handshake, Percent, CalendarClock, BarChart3 } from "lucide-react";
+import { Handshake, FileText, CalendarClock, BarChart3 } from "lucide-react";
 
 interface PipelineHealthPanelProps {
   pipeline: PipelineInsight;
@@ -11,10 +11,10 @@ interface PipelineHealthPanelProps {
 export function PipelineHealthPanel({ pipeline }: PipelineHealthPanelProps) {
   const stats = [
     {
-      icon: Percent,
-      label: "Win rate",
-      value: `${pipeline.winRate}%`,
-      detail: `${pipeline.wonCount} won · ${pipeline.lostCount} lost`,
+      icon: FileText,
+      label: "In proposal",
+      value: String(pipeline.inProposal),
+      detail: formatCurrency(pipeline.proposalValue),
     },
     {
       icon: Handshake,
@@ -59,12 +59,6 @@ export function PipelineHealthPanel({ pipeline }: PipelineHealthPanelProps) {
           </div>
         ))}
       </div>
-      {pipeline.wonValue > 0 && (
-        <p className="mt-4 body-md text-surface-on-variant">
-          Won revenue to date:{" "}
-          <span className="title-sm text-primary">{formatCurrency(pipeline.wonValue)}</span>
-        </p>
-      )}
     </div>
   );
 }

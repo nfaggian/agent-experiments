@@ -21,10 +21,10 @@ export interface MilestoneItem {
 }
 
 export interface PipelineInsight {
-  winRate: number;
-  wonCount: number;
-  lostCount: number;
-  wonValue: number;
+  inProposal: number;
+  proposalValue: number;
+  lateStage: number;
+  lateStageValue: number;
   closingWithin30Days: number;
   closingValue30Days: number;
   inNegotiation: number;
@@ -70,16 +70,15 @@ export function buildDashboardInsights(
   projects: Project[]
 ): DashboardInsights {
   const activeOpps = opportunities.filter(isActiveOpportunity);
-  const won = opportunities.filter((o) => o.stage === "won");
-  const lost = opportunities.filter((o) => o.stage === "lost");
-  const closed = won.length + lost.length;
-
+  const inProposal = activeOpps.filter((o) => o.stage === "proposal");
+  const inNegotiation = activeOpps.filter((o) => o.stage === "negotiation");
+  const lateStage = activeOpps.filter((o) =>
+    ["proposal", "negotiation"].includes(o.stage)
+  );
   const closingSoon = activeOpps.filter((o) => {
     const days = daysUntil(o.expectedClose);
     return days >= 0 && days <= 30;
   });
-
-  const inNegotiation = activeOpps.filter((o) => o.stage === "negotiation");
 
   const activeProjects = projects.filter(
     (p) => p.status === "active" || p.status === "at_risk"
@@ -210,10 +209,10 @@ export function buildDashboardInsights(
     actions,
     milestones: sortedMilestones.slice(0, 8),
     pipeline: {
-      winRate: closed > 0 ? Math.round((won.length / closed) * 100) : 0,
-      wonCount: won.length,
-      lostCount: lost.length,
-      wonValue: won.reduce((s, o) => s + o.value, 0),
+      inProposal: inProposal.length,
+      proposalValue: inProposal.reduce((s, o) => s + o.value, 0),
+      lateStage: lateStage.length,
+      lateStageValue: lateStage.reduce((s, o) => s + o.value, 0),
       closingWithin30Days: closingSoon.length,
       closingValue30Days: closingSoon.reduce((s, o) => s + o.value, 0),
       inNegotiation: inNegotiation.length,
