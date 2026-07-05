@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Target, Users, FolderKanban, Zap } from "lucide-react";
+import {
+  FolderKanban,
+  LayoutDashboard,
+  MessageSquareText,
+  Target,
+  Users,
+  Zap,
+} from "lucide-react";
 import { cn } from "@/core/utils";
 
 const navigation = [
+  { name: "Chat", href: "/chat", icon: MessageSquareText, isPrimary: true },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Opportunities", href: "/opportunities", icon: Target },
   { name: "Team", href: "/team", icon: Users },
@@ -25,23 +33,37 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-0.5 px-2 py-3">
-        {navigation.map((item) => {
+        {navigation.map((item, index) => {
           const isActive = pathname.startsWith(item.href);
+          const isChat = item.isPrimary;
           return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn("nav-item", isActive && "nav-item-active")}
-            >
-              <item.icon
-                className={cn(
-                  "h-4 w-4 shrink-0",
-                  isActive ? "text-surface-on" : "text-sidebar-muted"
+            <div key={item.name}>
+              <Link
+                href={item.href}
+                className={cn("nav-item", isActive && "nav-item-active")}
+              >
+                <item.icon
+                  className={cn(
+                    "h-4 w-4 shrink-0",
+                    isChat
+                      ? "text-accent"
+                      : isActive
+                        ? "text-surface-on"
+                        : "text-sidebar-muted"
+                  )}
+                  strokeWidth={isActive ? 2.25 : 1.75}
+                />
+                {item.name}
+                {isChat && (
+                  <span className="ml-auto rounded bg-accent-muted px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-accent-foreground">
+                    AI
+                  </span>
                 )}
-                strokeWidth={isActive ? 2.25 : 1.75}
-              />
-              {item.name}
-            </Link>
+              </Link>
+              {isChat && index === 0 && (
+                <div className="my-2 border-b border-sidebar-border/60" />
+              )}
+            </div>
           );
         })}
       </nav>

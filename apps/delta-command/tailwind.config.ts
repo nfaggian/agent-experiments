@@ -101,6 +101,25 @@ const config: Config = {
       backgroundSize: {
         grid: "24px 24px",
       },
+      keyframes: {
+        "typing-dot": {
+          "0%, 60%, 100%": { opacity: "0.35", transform: "translateY(0)" },
+          "30%": { opacity: "1", transform: "translateY(-2px)" },
+        },
+        "caret-blink": {
+          "0%, 50%": { opacity: "1" },
+          "50.01%, 100%": { opacity: "0" },
+        },
+        "message-in": {
+          "0%": { opacity: "0", transform: "translateY(4px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "typing-dot": "typing-dot 1.2s ease-in-out infinite",
+        "caret-blink": "caret-blink 1s steps(1) infinite",
+        "message-in": "message-in 200ms cubic-bezier(0.16, 1, 0.3, 1)",
+      },
     },
   },
   plugins: [],

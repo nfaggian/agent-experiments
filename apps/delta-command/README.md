@@ -46,13 +46,13 @@ The whole app is small on purpose:
 | `DELTA_API_URL` | `http://127.0.0.1:8000` | Backend URL (used by Next.js server-side and rewrites). |
 | `DELTA_DATA_PATH` | `backend/config/data.json` | JSON database file. |
 | `DELTA_HOST` / `DELTA_PORT` | `127.0.0.1` / `8000` | Backend bind address. |
-| `LLM_API_KEY` | *(unset)* | Enables the **AI Executive Briefing** on the dashboard. |
+| `LLM_API_KEY` | *(unset)* | Enables the **Delta chat** surface and executive briefing. |
 | `LLM_BASE_URL` | `https://api.openai.com/v1` | Any OpenAI-compatible endpoint (Groq, Ollama, etc.). |
 | `LLM_MODEL` | `gpt-4o-mini` | Model name. |
 
-### AI briefing
+### Delta chat
 
-With `LLM_API_KEY` set, a **Generate** button on the dashboard produces a 2–3 paragraph leadership summary of the live pipeline, capacity, and delivery risks. Works with any OpenAI-compatible provider:
+With `LLM_API_KEY` set, `/chat` becomes a full conversational surface: composer, message thread, starter prompts, streaming reveal. Every turn sends the current pipeline, team-capacity, and delivery state as the system prompt, so answers stay grounded. The dashboard "Ask Delta" callout deep-links into `/chat?prompt=<id>` and auto-submits the first turn. Works with any OpenAI-compatible provider:
 
 ```bash
 # OpenAI

@@ -86,3 +86,69 @@ def test_briefing_returns_502_when_provider_errors(
     response = client.post("/api/briefing")
     assert response.status_code == 502
     assert "500" in response.json()["detail"]
+
+
+def test_chat_returns_400_when_messages_empty(client: TestClient) -> None:
+    response = client.post("/api/chat", json={"messages": []})
+    assert response.status_code == 400
+
+
+def test_chat_returns_503_when_llm_not_configured(client: TestClient) -> None:
+    response = client.post(
+        "/api/chat",
+        json={"messages": [{"role": "user", "content": "Who is overallocated?"}]},
+    )
+    assert response.status_code == 503
+
+
+def test_chat_returns_reply_and_forwards_full_history(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LLM_API_KEY", "test-key")
+    monkeypatch.setenv("LLM_BASE_URL", "https://example.test/v1")
+    monkeypatch.setenv("LLM_MODEL", "test-model")
+
+    captured: dict[str, Any] = {}
+    real_async_client = httpx.AsyncClient
+
+    def fake_handler(request: httpx.Request) -> httpx.Response:
+        import json
+
+        captured["payload"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {
+                        "message": {
+                            "content": "Marcus, Lisa, Ryan, Sophie, and Maya are overallocated."
+                        }
+                    }
+                ]
+            },
+        )
+
+    monkeypatch.setattr(
+        "delta_command.briefing.httpx.AsyncClient",
+        lambda *a, **k: real_async_client(transport=httpx.MockTransport(fake_handler)),
+    )
+
+    response = client.post(
+        "/api/chat",
+        json={
+            "messages": [
+                {"role": "user", "content": "Who is overallocated?"},
+            ]
+        },
+    )
+    assert response.status_code == 200
+    assert "Marcus" in response.json()["reply"]
+
+    payload = captured["payload"]
+    assert payload["model"] == "test-model"
+    assert payload["messages"][0]["role"] == "system"
+    assert "Current state:" in payload["messages"][0]["content"]
+    assert payload["messages"][1] == {
+        "role": "user",
+        "content": "Who is overallocated?",
+    }
