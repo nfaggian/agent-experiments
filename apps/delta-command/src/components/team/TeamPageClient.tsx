@@ -37,7 +37,7 @@ export function TeamPageClient({ engineers: initial }: TeamPageClientProps) {
         meta={`${engineers.length} engineers · click any week cell to edit`}
       />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-6 md:p-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard icon={Users} label="Team Members" value={engineers.length} tone="accent" />
           <StatCard icon={Clock} label="Avg This Week" value={`${avgUtil}%`} tone="blue" />
@@ -57,9 +57,9 @@ export function TeamPageClient({ engineers: initial }: TeamPageClientProps) {
 
         {overallocated.length > 0 && (
           <div className="banner-warning">
-            <AlertTriangle className="h-5 w-5 shrink-0" />
-            <p className="body-md">
-              <span className="title-sm">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <p className="text-sm text-amber-100">
+              <span className="font-medium text-amber-50">
                 {formatNameList(overallocated.map((e) => e.name.split(" ")[0]))}
               </span>{" "}
               {overallocated.length === 1 ? "is" : "are"} overallocated this week.
@@ -109,8 +109,8 @@ function StatCard({
           <Icon className="h-4 w-4" />
         </div>
         <div>
-          <p className="metric-value text-[1.75rem]">{value}</p>
-          <p className="metric-label">{label}</p>
+          <p className="metric-sm">{value}</p>
+          <p className="label">{label}</p>
         </div>
       </div>
     </div>

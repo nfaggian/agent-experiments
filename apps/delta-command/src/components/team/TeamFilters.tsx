@@ -26,13 +26,13 @@ export function TeamFilters({ filters, onChange, resultCount, totalCount }: Team
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div className="relative min-w-[220px] flex-1">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-surface-on-variant/60" />
+        <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-surface-on-variant/60" />
         <input
           type="search"
-          placeholder="Search engineers..."
+          placeholder="Search engineers…"
           value={filters.search}
           onChange={(e) => onChange({ ...filters, search: e.target.value })}
-          className="text-field-outlined h-10 w-full pl-9 text-sm"
+          className="text-field w-full pl-8"
         />
       </div>
       <select
@@ -40,7 +40,7 @@ export function TeamFilters({ filters, onChange, resultCount, totalCount }: Team
         onChange={(e) =>
           onChange({ ...filters, status: e.target.value as TeamFilterState["status"] })
         }
-        className="text-field-outlined h-10 min-w-[160px] px-3 text-sm"
+        className="text-field min-w-[160px]"
       >
         {STATUS_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>
@@ -48,7 +48,7 @@ export function TeamFilters({ filters, onChange, resultCount, totalCount }: Team
           </option>
         ))}
       </select>
-      <span className="label-md text-surface-on-variant">
+      <span className="label">
         {resultCount} of {totalCount} engineers
       </span>
     </div>

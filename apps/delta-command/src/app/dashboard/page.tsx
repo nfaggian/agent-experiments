@@ -42,35 +42,31 @@ export default async function DashboardPage() {
     <div>
       <Header title="Executive Dashboard" />
 
-      <div className="space-y-8 p-8">
+      <div className="space-y-6 p-6 md:p-8">
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <KPICard
             label="Weighted Pipeline"
             value={formatCurrency(pipelineValue)}
             context={`${formatCurrency(totalPipeline)} unweighted · ${pipeline.closingWithin30Days} closing in 30d`}
             icon={DollarSign}
-            accent="blue"
           />
           <KPICard
             label="Active Delivery"
             value={String(activeProjects.length)}
             context={`${delivery.planningCount} in planning · ${delivery.atRiskCount} at risk`}
             icon={FolderKanban}
-            accent="emerald"
           />
           <KPICard
             label="Budget Burn"
             value={`${delivery.burnPercent}%`}
             context={`${formatCurrency(delivery.totalSpent)} of ${formatCurrency(delivery.totalBudget)}`}
             icon={Flame}
-            accent="amber"
           />
           <KPICard
             label="Team Utilization"
             value={`${avgUtilization}%`}
             context={`${team.overallocated.length} overallocated · ${team.benchCapacityPercent}% bench`}
             icon={Users}
-            accent="blue"
           />
         </div>
 
@@ -93,13 +89,13 @@ export default async function DashboardPage() {
 
         {atRiskProjects.length > 0 && (
           <section>
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="section-title">Projects Needing Attention</h3>
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="title-lg">Projects Needing Attention</h3>
               <Link href="/projects" className="link-subtle">
                 All projects
               </Link>
             </div>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className={atRiskProjects.length === 1 ? "grid gap-6" : "grid gap-6 md:grid-cols-2"}>
               {atRiskProjects.map((project) => (
                 <ProjectCard
                   key={project.id}
@@ -136,32 +132,29 @@ function UpcomingClosesPanel({
     <div className="card p-6">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="section-title">Upcoming Closes</h3>
-          <p className="body-md text-surface-on-variant">
-            {formatCurrency(closingValue)} in next 30 days
-          </p>
+          <h3 className="title-lg">Upcoming Closes</h3>
+          <p className="body">{formatCurrency(closingValue)} in next 30 days</p>
         </div>
         <Link href="/opportunities" className="link-subtle">
           View all
         </Link>
       </div>
-      <ul className="space-y-4">
+      <ul className="divide-y divide-outline-variant/40">
         {closes.map((opp) => (
-          <li
-            key={opp.id}
-            className="flex items-start justify-between gap-3 border-b border-outline-variant/40 pb-4 last:border-0 last:pb-0"
-          >
+          <li key={opp.id} className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0">
             <div className="min-w-0">
-              <p className="truncate title-sm text-surface-on">{opp.title}</p>
-              <p className="label-md text-surface-on-variant">{opp.client}</p>
-              <div className="mt-1 flex items-center gap-2">
+              <p className="truncate title-sm">{opp.title}</p>
+              <p className="mt-0.5 text-xs text-surface-on-variant">{opp.client}</p>
+              <div className="mt-1.5 flex items-center gap-2">
                 <span className="chip capitalize">{opp.stage}</span>
-                <span className="label-md text-surface-on-variant/70">{opp.probability}%</span>
+                <span className="text-[11px] tabular text-surface-on-variant/70">
+                  {opp.probability}% probability
+                </span>
               </div>
             </div>
             <div className="shrink-0 text-right">
-              <p className="title-sm text-surface-on">{formatCurrency(opp.value)}</p>
-              <p className="flex items-center justify-end gap-1 label-md text-surface-on-variant/70">
+              <p className="title-sm tabular">{formatCurrency(opp.value)}</p>
+              <p className="mt-0.5 flex items-center justify-end gap-1 text-[11px] tabular text-surface-on-variant/70">
                 <CalendarClock className="h-3 w-3" />
                 {formatDate(opp.expectedClose)}
               </p>

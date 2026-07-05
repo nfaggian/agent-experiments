@@ -1,13 +1,14 @@
+import { AlertTriangle, Calendar, CheckCircle2, ChevronDown, Circle, Users } from "lucide-react";
+
 import type { Project } from "@/core/types";
 import { PROJECT_STATUSES } from "@/core/types";
 import {
   cn,
+  daysUntil,
   formatCurrency,
   formatDate,
-  daysUntil,
   getStatusBadgeColor,
 } from "@/core/utils";
-import { Calendar, Users, AlertTriangle, CheckCircle2, Circle } from "lucide-react";
 
 interface ProjectCardProps {
   project: Project;
@@ -15,11 +16,7 @@ interface ProjectCardProps {
   onStatusChange?: (id: string, status: Project["status"]) => void;
 }
 
-export function ProjectCard({
-  project,
-  engineerNames = {},
-  onStatusChange,
-}: ProjectCardProps) {
+export function ProjectCard({ project, engineerNames = {}, onStatusChange }: ProjectCardProps) {
   const statusConfig = PROJECT_STATUSES.find((s) => s.id === project.status);
   const daysLeft = daysUntil(project.endDate);
   const budgetUsed = Math.round((project.spent / project.budget) * 100);
@@ -28,30 +25,38 @@ export function ProjectCard({
 
   return (
     <div className="card overflow-hidden">
-      <div className="border-b border-outline-variant/50 px-6 py-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="title-sm text-surface-on">{project.name}</h3>
-            <p className="body-md text-surface-on-variant">{project.client}</p>
-          </div>
+      <div className="flex items-start justify-between gap-4 border-b border-outline-variant/40 px-5 py-3.5">
+        <div className="min-w-0">
+          <h3 className="truncate title-md">{project.name}</h3>
+          <p className="mt-0.5 text-xs text-surface-on-variant">{project.client}</p>
+        </div>
+        {onStatusChange ? (
+          <StatusPicker
+            projectId={project.id}
+            currentStatus={project.status}
+            onChange={onStatusChange}
+          />
+        ) : (
           <span className={cn("badge capitalize", getStatusBadgeColor(project.status))}>
             {statusConfig?.label ?? project.status}
           </span>
-        </div>
+        )}
       </div>
 
-      <div className="px-6 py-4">
-        <p className="mb-4 body-md text-surface-on-variant">{project.description}</p>
+      <div className="space-y-4 px-5 py-4">
+        <p className="body">{project.description}</p>
 
-        <div className="mb-4">
-          <div className="mb-1.5 flex items-center justify-between body-md">
-            <span className="text-surface-on-variant">Progress</span>
-            <span className="title-sm text-surface-on">{project.progress}%</span>
+        <div>
+          <div className="mb-1.5 flex items-baseline justify-between">
+            <span className="text-[11px] uppercase tracking-wider text-surface-on-variant">
+              Progress
+            </span>
+            <span className="title-sm tabular">{project.progress}%</span>
           </div>
-          <div className="progress-track h-2">
+          <div className="progress-track h-1.5">
             <div
               className={cn(
-                "h-full rounded-full transition-all",
+                "h-full rounded-full transition-[width] duration-500",
                 project.status === "at_risk" ? "bg-red-500" : "bg-accent"
               )}
               style={{ width: `${project.progress}%` }}
@@ -59,84 +64,65 @@ export function ProjectCard({
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-2 gap-4">
+        <dl className="grid grid-cols-2 gap-4">
           <div>
-            <p className="label-md text-surface-on-variant">Budget</p>
-            <p className="title-sm text-surface-on">
-              {formatCurrency(project.spent)} / {formatCurrency(project.budget)}
-            </p>
-            <p
+            <dt className="label">Budget</dt>
+            <dd className="mt-0.5 title-sm tabular">
+              {formatCurrency(project.spent)}{" "}
+              <span className="font-normal text-surface-on-variant/70">
+                / {formatCurrency(project.budget)}
+              </span>
+            </dd>
+            <dd
               className={cn(
-                "label-md",
-                budgetUsed > 90 ? "text-error" : "text-surface-on-variant/70"
+                "text-[11px] tabular",
+                budgetUsed > 90 ? "text-red-400" : "text-surface-on-variant/70"
               )}
             >
               {budgetUsed}% utilized
-            </p>
+            </dd>
           </div>
           <div>
-            <p className="label-md text-surface-on-variant">Timeline</p>
-            <div className="flex items-center gap-1 title-sm text-surface-on">
-              <Calendar className="h-3.5 w-3.5 text-surface-on-variant" />
+            <dt className="label">Timeline</dt>
+            <dd className="mt-0.5 flex items-center gap-1 title-sm tabular">
+              <Calendar className="h-3 w-3 text-surface-on-variant" />
               {daysLeft > 0 ? `${daysLeft}d remaining` : "Past due"}
-            </div>
-            <p className="label-md text-surface-on-variant/70">
+            </dd>
+            <dd className="text-[11px] tabular text-surface-on-variant/70">
               Due {formatDate(project.endDate)}
-            </p>
+            </dd>
           </div>
-        </div>
+        </dl>
 
-        <div className="mb-4 flex items-center gap-2">
-          <Users className="h-4 w-4 text-surface-on-variant" />
-          <span className="label-md text-surface-on-variant">Lead:</span>
-          <span className="label-md font-medium text-surface-on">
-            {project.leadEngineer}
-          </span>
-          <span className="label-md text-outline-variant">|</span>
-          <span className="label-md text-surface-on-variant">
-            {teamNames.length} team members
-          </span>
+        <div className="flex items-center gap-2 text-xs text-surface-on-variant tabular">
+          <Users className="h-3.5 w-3.5" />
+          <span>Lead</span>
+          <span className="font-medium text-surface-on">{project.leadEngineer}</span>
+          <span className="text-outline-variant">·</span>
+          <span>{teamNames.length} team members</span>
         </div>
-
-        {onStatusChange && (
-          <div className="mb-4">
-            <label className="mb-1.5 block label-md text-surface-on-variant">
-              Update status
-            </label>
-            <select
-              value={project.status}
-              onChange={(e) =>
-                onStatusChange(project.id, e.target.value as Project["status"])
-              }
-              className="text-field-outlined h-10 w-full text-sm"
-            >
-              {PROJECT_STATUSES.map((status) => (
-                <option key={status.id} value={status.id}>
-                  {status.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
 
         {project.status === "at_risk" && (
-          <div className="banner-error mb-4 py-3">
-            <AlertTriangle className="h-4 w-4 shrink-0" />
-            <span className="body-md">Project flagged as at-risk — review milestones and budget</span>
+          <div className="banner-warning text-xs">
+            <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+            <span>At-risk — review milestones and budget</span>
           </div>
         )}
 
-        <div className="border-t border-outline-variant/50 pt-4">
-          <p className="mb-2 label-md text-surface-on-variant">
-            Milestones ({completedMilestones}/{project.milestones.length})
+        <div className="border-t border-outline-variant/40 pt-3">
+          <p className="mb-2 label">
+            Milestones{" "}
+            <span className="text-surface-on-variant/60">
+              ({completedMilestones}/{project.milestones.length})
+            </span>
           </p>
-          <ul className="space-y-2">
+          <ul className="space-y-1.5">
             {project.milestones.map((milestone) => (
-              <li key={milestone.id} className="flex items-center gap-2 label-md">
+              <li key={milestone.id} className="flex items-center gap-2 text-xs tabular">
                 {milestone.completed ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle2 className="h-3 w-3 shrink-0 text-emerald-400" />
                 ) : (
-                  <Circle className="h-3.5 w-3.5 shrink-0 text-outline-variant" />
+                  <Circle className="h-3 w-3 shrink-0 text-outline-variant" />
                 )}
                 <span
                   className={cn(
@@ -156,5 +142,45 @@ export function ProjectCard({
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Compact status picker rendered inline in the card header — an editable
+ * badge, not a bulky select. Uses a native select for keyboard/a11y,
+ * styled to match the read-only badge visually.
+ */
+function StatusPicker({
+  projectId,
+  currentStatus,
+  onChange,
+}: {
+  projectId: string;
+  currentStatus: Project["status"];
+  onChange: (id: string, status: Project["status"]) => void;
+}) {
+  return (
+    <label
+      className={cn(
+        "badge relative shrink-0 cursor-pointer gap-1 pr-1.5 capitalize",
+        getStatusBadgeColor(currentStatus)
+      )}
+      title="Change status"
+    >
+      {PROJECT_STATUSES.find((s) => s.id === currentStatus)?.label ?? currentStatus}
+      <ChevronDown className="h-3 w-3 opacity-70" strokeWidth={2.25} />
+      <select
+        value={currentStatus}
+        onChange={(e) => onChange(projectId, e.target.value as Project["status"])}
+        className="absolute inset-0 cursor-pointer opacity-0"
+        aria-label="Update project status"
+      >
+        {PROJECT_STATUSES.map((s) => (
+          <option key={s.id} value={s.id}>
+            {s.label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }

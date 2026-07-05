@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans bg-surface text-surface-on`}>
         <div className="flex min-h-screen">
           <Sidebar />
-          <main className="ml-60 min-h-screen flex-1 page-shell">{children}</main>
+          <main className="ml-60 min-h-screen flex-1 bg-surface">{children}</main>
         </div>
       </body>
     </html>
