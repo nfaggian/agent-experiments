@@ -127,3 +127,17 @@ class TimelineCellUpdate(BaseModel):
     week_start: str
     utilization: int
     note: str | None = None
+
+
+class ChatRole(StrEnum):
+    USER = "user"
+    ASSISTANT = "assistant"
+
+
+class ChatTurn(BaseModel):
+    role: ChatRole
+    content: str
+
+
+class ChatRequest(BaseModel):
+    messages: list[ChatTurn]

@@ -18,11 +18,12 @@ uv run delta-command    # → http://127.0.0.1:8000
 | PATCH | `/api/opportunities` | Update stage (probability auto-set to 100/0 for won/lost). |
 | PATCH | `/api/projects` | Update status. |
 | PATCH | `/api/timeline` | Update one weekly utilization cell for one engineer; recomputes engineer.utilization and status. |
-| POST | `/api/briefing` | Author an executive briefing via an OpenAI-compatible LLM. Returns `503` if `LLM_API_KEY` is not set. |
+| POST | `/api/chat` | Reply to a conversation `{ messages: [{role, content}] }`. Backend embeds a summary of the live database in the system prompt on every turn, so replies stay grounded without the client sending state. Returns `503` if `LLM_API_KEY` is not set. |
+| POST | `/api/briefing` | One-shot executive briefing — a canned first-turn prompt. Kept for CLI / non-chat callers. |
 
 ### LLM configuration
 
-`POST /api/briefing` uses an OpenAI-compatible chat completions endpoint:
+Both `/api/chat` and `/api/briefing` use an OpenAI-compatible chat completions endpoint:
 
 ```
 LLM_API_KEY    required
@@ -53,6 +54,6 @@ delta_command/
 ├── json_db.py   # atomic file I/O
 ├── models.py    # Pydantic models (snake_case in Python, camelCase in JSON)
 ├── store.py     # domain operations (load/save/update)
-├── briefing.py  # LLM-authored executive briefing
+├── briefing.py  # Chat + one-shot briefing via OpenAI-compatible LLM
 └── main.py      # FastAPI routes
 ```

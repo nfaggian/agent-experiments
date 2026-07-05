@@ -6,7 +6,7 @@ import { KPICard } from "@/components/dashboard/KPICard";
 import { PipelineChart } from "@/components/dashboard/PipelineChart";
 import { UtilizationChart } from "@/components/dashboard/UtilizationChart";
 import { ActionItemsPanel } from "@/components/dashboard/ActionItemsPanel";
-import { ExecutiveBriefingPanel } from "@/components/dashboard/ExecutiveBriefingPanel";
+import { AskDeltaCallout } from "@/components/dashboard/AskDeltaCallout";
 import { MilestonesPanel } from "@/components/dashboard/MilestonesPanel";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { getState } from "@/core/api";
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
           />
         </div>
 
-        <ExecutiveBriefingPanel />
+        <AskDeltaCallout />
 
         <ActionItemsPanel items={actions} />
 

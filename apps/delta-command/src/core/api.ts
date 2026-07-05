@@ -66,7 +66,17 @@ export function updateTimelineCell(
   });
 }
 
-/** Ask the LLM to author an executive briefing from the current state. */
-export function generateBriefing(): Promise<{ briefing: string }> {
-  return apiFetch<{ briefing: string }>("/api/briefing", { method: "POST" });
+/** Chat turn — the shape the backend expects and returns. */
+export type ChatTurn = { role: "user" | "assistant"; content: string };
+
+/**
+ * Send a full conversation history and get the next assistant reply. The
+ * backend embeds current pipeline/team/project data into the system prompt,
+ * so callers only send user/assistant turns.
+ */
+export function postChat(messages: ChatTurn[]): Promise<{ reply: string }> {
+  return apiFetch<{ reply: string }>("/api/chat", {
+    method: "POST",
+    body: JSON.stringify({ messages }),
+  });
 }
