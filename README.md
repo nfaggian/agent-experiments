@@ -2,6 +2,8 @@
 
 Experiments with Google Agent Development Kit (ADK) for building AI agents with local Ollama models and Prefect workflows.
 
+> The **Delta Command** engineering ops dashboard previously lived at `apps/delta-command/` and now has its own home at [nfaggian/delta-tools](https://github.com/nfaggian/delta-tools).
+
 ## Quick Start
 
 ```bash
