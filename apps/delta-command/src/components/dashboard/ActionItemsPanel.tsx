@@ -1,30 +1,26 @@
 import Link from "next/link";
+import { AlertCircle, AlertTriangle, ArrowRight, Info } from "lucide-react";
+
 import type { ActionItem, ActionSeverity } from "@/core/dashboard-analytics";
 import { cn } from "@/core/utils";
-import {
-  AlertCircle,
-  AlertTriangle,
-  Info,
-  ArrowRight,
-} from "lucide-react";
 
-const severityStyles: Record<
-  ActionSeverity,
-  { container: string; icon: typeof AlertCircle }
-> = {
+const SEVERITY = {
   critical: {
-    container: "border-red-500/30 bg-red-500/10",
     icon: AlertCircle,
+    stripe: "before:bg-red-500",
+    iconColor: "text-red-400",
   },
   warning: {
-    container: "border-amber-500/30 bg-amber-500/10",
     icon: AlertTriangle,
+    stripe: "before:bg-amber-500",
+    iconColor: "text-amber-400",
   },
   info: {
-    container: "border-blue-500/30 bg-blue-500/10",
     icon: Info,
+    stripe: "before:bg-blue-500",
+    iconColor: "text-blue-400",
   },
-};
+} as const satisfies Record<ActionSeverity, { icon: typeof AlertCircle; stripe: string; iconColor: string }>;
 
 interface ActionItemsPanelProps {
   items: ActionItem[];
@@ -38,36 +34,39 @@ export function ActionItemsPanel({ items }: ActionItemsPanelProps) {
 
   return (
     <div className="card p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h3 className="section-title">Action Required</h3>
-          <p className="body-md text-surface-on-variant">
-            {critical > 0 && `${critical} critical`}
-            {critical > 0 && warning > 0 && " · "}
-            {warning > 0 && `${warning} needs attention`}
-            {critical === 0 && warning === 0 && `${items.length} items`}
-          </p>
-        </div>
+      <div className="mb-4 flex items-baseline justify-between">
+        <h3 className="title-lg">Action Required</h3>
+        <p className="text-xs text-surface-on-variant tabular">
+          {[
+            critical > 0 && `${critical} critical`,
+            warning > 0 && `${warning} warning`,
+            critical === 0 && warning === 0 && `${items.length} items`,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
       </div>
-      <ul className="space-y-2">
+      <ul className="divide-y divide-outline-variant/30 border-y border-outline-variant/30">
         {items.slice(0, 6).map((item) => {
-          const style = severityStyles[item.severity];
-          const Icon = style.icon;
+          const config = SEVERITY[item.severity];
+          const Icon = config.icon;
           return (
             <li key={item.id}>
               <Link
                 href={item.href}
                 className={cn(
-                  "group flex items-start gap-3 rounded-xl border p-3.5 transition-all duration-200 hover:shadow-card",
-                  style.container
+                  "group relative flex items-center gap-3 py-3 pl-4 pr-2 transition-colors duration-150",
+                  "before:absolute before:left-0 before:top-1/2 before:h-6 before:w-[2px] before:-translate-y-1/2 before:rounded-full before:content-['']",
+                  "hover:bg-white/[0.02]",
+                  config.stripe
                 )}
               >
-                <Icon className="mt-0.5 h-4 w-4 shrink-0" />
+                <Icon className={cn("h-4 w-4 shrink-0", config.iconColor)} strokeWidth={2} />
                 <div className="min-w-0 flex-1">
                   <p className="title-sm">{item.title}</p>
-                  <p className="body-md opacity-80">{item.detail}</p>
+                  <p className="mt-0.5 text-xs text-surface-on-variant tabular">{item.detail}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
+                <ArrowRight className="h-3.5 w-3.5 shrink-0 text-surface-on-variant/40 transition-colors group-hover:text-surface-on-variant" />
               </Link>
             </li>
           );

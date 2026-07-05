@@ -14,7 +14,7 @@
 
   body {
     @apply bg-surface text-surface-on antialiased;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings: "kern" 1, "liga" 1, "cv11" 1, "ss01" 1;
   }
 
   h1, h2, h3, h4 {
@@ -24,119 +24,131 @@
   select option {
     @apply bg-surface-bright text-surface-on;
   }
+
+  /* Tabular numbers everywhere data is displayed. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 @layer components {
+  /*
+   * Cards.
+   *
+   * Static by default — precise dashboards don't move under the cursor.
+   * Use .card-interactive on cards whose click/hover implies a target.
+   */
   .card {
-    @apply rounded-xl border border-white/[0.06] bg-surface-bright/80 shadow-card
-      backdrop-blur-sm transition-all duration-300 ease-emphasized
-      hover:border-white/[0.1] hover:bg-surface-bright hover:shadow-elevated;
+    @apply rounded-xl border border-white/[0.06] bg-surface-bright/80 shadow-card;
   }
 
-  .card-flat {
-    @apply rounded-xl border border-white/[0.06] bg-surface-bright/80;
+  .card-interactive {
+    @apply card cursor-pointer transition-colors duration-150 ease-standard
+      hover:border-white/[0.1] hover:bg-surface-bright;
+  }
+
+  /* Small, uppercase label used for metric captions and section eyebrows. */
+  .label {
+    @apply text-[11px] font-medium uppercase tracking-[0.08em] text-surface-on-variant tabular;
   }
 
   .badge {
-    @apply inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium leading-4;
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium leading-4 tabular;
   }
 
   .chip {
     @apply inline-flex items-center rounded-md bg-surface-container/60 px-2 py-0.5
-      text-[11px] font-medium leading-4 text-surface-on-variant ring-1 ring-inset ring-white/[0.06];
+      text-[11px] font-medium leading-4 text-surface-on-variant ring-1 ring-inset ring-white/[0.06] tabular;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2
-      text-sm font-medium text-white shadow-sm
-      transition-all duration-200 ease-standard
-      hover:bg-blue-400 active:scale-[0.98]
-      focus-visible:outline-none focus-visible:shadow-glow;
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-accent px-4
+      text-sm font-medium text-white
+      transition-colors duration-150 ease-standard
+      hover:bg-blue-400 active:bg-blue-500
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-white/[0.08]
-      bg-surface-container px-5 py-2 text-sm font-medium text-surface-on
-      transition-all duration-200 ease-standard
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-white/[0.08]
+      bg-surface-container px-4 text-sm font-medium text-surface-on
+      transition-colors duration-150 ease-standard
       hover:bg-surface-container-high
-      focus-visible:outline-none focus-visible:shadow-glow;
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface;
   }
 
   .btn-tonal {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent-muted px-5 py-2
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-accent-muted px-4
       text-sm font-medium text-accent-foreground
-      transition-all duration-200 ease-standard hover:bg-blue-500/20;
+      transition-colors duration-150 ease-standard hover:bg-blue-500/20
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface
+      disabled:opacity-60;
   }
 
-  .icon-btn {
-    @apply relative flex h-9 w-9 items-center justify-center rounded-lg
-      text-surface-on-variant transition-all duration-200 ease-standard
-      hover:bg-white/[0.06] hover:text-surface-on;
-  }
-
-  .headline-md {
-    @apply text-2xl font-semibold leading-8 tracking-tight;
+  /* Typography scale — five tiers, each with one job. */
+  .headline {
+    @apply text-2xl font-semibold leading-8 tracking-tight text-surface-on;
   }
 
   .title-lg {
-    @apply text-lg font-semibold leading-7 tracking-tight;
+    @apply text-base font-semibold leading-6 tracking-tight text-surface-on;
   }
 
   .title-md {
-    @apply text-sm font-semibold leading-5;
+    @apply text-sm font-semibold leading-5 text-surface-on;
   }
 
   .title-sm {
-    @apply text-sm font-medium leading-5;
+    @apply text-sm font-medium leading-5 text-surface-on;
   }
 
-  .body-md {
+  .body {
     @apply text-sm font-normal leading-5 text-surface-on-variant;
   }
 
-  .label-md {
-    @apply text-xs font-medium uppercase tracking-wider text-surface-on-variant/70;
+  .metric {
+    @apply text-3xl font-semibold leading-[1.1] tracking-tight text-surface-on tabular;
   }
 
-  .section-title {
-    @apply text-base font-semibold tracking-tight text-surface-on;
-  }
-
-  .metric-value {
-    @apply text-3xl font-semibold leading-none tracking-tight text-surface-on;
-  }
-
-  .metric-label {
-    @apply text-xs font-medium uppercase tracking-wider text-surface-on-variant/80;
+  .metric-sm {
+    @apply text-xl font-semibold leading-[1.15] tracking-tight text-surface-on tabular;
   }
 
   .nav-item {
-    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium
-      text-sidebar-muted transition-all duration-200 ease-standard
+    @apply relative flex h-9 items-center gap-3 rounded-md px-3 text-sm font-medium
+      text-sidebar-muted transition-colors duration-150 ease-standard
       hover:bg-white/[0.05] hover:text-sidebar-foreground;
   }
 
   .nav-item-active {
-    @apply bg-white/[0.08] text-sidebar-foreground before:absolute before:left-0 before:top-1/2
-      before:h-5 before:w-0.5 before:-translate-y-1/2 before:rounded-full before:bg-accent
-      before:shadow-[0_0_8px_rgb(59_130_246/0.6)] before:content-[''];
+    @apply bg-white/[0.06] text-sidebar-foreground
+      before:absolute before:left-0 before:top-1/2 before:h-4 before:w-[2px]
+      before:-translate-y-1/2 before:rounded-full before:bg-accent before:content-[''];
   }
 
-  .text-field-outlined {
-    @apply rounded-lg border border-white/[0.08] bg-surface-container/80 text-sm text-surface-on
-      outline-none transition-all duration-200
-      placeholder:text-surface-on-variant/40
-      focus:border-accent/60 focus:shadow-glow;
+  .text-field {
+    @apply h-9 rounded-md border border-white/[0.08] bg-surface-container/80 px-3 text-sm text-surface-on
+      outline-none transition-colors duration-150
+      placeholder:text-surface-on-variant/50
+      focus:border-accent/60 focus:ring-1 focus:ring-accent/40;
+  }
+
+  /* Semantic banners — quiet fills + a solid left stripe for scannability. */
+  .banner {
+    @apply relative flex items-center gap-3 rounded-lg border pl-4 pr-4 py-3 text-sm
+      before:absolute before:left-0 before:top-0 before:h-full before:w-[3px] before:rounded-l-lg before:content-[''];
   }
 
   .banner-error {
-    @apply flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-3.5
-      text-red-300 backdrop-blur-sm;
+    @apply banner border-red-500/25 bg-red-500/[0.06] text-red-200 before:bg-red-500;
   }
 
   .banner-warning {
-    @apply flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-3.5
-      text-amber-200 backdrop-blur-sm;
+    @apply banner border-amber-500/25 bg-amber-500/[0.06] text-amber-100 before:bg-amber-500;
+  }
+
+  .banner-info {
+    @apply banner border-blue-500/25 bg-blue-500/[0.06] text-blue-100 before:bg-blue-500;
   }
 
   .progress-track {
@@ -144,12 +156,12 @@
   }
 
   .progress-indicator {
-    @apply h-full rounded-full bg-accent transition-all duration-500 ease-emphasized;
+    @apply h-full rounded-full bg-accent transition-[width] duration-500 ease-standard;
   }
 
   .top-app-bar {
-    @apply sticky top-0 z-20 flex h-[4.25rem] items-center justify-between
-      border-b border-white/[0.06] bg-surface/80 px-6 backdrop-blur-xl md:px-8;
+    @apply sticky top-0 z-20 flex h-14 items-center justify-between
+      border-b border-white/[0.06] bg-surface/80 px-6 backdrop-blur-md md:px-8;
   }
 
   .nav-drawer {
@@ -158,17 +170,17 @@
   }
 
   .segmented-control {
-    @apply inline-flex rounded-lg bg-surface-container/80 p-1 ring-1 ring-inset ring-white/[0.06];
+    @apply inline-flex rounded-md bg-surface-container/60 p-0.5 ring-1 ring-inset ring-white/[0.06];
   }
 
   .segmented-item {
-    @apply flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium
-      text-surface-on-variant transition-all duration-200 ease-standard
+    @apply flex h-8 items-center gap-1.5 rounded px-3 text-[13px] font-medium
+      text-surface-on-variant transition-colors duration-150 ease-standard
       hover:text-surface-on;
   }
 
   .segmented-item-active {
-    @apply bg-surface-bright text-surface-on shadow-sm ring-1 ring-white/[0.08];
+    @apply bg-surface-bright text-surface-on ring-1 ring-inset ring-white/[0.06];
   }
 
   .link-subtle {
@@ -180,22 +192,18 @@
   }
 
   .stat-icon {
-    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg;
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-md;
   }
 
   .kanban-column {
-    @apply flex w-72 shrink-0 flex-col rounded-xl border border-white/[0.06]
-      bg-surface-container-low/60 p-3 backdrop-blur-sm;
+    @apply flex w-72 shrink-0 flex-col rounded-lg border border-white/[0.06]
+      bg-surface-container-low/60 p-3;
   }
 
-  .page-shell {
-    @apply bg-radial-glow bg-grid-pattern bg-grid bg-surface;
-  }
-
+  /* Utilization grid cell — spreadsheet-precise. */
   .util-cell {
-    @apply mx-auto flex h-10 w-[68px] flex-col items-center justify-center rounded-lg
-      text-sm font-semibold ring-1 ring-inset transition-all duration-200
-      hover:scale-[1.02] hover:brightness-110 active:scale-[0.98];
+    @apply mx-auto flex h-9 w-16 items-center justify-center rounded
+      text-[13px] font-semibold tabular ring-1 ring-inset transition-colors duration-100;
   }
 }
 

@@ -45,33 +45,28 @@ export function OpportunitiesPageClient({
         meta={`${activeOpps.length} active · ${wonOpps.length} won · ${lostCount} lost`}
       />
 
-      <div className="space-y-6 p-8">
+      <div className="space-y-6 p-6 md:p-8">
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="card p-4">
-            <p className="metric-label">Active Pipeline</p>
-            <p className="metric-value text-[1.75rem]">{formatCurrency(totalValue)}</p>
-          </div>
-          <div className="card p-4">
-            <p className="metric-label">Weighted Value</p>
-            <p className="metric-value text-[1.75rem] text-accent-foreground">
-              {formatCurrency(weightedValue)}
-            </p>
-          </div>
-          <div className="card p-4">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-emerald-400" />
-              <p className="metric-label">Won this cycle</p>
-              {lostCount > 0 && (
-                <span className="ml-auto flex items-center gap-1 label-md text-surface-on-variant/70">
-                  <XCircle className="h-3.5 w-3.5" />
+          <StatCard label="Active Pipeline" value={formatCurrency(totalValue)} />
+          <StatCard
+            label="Weighted Value"
+            value={formatCurrency(weightedValue)}
+            valueClassName="text-accent-foreground"
+          />
+          <StatCard
+            label="Won this cycle"
+            value={`${wonOpps.length} · ${formatCurrency(wonValue)}`}
+            valueClassName="text-emerald-400"
+            leadingIcon={<Trophy className="h-3.5 w-3.5" />}
+            trailing={
+              lostCount > 0 ? (
+                <span className="flex items-center gap-1 text-[11px] tabular text-surface-on-variant/70">
+                  <XCircle className="h-3 w-3" />
                   {lostCount} lost
                 </span>
-              )}
-            </div>
-            <p className="metric-value text-[1.75rem] text-emerald-400">
-              {wonOpps.length} · {formatCurrency(wonValue)}
-            </p>
-          </div>
+              ) : null
+            }
+          />
         </div>
 
         <div className="segmented-control w-fit">
@@ -80,7 +75,7 @@ export function OpportunitiesPageClient({
             onClick={() => setView("board")}
             className={cn("segmented-item", view === "board" && "segmented-item-active")}
           >
-            <LayoutGrid className="h-4 w-4" />
+            <LayoutGrid className="h-3.5 w-3.5" />
             Board
           </button>
           <button
@@ -88,7 +83,7 @@ export function OpportunitiesPageClient({
             onClick={() => setView("list")}
             className={cn("segmented-item", view === "list" && "segmented-item-active")}
           >
-            <List className="h-4 w-4" />
+            <List className="h-3.5 w-3.5" />
             List
           </button>
         </div>
@@ -107,6 +102,33 @@ export function OpportunitiesPageClient({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  valueClassName,
+  leadingIcon,
+  trailing,
+}: {
+  label: string;
+  value: string;
+  valueClassName?: string;
+  leadingIcon?: React.ReactNode;
+  trailing?: React.ReactNode;
+}) {
+  return (
+    <div className="card p-5">
+      <div className="flex items-center justify-between gap-2 text-surface-on-variant">
+        <div className="flex items-center gap-1.5">
+          {leadingIcon}
+          <p className="label">{label}</p>
+        </div>
+        {trailing}
+      </div>
+      <p className={cn("mt-2 metric-sm", valueClassName)}>{value}</p>
     </div>
   );
 }

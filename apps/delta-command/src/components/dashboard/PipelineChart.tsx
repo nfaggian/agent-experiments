@@ -42,33 +42,39 @@ export function PipelineChart({ opportunities }: PipelineChartProps) {
 
   return (
     <div className="card p-6">
-      <h3 className="section-title mb-1">Pipeline by Stage</h3>
-      <p className="mb-6 body-md text-surface-on-variant">
-        Opportunity count and value across the sales funnel
-      </p>
-      <div className="h-64">
+      <div className="mb-4 flex items-baseline justify-between">
+        <h3 className="title-lg">Pipeline by Stage</h3>
+        <p className="text-xs text-surface-on-variant tabular">
+          count across the funnel
+        </p>
+      </div>
+      <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barSize={40}>
-            <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
+          <BarChart data={data} barSize={36} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+            <CartesianGrid strokeDasharray="2 4" stroke={CHART_GRID} vertical={false} />
             <XAxis
               dataKey="stage"
-              tick={{ fontSize: 12, fill: CHART_TICK }}
+              tick={{ fontSize: 11, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
+              tickMargin={8}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: CHART_TICK }}
+              tick={{ fontSize: 11, fill: CHART_TICK }}
               axisLine={false}
               tickLine={false}
+              width={32}
+              allowDecimals={false}
             />
             <Tooltip
+              cursor={{ fill: "rgb(255 255 255 / 0.03)" }}
               contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(value: number, name: string) => {
                 if (name === "value") return [formatCurrency(value), "Total Value"];
                 return [value, "Count"];
               }}
             />
-            <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+            <Bar dataKey="count" radius={[3, 3, 0, 0]}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
